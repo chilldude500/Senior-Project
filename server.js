@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // MongoDB Connection
-const MONGODB_URI = 'mongodb://localhost:27017/registration_db';
+const MONGODB_URI = 'mongodb+srv://seniorproject:RsxK1bDyaTDoXnzx@seniorproject.wkyrwfp.mongodb.net/senior_project_db?appName=seniorproject';
 
 mongoose.connect(MONGODB_URI, {
     useNewUrlParser: true,
