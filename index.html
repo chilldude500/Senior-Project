@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: skyblue;
+            font-family: Arial, sans-serif;
+        }
+        
+        .button-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        button {
+            padding: 12px 24px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: white;
+            color: #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s, transform 0.1s;
+        }
+        
+        button:hover {
+            background-color: #f0f0f0;
+            transform: translateY(-2px);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="button-container">
+        <button onclick="window.location.href='register.html'">Register</button>
+        <button onclick="alert('Login functionality not implemented yet')">Login</button>
+    </div>
+</body>
+</html>
