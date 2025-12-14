@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -9,6 +10,9 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Serve static HTML files (index.html, login.html, register.html)
+app.use(express.static(path.join(__dirname)));
 
 // MongoDB Connection
 const MONGODB_URI = 'mongodb+srv://seniorproject:RsxK1bDyaTDoXnzx@seniorproject.wkyrwfp.mongodb.net/senior_project_db?appName=seniorproject';
@@ -46,6 +50,16 @@ const userSchema = new mongoose.Schema({
 
 // User Model
 const User = mongoose.model('User', userSchema);
+
+// Home page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Register page
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'register.html'));
+});
 
 // Register endpoint
 app.post('/api/register', async (req, res) => {
@@ -85,7 +99,43 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
+
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Success (for now, we just return user info — no sessions/JWT yet)
+        return res.status(200).json({
+            message: 'Login successful',
+            userId: user._id,
+            name: user.name,
+            email: user.email
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Server error during login' });
+    }
+});
+
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
