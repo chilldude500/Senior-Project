@@ -10,15 +10,81 @@
     .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     input, select, button { padding:10px; font-size:14px; border-radius:8px; border:1px solid #ccc; }
     button { background:#4CAF50; border:none; color:white; cursor:pointer; padding:10px 16px; }
+    button:hover { background:#45a049; }
     .muted { color:#444; margin-top:10px; }
     table { width:100%; border-collapse:collapse; margin-top:16px; }
     th, td { border:1px solid #ddd; padding:10px; text-align:left; vertical-align:top; }
     th { background:#f5f5f5; }
     a { display:inline-block; margin-top:18px; color:#000; text-decoration:none; }
+    a:hover { text-decoration:underline; }
     .pill { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; border:1px solid #ddd; }
+    .flight { background:#e3f2fd; border-color:#2196f3; }
+    .weather { background:#fff3e0; border-color:#ff9800; }
+    .currency { background:#e8f5e8; border-color:#4caf50; }
+    
+    /* Additional button styles for better UX */
+    .button-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    
+    .nav-btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: white;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    
+    .nav-btn:hover {
+      background-color: #f0f0f0;
+      transform: translateY(-2px);
+    }
+    
+    .nav-btn:active {
+      transform: translateY(0);
+    }
+    
+    #seedBtn { background:#ff9800; }
+    #seedBtn:hover { background:#f57c00; }
+    
+    #myBtn { background:#2196f3; }
+    #myBtn:hover { background:#1976d2; }
+    
+    #subBtn { background:#9c27b0; }
+    #subBtn:hover { background:#7b1fa2; }
+    
+    .status-info { 
+      padding: 10px; 
+      background: #f5f5f5; 
+      border-radius: 8px; 
+      margin-top: 10px;
+      border-left: 4px solid #4CAF50;
+    }
+    
+    .status-error { 
+      padding: 10px; 
+      background: #ffebee; 
+      border-radius: 8px; 
+      margin-top: 10px;
+      border-left: 4px solid #f44336;
+    }
   </style>
 </head>
 <body>
+  <div class="button-container">
+    <button class="nav-btn" onclick="window.location.href='/'">Home</button>
+    <button class="nav-btn" onclick="window.location.href='register.html'">Register</button>
+    <button class="nav-btn" onclick="window.location.href='login.html'">Login</button>
+  </div>
+
   <div class="wrap">
     <div class="card">
       <h2>Travel Alerts</h2>
@@ -54,6 +120,7 @@
         <input id="currencyCode" placeholder="Currency Code (optional) e.g., JPY" style="width:200px;">
         <select id="minSeverity" style="width:160px;">
           <option value="0">Min Severity</option>
+          <option value="1">1+</option>
           <option value="2">2+</option>
           <option value="3">3+</option>
           <option value="4">4+</option>
@@ -65,7 +132,7 @@
       </div>
 
       <div class="row" style="margin-top:14px;">
-        <input id="email" placeholder="Email (for subscription demo)" style="flex:1; min-width:280px;">
+        <input id="email" type="email" placeholder="Email (for subscription demo)" style="flex:1; min-width:280px;">
         <button id="subBtn">Subscribe</button>
         <button id="myBtn">Load My Alerts</button>
       </div>
@@ -86,7 +153,7 @@
         <tbody id="body"></tbody>
       </table>
 
-      <a href="/">Back to Main Page</a>
+      <a href="/">← Back to Main Page</a>
     </div>
   </div>
 
@@ -100,9 +167,24 @@
     }
   });
 
-  function esc(s){ return String(s)
-    .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
-    .replaceAll('"','&quot;').replaceAll("'","&#039;"); }
+  function esc(s){ 
+    if (s === null || s === undefined) return '';
+    return String(s)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;"); 
+  }
+
+  function getTypeClass(type) {
+    switch(type) {
+      case 'flight': return 'flight';
+      case 'weather': return 'weather';
+      case 'currency': return 'currency';
+      default: return '';
+    }
+  }
 
   function showRows(rows){
     const body = document.getElementById('body');
@@ -111,30 +193,55 @@
 
     for (const a of rows) {
       const where = [a.destination, a.country].filter(Boolean).join(", ");
-      const extra = a.type === "flight"
-        ? `Airport: ${esc(a.airportCode || "")}<br>Flight: ${esc(a.flightNumber || "")}`
-        : a.type === "currency"
-          ? `Code: ${esc(a.currencyCode || "")}<br>Change: ${esc(a.percentChange ?? "")}%`
-          : "";
+      let extra = '';
+      
+      if (a.type === "flight") {
+        extra = `Airport: ${esc(a.airportCode || "")}<br>Flight: ${esc(a.flightNumber || "")}`;
+      } else if (a.type === "currency") {
+        const change = a.percentChange || 0;
+        const changeColor = change < 0 ? 'red' : 'green';
+        const changeSymbol = change > 0 ? '+' : '';
+        extra = `Code: ${esc(a.currencyCode || "")}<br>Change: <span style="color:${changeColor}">${changeSymbol}${esc(change)}%</span>`;
+      } else if (a.type === "weather") {
+        extra = `Location: ${esc(a.destination || "")}, ${esc(a.country || "")}`;
+      }
+
+      const severityStars = '★'.repeat(a.severity || 1) + '☆'.repeat(5 - (a.severity || 1));
+      const severityColor = a.severity >= 4 ? '#f44336' : a.severity >= 3 ? '#ff9800' : '#4CAF50';
 
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td><span class="pill">${esc(a.type)}</span></td>
-        <td>${esc(a.title)}</td>
+        <td><span class="pill ${getTypeClass(a.type)}">${esc(a.type || '')}</span></td>
+        <td><strong>${esc(a.title || '')}</strong></td>
         <td>${esc(where)}</td>
         <td>${esc(a.details || "")}</td>
-        <td>${esc(String(a.severity ?? ""))}</td>
-        <td>${extra}</td>
+        <td><span style="color:${severityColor}; font-weight:bold">${severityStars} (${a.severity})</span></td>
+        <td><small>${extra}</small></td>
       `;
       body.appendChild(tr);
     }
   }
 
+  function showStatus(message, isError = false) {
+    const statusDiv = document.getElementById('status');
+    statusDiv.textContent = message;
+    statusDiv.className = isError ? 'status-error' : 'status-info';
+  }
+
   async function seedAlerts(){
-    document.getElementById('status').textContent = "Seeding alerts...";
-    const r = await fetch("/api/alerts/seed", { method:"POST" });
-    const data = await r.json();
-    document.getElementById('status').textContent = data.ok ? `Seeded ${data.added} alerts.` : (data.message || "Seed failed");
+    showStatus("Seeding alerts...", false);
+    try {
+      const r = await fetch("/api/alerts/seed", { method:"POST" });
+      const data = await r.json();
+      if (data.ok) {
+        showStatus(`Successfully seeded ${data.added} alerts. Now click 'Load Alerts' to see them.`, false);
+      } else {
+        showStatus(data.message || "Seed failed", true);
+      }
+    } catch (error) {
+      console.error('Seed error:', error);
+      showStatus("Error connecting to server. Make sure server is running.", true);
+    }
   }
 
   async function loadAlerts(){
@@ -149,51 +256,115 @@
     if (currencyCode) params.set("currencyCode", currencyCode);
     if (minSeverity && minSeverity !== "0") params.set("minSeverity", minSeverity);
 
-    document.getElementById('status').textContent = "Loading alerts...";
-    const r = await fetch("/api/alerts?" + params.toString());
-    const data = await r.json();
-    if (!data.ok) { document.getElementById('status').textContent = data.message || "Load failed"; return; }
+    showStatus("Loading alerts...", false);
+    try {
+      const r = await fetch("/api/alerts?" + params.toString());
+      const data = await r.json();
+      if (!data.ok) { 
+        showStatus(data.message || "Load failed", true); 
+        return; 
+      }
 
-    document.getElementById('status').textContent = `Found ${data.count} alert(s).`;
-    showRows(data.results);
+      showStatus(`Found ${data.count} alert(s).`, false);
+      showRows(data.results || []);
+    } catch (error) {
+      console.error('Load alerts error:', error);
+      showStatus("Error connecting to server. Make sure server is running and seed alerts first.", true);
+    }
   }
 
   async function subscribe(){
     const email = document.getElementById('email').value.trim();
-    if (!email) { document.getElementById('status').textContent = "Enter an email to subscribe."; return; }
+    if (!email) { 
+      showStatus("Please enter an email address to subscribe.", true); 
+      return; 
+    }
+    
+    // Basic email validation
+    if (!email.includes('@') || !email.includes('.')) {
+      showStatus("Please enter a valid email address.", true);
+      return;
+    }
 
     const destination = document.getElementById('destination').value.trim();
     const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
     const minSeverity = Number(document.getElementById('minSeverity').value || 1);
 
-    document.getElementById('status').textContent = "Subscribing...";
-    const r = await fetch("/api/alerts/subscribe", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body: JSON.stringify({ email, destination, currencyCode, minSeverity })
-    });
+    showStatus("Subscribing...", false);
+    try {
+      const r = await fetch("/api/alerts/subscribe", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ email, destination, currencyCode, minSeverity })
+      });
 
-    const data = await r.json();
-    document.getElementById('status').textContent = data.ok ? "Subscribed! Now click 'Load My Alerts'." : (data.message || "Subscribe failed");
+      const data = await r.json();
+      if (data.ok) {
+        showStatus("Successfully subscribed! You can now click 'Load My Alerts' to see alerts matching your preferences.", false);
+      } else {
+        showStatus(data.message || "Subscribe failed", true);
+      }
+    } catch (error) {
+      console.error('Subscribe error:', error);
+      showStatus("Error connecting to server. Make sure server is running.", true);
+    }
   }
 
   async function loadMyAlerts(){
     const email = document.getElementById('email').value.trim();
-    if (!email) { document.getElementById('status').textContent = "Enter an email first."; return; }
+    if (!email) { 
+      showStatus("Please enter your email address first.", true); 
+      return; 
+    }
 
-    document.getElementById('status').textContent = "Loading your alerts...";
-    const r = await fetch("/api/alerts/forUser?email=" + encodeURIComponent(email));
-    const data = await r.json();
-    if (!data.ok) { document.getElementById('status').textContent = data.message || "Load failed"; return; }
+    showStatus(`Loading alerts for ${email}...`, false);
+    try {
+      const r = await fetch("/api/alerts/forUser?email=" + encodeURIComponent(email));
+      const data = await r.json();
+      if (!data.ok) { 
+        showStatus(data.message || "Load failed", true); 
+        return; 
+      }
 
-    document.getElementById('status').textContent = `Found ${data.count} alert(s) for ${email}.`;
-    showRows(data.results);
+      if (data.count === 0) {
+        showStatus(`No alerts found for ${email}. Try subscribing first or check your subscription criteria.`, false);
+      } else {
+        showStatus(`Found ${data.count} alert(s) for ${email}.`, false);
+      }
+      showRows(data.results || []);
+    } catch (error) {
+      console.error('Load my alerts error:', error);
+      showStatus("Error connecting to server. Make sure server is running.", true);
+    }
   }
 
+  // Event listeners
   document.getElementById("seedBtn").addEventListener("click", seedAlerts);
   document.getElementById("loadBtn").addEventListener("click", loadAlerts);
   document.getElementById("subBtn").addEventListener("click", subscribe);
   document.getElementById("myBtn").addEventListener("click", loadMyAlerts);
+
+  // Enter key support
+  document.getElementById("email").addEventListener("keydown", (e) => {
+    if (e.key === 'Enter') subscribe();
+  });
+  document.getElementById("destination").addEventListener("keydown", (e) => {
+    if (e.key === 'Enter') loadAlerts();
+  });
+  document.getElementById("currencyCode").addEventListener("keydown", (e) => {
+    if (e.key === 'Enter') loadAlerts();
+  });
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    showStatus('Click "Seed Alerts" to populate the database with sample data, then "Load Alerts" to view them.', false);
+    
+    // Auto-fill email if user is logged in (from localStorage)
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+      document.getElementById('email').value = savedEmail;
+    }
+  });
 </script>
 </body>
 </html>
