@@ -201,29 +201,39 @@
             document.getElementById('tbl').style.display = 'none';
             document.getElementById('body').innerHTML = '';
 
-            const resp = await fetch('/api/destinations/search?' + params.toString());
-            const data = await resp.json();
+            try {
+                const resp = await fetch('/api/destinations/search?' + params.toString());
+                const data = await resp.json();
 
-            if (!data.ok) {
-                document.getElementById('status').textContent = data.message || 'Search failed';
-                return;
-            }
+                if (!data.ok) {
+                    document.getElementById('status').textContent = data.message || 'Search failed';
+                    return;
+                }
 
-            document.getElementById('status').textContent = `Found ${data.count} result(s)`;
-            document.getElementById('tbl').style.display = 'table';
+                document.getElementById('status').textContent = `Found ${data.count} result(s)`;
+                
+                if (data.count > 0) {
+                    document.getElementById('tbl').style.display = 'table';
 
-            for (const d of data.results) {
-                const tr = document.createElement('tr');
-                const tags = Array.isArray(d.tags) ? d.tags.join(', ') : '';
-                tr.innerHTML = `
-                    <td>${escapeHtml(d.name || '')}</td>
-                    <td>${escapeHtml(d.country || '')}</td>
-                    <td>${escapeHtml(d.continent || '')}</td>
-                    <td>$${Number(d.estimatedCost || 0).toFixed(2)}</td>
-                    <td>${escapeHtml(String(d.safetyScore ?? ''))}</td>
-                    <td>${escapeHtml(tags)}</td>
-                `;
-                document.getElementById('body').appendChild(tr);
+                    for (const d of data.results) {
+                        const tr = document.createElement('tr');
+                        const tags = Array.isArray(d.tags) ? d.tags.join(', ') : '';
+                        tr.innerHTML = `
+                            <td>${escapeHtml(d.name || '')}</td>
+                            <td>${escapeHtml(d.country || '')}</td>
+                            <td>${escapeHtml(d.continent || '')}</td>
+                            <td>$${Number(d.estimatedCost || 0).toFixed(2)}</td>
+                            <td>${escapeHtml(String(d.safetyScore ?? ''))}</td>
+                            <td>${escapeHtml(tags)}</td>
+                        `;
+                        document.getElementById('body').appendChild(tr);
+                    }
+                } else {
+                    document.getElementById('status').textContent = 'No destinations found matching your criteria.';
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                document.getElementById('status').textContent = 'Error connecting to server. Make sure server is running.';
             }
         }
 
@@ -239,6 +249,11 @@
         document.getElementById('btn').addEventListener('click', search);
         document.getElementById('q').addEventListener('keydown', (e) => {
             if (e.key === 'Enter') search();
+        });
+        
+        // Initialize with some data or show message
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('status').textContent = 'Use the search filters to find destinations.';
         });
     </script>
 </body>
