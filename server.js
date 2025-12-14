@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
@@ -9,7 +10,9 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); //added this to find html files-david
+
+// Serve static HTML files (index.html, login.html, register.html)
+app.use(express.static(path.join(__dirname)));
 
 // MongoDB Connection
 const MONGODB_URI = 'mongodb+srv://seniorproject:RsxK1bDyaTDoXnzx@seniorproject.wkyrwfp.mongodb.net/senior_project_db?appName=seniorproject';
@@ -48,18 +51,15 @@ const userSchema = new mongoose.Schema({
 // User Model
 const User = mongoose.model('User', userSchema);
 
-// Destination Schema (Use Case #4)
-const destinationSchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  country: { type: String, required: true, trim: true },
-  continent: { type: String, default: "", trim: true },
-  estimatedCost: { type: Number, default: 0 },   // for budget searching
-  safetyScore: { type: Number, default: 0 },     // optional filter
-  tags: { type: [String], default: [] }          // keyword searching
+// Home page
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-const Destination = mongoose.model('Destination', destinationSchema);
-
+// Register page
+app.get('/register', (req, res) => {
+  res.sendFile(path.join(__dirname, 'register.html'));
+});
 
 // Register endpoint
 app.post('/api/register', async (req, res) => {
@@ -99,54 +99,43 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// Use Case #4: Search Destinations
-app.get('/api/destinations/search', async (req, res) => {
-  try {
-    const query = (req.query.query || '').trim();
-    const maxBudget = Number(req.query.maxBudget || 0);
-    const continent = (req.query.continent || '').trim();
-    const minSafety = Number(req.query.minSafety || 0);
 
-    const filter = {};
+// Login endpoint
+app.post('/api/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
 
-    // keyword match: name OR country OR tags
-    if (query.length > 0) {
-      filter.$or = [
-        { name: { $regex: query, $options: 'i' } },
-        { country: { $regex: query, $options: 'i' } },
-        { tags: { $elemMatch: { $regex: query, $options: 'i' } } }
-      ];
+        // Validate input
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Email and password are required' });
+        }
+
+        // Find user by email
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
+        if (!user) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+        // Success (for now, we just return user info — no sessions/JWT yet)
+        return res.status(200).json({
+            message: 'Login successful',
+            userId: user._id,
+            name: user.name,
+            email: user.email
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return res.status(500).json({ message: 'Server error during login' });
     }
-
-    // budget filter
-    if (!Number.isNaN(maxBudget) && maxBudget > 0) {
-      filter.estimatedCost = { $lte: maxBudget };
-    }
-
-    // continent filter
-    if (continent.length > 0 && continent !== 'Any') {
-      filter.continent = continent;
-    }
-
-    // safety filter
-    if (!Number.isNaN(minSafety) && minSafety > 0) {
-      filter.safetyScore = { $gte: minSafety };
-    }
-
-    const results = await Destination
-      .find(filter)
-      .sort({ safetyScore: -1, estimatedCost: 1 })
-      .limit(50);
-
-    res.json({ ok: true, count: results.length, results });
-  } catch (error) {
-    console.error('Search destinations error:', error);
-    res.status(500).json({ ok: false, message: 'Server error searching destinations' });
-  }
 });
-
 
 // Start server
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on http://localhost:${PORT}`);
 });
