@@ -24,6 +24,24 @@
       <h2>Travel Alerts</h2>
       <div class="muted">Flight delays, weather warnings, and currency drop alerts.</div>
 
+      <!-- Quick Select Location Dropdown -->
+      <div class="row" style="margin-top:12px;">
+        <select id="quickLocation" style="flex:1; min-width:240px;">
+          <option value="">Quick Select Location...</option>
+          <option value="Tokyo">Tokyo, Japan</option>
+          <option value="Paris">Paris, France</option>
+          <option value="New York">New York, USA</option>
+          <option value="London">London, UK</option>
+          <option value="Dubai">Dubai, UAE</option>
+          <option value="Sydney">Sydney, Australia</option>
+          <option value="Barcelona">Barcelona, Spain</option>
+          <option value="Rome">Rome, Italy</option>
+          <option value="Bangkok">Bangkok, Thailand</option>
+          <option value="Bali">Bali, Indonesia</option>
+        </select>
+      </div>
+
+      <!-- Filter Options -->
       <div class="row" style="margin-top:12px;">
         <select id="type">
           <option value="">All Types</option>
@@ -73,6 +91,15 @@
   </div>
 
 <script>
+  // Quick select location functionality
+  document.getElementById('quickLocation').addEventListener('change', function() {
+    const selected = this.value;
+    if (selected) {
+      document.getElementById('destination').value = selected;
+      loadAlerts();
+    }
+  });
+
   function esc(s){ return String(s)
     .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
     .replaceAll('"','&quot;').replaceAll("'","&#039;"); }

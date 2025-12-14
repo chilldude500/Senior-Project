@@ -59,6 +59,7 @@
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
+            margin-bottom: 12px;
         }
 
         .search-input, .search-select {
@@ -115,6 +116,24 @@
         <div class="card">
             <h2>Search Destinations</h2>
 
+            <!-- Quick Select Dropdown -->
+            <div class="row">
+                <select id="quickSelect" class="search-select" style="flex:1; min-width:200px;">
+                    <option value="">Quick Select Destination...</option>
+                    <option value="Tokyo">Tokyo, Japan</option>
+                    <option value="Paris">Paris, France</option>
+                    <option value="New York">New York, USA</option>
+                    <option value="Bali">Bali, Indonesia</option>
+                    <option value="London">London, UK</option>
+                    <option value="Barcelona">Barcelona, Spain</option>
+                    <option value="Dubai">Dubai, UAE</option>
+                    <option value="Sydney">Sydney, Australia</option>
+                    <option value="Rome">Rome, Italy</option>
+                    <option value="Bangkok">Bangkok, Thailand</option>
+                </select>
+            </div>
+
+            <!-- Search Filters -->
             <div class="row">
                 <input id="q" class="search-input" placeholder="Search (city/country/tag)" style="flex:2; min-width:220px;">
                 <input id="budget" class="search-input" type="number" min="0" placeholder="Max Budget" style="flex:1; min-width:140px;">
@@ -157,6 +176,15 @@
     </div>
 
     <script>
+        // Quick select functionality
+        document.getElementById('quickSelect').addEventListener('change', function() {
+            const selected = this.value;
+            if (selected) {
+                document.getElementById('q').value = selected;
+                search();
+            }
+        });
+
         async function search() {
             const q = document.getElementById('q').value.trim();
             const budget = document.getElementById('budget').value.trim();
