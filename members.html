@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Member List</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #9fd3e5; font-family: Arial, sans-serif; }
+        .nav { padding: 20px; display: flex; gap: 10px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: 0.2s; }
+        button:hover { background: #f0f0f0; transform: translateY(-2px); }
+        
+        .container { max-width: 900px; margin: 40px auto; }
+        h1 { text-align: center; color: #333; margin-bottom: 30px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px; }
+        
+        .user-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .user-card:hover { transform: translateY(-5px); }
+        
+        .avatar {
+            width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 15px; border: 3px solid #f0f0f0;
+        }
+        .name { font-weight: bold; font-size: 18px; margin-bottom: 8px; color: #333; }
+        .bio-snippet { font-size: 13px; color: #666; height: 36px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <button onclick="window.location.href='/'">Home</button>
+        <button onclick="window.location.href='/profile'">My Profile</button>
+    </div>
+
+    <div class="container">
+        <h1>Community Members</h1>
+        <div id="grid" class="grid">Loading members...</div>
+    </div>
+
+    <script>
+        async function loadMembers() {
+            try {
+                const res = await fetch('/api/all-users');
+                const users = await res.json();
+                
+                const grid = document.getElementById('grid');
+                grid.innerHTML = ''; 
+
+                users.forEach(user => {
+                    const pic = user.profilePicture || 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+                    
+                    const card = document.createElement('div');
+                    card.className = 'user-card';
+                    // This click sends them to the "View User" page with that specific ID
+                    card.onclick = () => window.location.href = `/user?id=${user._id}`;
+                    
+                    card.innerHTML = `
+                        <img src="${pic}" class="avatar">
+                        <div class="name">${user.name}</div>
+                        <div class="bio-snippet">${user.bio || 'No bio yet.'}</div>
+                    `;
+                    grid.appendChild(card);
+                });
+            } catch (e) {
+                console.error(e);
+                document.getElementById('grid').innerText = 'Failed to load members.';
+            }
+        }
+        loadMembers();
+    </script>
+</body>
+</html>

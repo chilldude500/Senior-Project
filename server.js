@@ -17,25 +17,29 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// UPDATED USER SCHEMA
+// USER SCHEMA
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true },
-    bio: { type: String, default: '' },
+    bio: { type: String, default: 'No bio available.' },
     profilePicture: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', userSchema);
 
-// PAGES
+// --- HTML PAGE ROUTES ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'register.html')));
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
 app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'profile.html')));
+app.get('/members', (req, res) => res.sendFile(path.join(__dirname, 'members.html')));   // NEW
+app.get('/user', (req, res) => res.sendFile(path.join(__dirname, 'user-view.html')));     // NEW
 
-// API: REGISTER
+// --- API ROUTES ---
+
+// 1. Register
 app.post('/api/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -49,7 +53,7 @@ app.post('/api/register', async (req, res) => {
     } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
 
-// API: LOGIN
+// 2. Login
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -61,7 +65,7 @@ app.post('/api/login', async (req, res) => {
     } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
 
-// API: GET PROFILE
+// 3. Get Single Profile (for editing or viewing)
 app.get('/api/users/:id', async (req, res) => {
     try {
         const user = await User.findById(req.params.id).select('-password');
@@ -70,7 +74,7 @@ app.get('/api/users/:id', async (req, res) => {
     } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
 
-// API: UPDATE PROFILE
+// 4. Update Profile
 app.put('/api/users/:id', async (req, res) => {
     try {
         const { name, bio, profilePicture } = req.body;
@@ -81,6 +85,15 @@ app.put('/api/users/:id', async (req, res) => {
         ).select('-password');
         res.json(updatedUser);
     } catch (e) { res.status(500).json({ message: 'Error' }); }
+});
+
+// 5. Get ALL Users (For the Member List) - NEW
+app.get('/api/all-users', async (req, res) => {
+    try {
+        // Find all users, but ONLY select name, bio, and picture.
+        const users = await User.find().select('name bio profilePicture');
+        res.json(users);
+    } catch (e) { res.status(500).json({ message: 'Error fetching users' }); }
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
