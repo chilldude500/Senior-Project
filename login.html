@@ -1,122 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #9fd3e5;
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+  <meta charset="UTF-8" />
+  <title>Login</title>
 
-        .card {
-            background: #fff;
-            width: 400px;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 18px rgba(0,0,0,.15);
-            text-align: center;
-        }
+  <style>
+    body {
+      background: skyblue;
+      font-family: Arial, sans-serif;
+    }
 
-        h2 { margin-top: 0; color: #333; }
+    .container {
+      width: 350px;
+      margin: 100px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
+    h2 {
+      text-align: center;
+    }
 
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      box-sizing: border-box;
+    }
 
-        button:hover { background-color: #45a049; }
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #333;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
 
-        .links { margin-top: 15px; font-size: 14px; }
-        a { color: #007BFF; text-decoration: none; }
-        a:hover { text-decoration: underline; }
-        
-        #error-msg {
-            color: red;
-            margin-top: 10px;
-            display: none;
-        }
-    </style>
+    button:hover {
+      background: #555;
+    }
+
+    .msg {
+      text-align: center;
+      margin-top: 10px;
+      color: green;
+    }
+
+    .link {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .link a {
+      text-decoration: none;
+      color: purple;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="container">
+    <h2>Login</h2>
 
-    <div class="card">
-        <h2>Welcome Back</h2>
-        <form id="loginForm">
-            <input type="email" id="email" placeholder="Email Address" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-        </form>
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Password" />
 
-        <p id="error-msg"></p>
+    <button onclick="login()">Login</button>
 
-        <div class="links">
-            <p>Don't have an account? <a href="register.html">Register here</a></p>
-            <p><a href="/">Back to Home</a></p>
-        </div>
+    <p class="msg" id="message"></p>
+
+    <!-- ✅ NEW LINK -->
+    <div class="link">
+      <a href="resetpassword.html">Forgot password?</a>
     </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // Stop page from reloading
+    <div class="link">
+      <a href="index.html">Back to Home</a>
+    </div>
+  </div>
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorMsg = document.getElementById('error-msg');
+  <script>
+    async function login() {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
 
-            try {
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
-                });
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
 
-                const data = await response.json();
-
-                if (response.ok) {
-                    // --- SUCCESS ---
-                    // 1. Save the User ID to browser storage
-                    localStorage.setItem('userId', data.userId);
-                    localStorage.setItem('userName', data.name);
-                    
-                    // 2. Redirect to the Profile page
-                    window.location.href = 'profile.html';
-                } else {
-                    // --- FAIL ---
-                    errorMsg.style.display = 'block';
-                    errorMsg.textContent = data.message || 'Login failed';
-                }
-            } catch (err) {
-                console.error(err);
-                errorMsg.style.display = 'block';
-                errorMsg.textContent = 'Server error. Please try again.';
-            }
-        });
-    </script>
+      const data = await res.json();
+      document.getElementById("message").textContent = data.message || "Login successful";
+    }
+  </script>
 </body>
 </html>
