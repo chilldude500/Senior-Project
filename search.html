@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Search Destinations</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#9fd3e5; margin:0; }
+    .wrap { display:flex; justify-content:center; margin-top:80px; }
+    .card { background:#fff; width:700px; padding:30px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    input, select, button { padding:10px; font-size:14px; border-radius:8px; border:1px solid #ccc; }
+    button { background:#4CAF50; border:none; color:white; cursor:pointer; padding:10px 18px; }
+    table { width:100%; border-collapse:collapse; margin-top:18px; }
+    th, td { border:1px solid #ddd; padding:10px; text-align:left; }
+    th { background:#f5f5f5; }
+    .muted { color:#444; margin-top:10px; }
+    a { display:inline-block; margin-top:18px; color:#000; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h2>Search Destinations</h2>
+
+      <div class="row">
+        <input id="q" placeholder="Search (city/country/tag)" style="flex:2; min-width:220px;">
+        <input id="budget" type="number" min="0" placeholder="Max Budget" style="flex:1; min-width:140px;">
+        <select id="continent" style="flex:1; min-width:160px;">
+          <option value="Any">Any Continent</option>
+          <option>North America</option>
+          <option>South America</option>
+          <option>Europe</option>
+          <option>Africa</option>
+          <option>Asia</option>
+          <option>Oceania</option>
+        </select>
+        <select id="safety" style="flex:1; min-width:140px;">
+          <option value="0">Min Safety</option>
+          <option value="5">5+</option>
+          <option value="6">6+</option>
+          <option value="7">7+</option>
+          <option value="8">8+</option>
+          <option value="9">9+</option>
+        </select>
+        <button id="btn">Search</button>
+      </div>
+
+      <div id="status" class="muted"></div>
+
+      <table id="tbl" style="display:none;">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Continent</th>
+            <th>Cost</th>
+            <th>Safety</th>
+            <th>Tags</th>
+          </tr>
+        </thead>
+        <tbody id="body"></tbody>
+      </table>
+
+      <a href="/">Back to Main Page</a>
+    </div>
+  </div>
+
+<script>
+  async function search() {
+    const q = document.getElementById('q').value.trim();
+    const budget = document.getElementById('budget').value.trim();
+    const continent = document.getElementById('continent').value;
+    const safety = document.getElementById('safety').value;
+
+    const params = new URLSearchParams();
+    if (q) params.set('query', q);
+    if (budget) params.set('maxBudget', budget);
+    if (continent && continent !== 'Any') params.set('continent', continent);
+    if (safety && safety !== '0') params.set('minSafety', safety);
+
+    document.getElementById('status').textContent = 'Searching...';
+    document.getElementById('tbl').style.display = 'none';
+    document.getElementById('body').innerHTML = '';
+
+    const resp = await fetch('/api/destinations/search?' + params.toString());
+    const data = await resp.json();
+
+    if (!data.ok) {
+      document.getElementById('status').textContent = data.message || 'Search failed';
+      return;
+    }
+
+    document.getElementById('status').textContent = `Found ${data.count} result(s)`;
+    document.getElementById('tbl').style.display = 'table';
+
+    for (const d of data.results) {
+      const tr = document.createElement('tr');
+      const tags = Array.isArray(d.tags) ? d.tags.join(', ') : '';
+      tr.innerHTML = `
+        <td>${escapeHtml(d.name || '')}</td>
+        <td>${escapeHtml(d.country || '')}</td>
+        <td>${escapeHtml(d.continent || '')}</td>
+        <td>$${Number(d.estimatedCost || 0).toFixed(2)}</td>
+        <td>${escapeHtml(String(d.safetyScore ?? ''))}</td>
+        <td>${escapeHtml(tags)}</td>
+      `;
+      document.getElementById('body').appendChild(tr);
+    }
+  }
+
+  function escapeHtml(s) {
+    return String(s)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#039;");
+  }
+
+  document.getElementById('btn').addEventListener('click', search);
+  document.getElementById('q').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') search();
+  });
+</script>
+</body>
+</html> 
+
