@@ -7,135 +7,80 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
-
-// Serve static HTML files (index.html, login.html, register.html)
 app.use(express.static(path.join(__dirname)));
 
-// MongoDB Connection
 const MONGODB_URI = 'mongodb+srv://seniorproject:RsxK1bDyaTDoXnzx@seniorproject.wkyrwfp.mongodb.net/senior_project_db?appName=seniorproject';
 
-mongoose.connect(MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to MongoDB'))
+    .catch(err => console.error('MongoDB connection error:', err));
 
-// User Schema
+// UPDATED USER SCHEMA
 const userSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    }
+    name: { type: String, required: true, trim: true },
+    email: { type: String, required: true, unique: true, lowercase: true, trim: true },
+    password: { type: String, required: true },
+    bio: { type: String, default: '' },
+    profilePicture: { type: String, default: '' },
+    createdAt: { type: Date, default: Date.now }
 });
 
-// User Model
 const User = mongoose.model('User', userSchema);
 
-// Home page
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+// PAGES
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
+app.get('/register', (req, res) => res.sendFile(path.join(__dirname, 'register.html')));
+app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html')));
+app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'profile.html')));
 
-// Register page
-app.get('/register', (req, res) => {
-  res.sendFile(path.join(__dirname, 'register.html'));
-});
-
-// Register endpoint
+// API: REGISTER
 app.post('/api/register', async (req, res) => {
     try {
         const { name, email, password } = req.body;
-
-        // Validate input
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: 'All fields are required' });
-        }
-
-        // Check if user already exists
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return res.status(400).json({ message: 'Email already registered' });
-        }
-
-        // Hash password
+        if (!name || !email || !password) return res.status(400).json({ message: 'All fields required' });
+        const existing = await User.findOne({ email });
+        if (existing) return res.status(400).json({ message: 'Email taken' });
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Create new user
-        const newUser = new User({
-            name,
-            email,
-            password: hashedPassword
-        });
-
+        const newUser = new User({ name, email, password: hashedPassword });
         await newUser.save();
-
-        res.status(201).json({ 
-            message: 'User registered successfully',
-            userId: newUser._id 
-        });
-    } catch (error) {
-        console.error('Registration error:', error);
-        res.status(500).json({ message: 'Server error during registration' });
-    }
+        res.status(201).json({ message: 'Registered', userId: newUser._id });
+    } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
 
-
-// Login endpoint
+// API: LOGIN
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-
-        // Validate input
-        if (!email || !password) {
-            return res.status(400).json({ message: 'Email and password are required' });
-        }
-
-        // Find user by email
         const user = await User.findOne({ email: email.toLowerCase().trim() });
-        if (!user) {
-            return res.status(401).json({ message: 'Invalid email or password' });
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            return res.status(401).json({ message: 'Invalid credentials' });
         }
-
-        // Compare password
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(401).json({ message: 'Invalid email or password' });
-        }
-
-        // Success (for now, we just return user info — no sessions/JWT yet)
-        return res.status(200).json({
-            message: 'Login successful',
-            userId: user._id,
-            name: user.name,
-            email: user.email
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        return res.status(500).json({ message: 'Server error during login' });
-    }
+        res.json({ message: 'Success', userId: user._id, name: user.name });
+    } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// API: GET PROFILE
+app.get('/api/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) return res.status(404).json({ message: 'Not found' });
+        res.json(user);
+    } catch (e) { res.status(500).json({ message: 'Error' }); }
 });
+
+// API: UPDATE PROFILE
+app.put('/api/users/:id', async (req, res) => {
+    try {
+        const { name, bio, profilePicture } = req.body;
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id, 
+            { name, bio, profilePicture }, 
+            { new: true }
+        ).select('-password');
+        res.json(updatedUser);
+    } catch (e) { res.status(500).json({ message: 'Error' }); }
+});
+
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
