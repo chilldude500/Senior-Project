@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #9fd3e5; font-family: Arial, sans-serif; }
+        .button-container { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
+        button { padding: 12px 24px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background-color: white; color: #333; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: 0.3s; }
+        button:hover { background-color: #f0f0f0; transform: translateY(-2px); }
+        .wrap { display: flex; justify-content: center; margin-top: 80px; }
+        .card { background: #fff; width: 500px; padding: 40px; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,.15); text-align: center; }
+        .profile-pic { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 4px solid #f0f0f0; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        input, textarea { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; box-sizing: border-box; }
+        textarea { resize: vertical; height: 80px; }
+        .save-btn { background-color: #4CAF50; color: white; width: 100%; margin-top: 10px; }
+        .logout-btn { background-color: #ff6b6b; color: white; margin-top: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <div class="button-container">
+        <button onclick="window.location.href='/'">Home</button>
+        <button onclick="window.location.href='alerts.html'">Alerts</button>
+    </div>
+
+    <div class="wrap">
+        <div class="card">
+            <h2>User Profile</h2>
+            <img id="previewImg" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-pic">
+            
+            <div class="form-group">
+                <label>Profile Image URL</label>
+                <input type="text" id="profilePicture" placeholder="Paste image link here">
+            </div>
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="text" id="email" disabled style="background-color: #eee;">
+            </div>
+            <div class="form-group">
+                <label>Bio</label>
+                <textarea id="bio" placeholder="Tell us about yourself..."></textarea>
+            </div>
+
+            <button class="save-btn" onclick="saveProfile()">Save Changes</button>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+            <p id="status" style="margin-top:15px; color:#666;"></p>
+        </div>
+    </div>
+
+    <script>
+        const userId = localStorage.getItem('userId');
+        if (!userId) window.location.href = 'login.html'; // Kick out if not logged in
+
+        async function loadProfile() {
+            try {
+                const res = await fetch(`/api/users/${userId}`);
+                const user = await res.json();
+                document.getElementById('name').value = user.name;
+                document.getElementById('email').value = user.email;
+                document.getElementById('bio').value = user.bio || '';
+                document.getElementById('profilePicture').value = user.profilePicture || '';
+                if(user.profilePicture) document.getElementById('previewImg').src = user.profilePicture;
+            } catch (e) { console.error(e); }
+        }
+
+        async function saveProfile() {
+            const name = document.getElementById('name').value;
+            const bio = document.getElementById('bio').value;
+            const pic = document.getElementById('profilePicture').value;
+            document.getElementById('status').innerText = 'Saving...';
+            
+            await fetch(`/api/users/${userId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, bio, profilePicture: pic })
+            });
+            document.getElementById('status').innerText = 'Saved!';
+            if(pic) document.getElementById('previewImg').src = pic;
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        loadProfile();
+    </script>
+</body>
+</html>
