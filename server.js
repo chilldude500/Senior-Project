@@ -78,7 +78,7 @@ const currencySchema = new mongoose.Schema({
 
   // 1 USD = exchangeRateToUSD of this currency
   exchangeRateToUSD: { type: Number, required: true }
-});
+}); 
 
 const Currency = mongoose.model("Currency", currencySchema);
 
