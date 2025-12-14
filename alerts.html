@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Travel Alerts</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#9fd3e5; margin:0; }
+    .wrap { display:flex; justify-content:center; margin-top:60px; }
+    .card { background:#fff; width:900px; padding:26px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    input, select, button { padding:10px; font-size:14px; border-radius:8px; border:1px solid #ccc; }
+    button { background:#4CAF50; border:none; color:white; cursor:pointer; padding:10px 16px; }
+    .muted { color:#444; margin-top:10px; }
+    table { width:100%; border-collapse:collapse; margin-top:16px; }
+    th, td { border:1px solid #ddd; padding:10px; text-align:left; vertical-align:top; }
+    th { background:#f5f5f5; }
+    a { display:inline-block; margin-top:18px; color:#000; text-decoration:none; }
+    .pill { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; border:1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h2>Travel Alerts</h2>
+      <div class="muted">Flight delays, weather warnings, and currency drop alerts.</div>
+
+      <div class="row" style="margin-top:12px;">
+        <select id="type">
+          <option value="">All Types</option>
+          <option value="flight">Flight</option>
+          <option value="weather">Weather</option>
+          <option value="currency">Currency</option>
+        </select>
+
+        <input id="destination" placeholder="Destination (optional) e.g., Tokyo" style="flex:1; min-width:240px;">
+        <input id="currencyCode" placeholder="Currency Code (optional) e.g., JPY" style="width:200px;">
+        <select id="minSeverity" style="width:160px;">
+          <option value="0">Min Severity</option>
+          <option value="2">2+</option>
+          <option value="3">3+</option>
+          <option value="4">4+</option>
+          <option value="5">5</option>
+        </select>
+
+        <button id="seedBtn">Seed Alerts</button>
+        <button id="loadBtn">Load Alerts</button>
+      </div>
+
+      <div class="row" style="margin-top:14px;">
+        <input id="email" placeholder="Email (for subscription demo)" style="flex:1; min-width:280px;">
+        <button id="subBtn">Subscribe</button>
+        <button id="myBtn">Load My Alerts</button>
+      </div>
+
+      <div id="status" class="muted"></div>
+
+      <table id="tbl" style="display:none;">
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Title</th>
+            <th>Where</th>
+            <th>Details</th>
+            <th>Severity</th>
+            <th>Extra</th>
+          </tr>
+        </thead>
+        <tbody id="body"></tbody>
+      </table>
+
+      <a href="/">Back to Main Page</a>
+    </div>
+  </div>
+
+<script>
+  function esc(s){ return String(s)
+    .replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;')
+    .replaceAll('"','&quot;').replaceAll("'","&#039;"); }
+
+  function showRows(rows){
+    const body = document.getElementById('body');
+    body.innerHTML = "";
+    document.getElementById('tbl').style.display = rows.length ? "table" : "none";
+
+    for (const a of rows) {
+      const where = [a.destination, a.country].filter(Boolean).join(", ");
+      const extra = a.type === "flight"
+        ? `Airport: ${esc(a.airportCode || "")}<br>Flight: ${esc(a.flightNumber || "")}`
+        : a.type === "currency"
+          ? `Code: ${esc(a.currencyCode || "")}<br>Change: ${esc(a.percentChange ?? "")}%`
+          : "";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><span class="pill">${esc(a.type)}</span></td>
+        <td>${esc(a.title)}</td>
+        <td>${esc(where)}</td>
+        <td>${esc(a.details || "")}</td>
+        <td>${esc(String(a.severity ?? ""))}</td>
+        <td>${extra}</td>
+      `;
+      body.appendChild(tr);
+    }
+  }
+
+  async function seedAlerts(){
+    document.getElementById('status').textContent = "Seeding alerts...";
+    const r = await fetch("/api/alerts/seed", { method:"POST" });
+    const data = await r.json();
+    document.getElementById('status').textContent = data.ok ? `Seeded ${data.added} alerts.` : (data.message || "Seed failed");
+  }
+
+  async function loadAlerts(){
+    const type = document.getElementById('type').value.trim();
+    const destination = document.getElementById('destination').value.trim();
+    const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
+    const minSeverity = document.getElementById('minSeverity').value;
+
+    const params = new URLSearchParams();
+    if (type) params.set("type", type);
+    if (destination) params.set("destination", destination);
+    if (currencyCode) params.set("currencyCode", currencyCode);
+    if (minSeverity && minSeverity !== "0") params.set("minSeverity", minSeverity);
+
+    document.getElementById('status').textContent = "Loading alerts...";
+    const r = await fetch("/api/alerts?" + params.toString());
+    const data = await r.json();
+    if (!data.ok) { document.getElementById('status').textContent = data.message || "Load failed"; return; }
+
+    document.getElementById('status').textContent = `Found ${data.count} alert(s).`;
+    showRows(data.results);
+  }
+
+  async function subscribe(){
+    const email = document.getElementById('email').value.trim();
+    if (!email) { document.getElementById('status').textContent = "Enter an email to subscribe."; return; }
+
+    const destination = document.getElementById('destination').value.trim();
+    const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
+    const minSeverity = Number(document.getElementById('minSeverity').value || 1);
+
+    document.getElementById('status').textContent = "Subscribing...";
+    const r = await fetch("/api/alerts/subscribe", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body: JSON.stringify({ email, destination, currencyCode, minSeverity })
+    });
+
+    const data = await r.json();
+    document.getElementById('status').textContent = data.ok ? "Subscribed! Now click 'Load My Alerts'." : (data.message || "Subscribe failed");
+  }
+
+  async function loadMyAlerts(){
+    const email = document.getElementById('email').value.trim();
+    if (!email) { document.getElementById('status').textContent = "Enter an email first."; return; }
+
+    document.getElementById('status').textContent = "Loading your alerts...";
+    const r = await fetch("/api/alerts/forUser?email=" + encodeURIComponent(email));
+    const data = await r.json();
+    if (!data.ok) { document.getElementById('status').textContent = data.message || "Load failed"; return; }
+
+    document.getElementById('status').textContent = `Found ${data.count} alert(s) for ${email}.`;
+    showRows(data.results);
+  }
+
+  document.getElementById("seedBtn").addEventListener("click", seedAlerts);
+  document.getElementById("loadBtn").addEventListener("click", loadAlerts);
+  document.getElementById("subBtn").addEventListener("click", subscribe);
+  document.getElementById("myBtn").addEventListener("click", loadMyAlerts);
+</script>
+</body>
+</html>
