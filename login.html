@@ -70,32 +70,16 @@
 
     <button onclick="login()">Login</button>
 
-<<<<<<< HEAD
-        <div class="links">
-            <!-- ✅ ADDED: Forgot Password link -->
-            <p><a href="reset_password.html">Forgot Password?</a></p>
-            
-            <p>Don't have an account? <a href="register.html">Register here</a></p>
-            <p><a href="/">Back to Home</a></p>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-=======
     <p class="msg" id="message"></p>
 
-    <!-- ✅ NEW LINK -->
     <div class="link">
-      <a href="resetpassword.html">Forgot password?</a>
+      <a href="reset_password.html">Forgot password?</a>
     </div>
 
     <div class="link">
       <a href="index.html">Back to Home</a>
     </div>
   </div>
->>>>>>> 206d7b655312e6ce3c4b8df4b31cad504b4c4159
 
   <script>
     async function login() {
@@ -108,29 +92,9 @@
         body: JSON.stringify({ email, password })
       });
 
-<<<<<<< HEAD
-                const data = await response.json();
-
-                if (response.ok) {
-                    localStorage.setItem('userId', data.userId);
-                    localStorage.setItem('userName', data.name);
-                    window.location.href = 'profile.html';
-                } else {
-                    errorMsg.style.display = 'block';
-                    errorMsg.textContent = data.message || 'Login failed';
-                }
-            } catch (err) {
-                console.error(err);
-                errorMsg.style.display = 'block';
-                errorMsg.textContent = 'Server error. Please try again.';
-            }
-        });
-    </script>
-=======
       const data = await res.json();
       document.getElementById("message").textContent = data.message || "Login successful";
     }
   </script>
->>>>>>> 206d7b655312e6ce3c4b8df4b31cad504b4c4159
 </body>
 </html>
