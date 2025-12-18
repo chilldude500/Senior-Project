@@ -1,136 +1,554 @@
-// commiting 
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Currency Leaderboard</title>
+  <title>Currency Comparison - Hybrid</title>
   <style>
     body { font-family: Arial, sans-serif; background:#9fd3e5; margin:0; }
     .wrap { display:flex; justify-content:center; margin-top:80px; }
-    .card { background:#fff; width:820px; padding:30px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); }
-    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .card { background:#fff; width:950px; padding:30px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); }
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
     input, select, button { padding:10px; font-size:14px; border-radius:8px; border:1px solid #ccc; }
-    button { background:#4CAF50; border:none; color:white; cursor:pointer; padding:10px 18px; }
+    button { cursor:pointer; padding:10px 18px; }
     table { width:100%; border-collapse:collapse; margin-top:18px; }
     th, td { border:1px solid #ddd; padding:10px; text-align:left; }
     th { background:#f5f5f5; }
     .muted { color:#444; margin-top:10px; }
     a { display:inline-block; margin-top:18px; color:#000; text-decoration:none; }
     .small { font-size: 12px; color:#555; }
+    .button-container {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      gap: 10px;
+    }
+    .nav-btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      background-color: white;
+      color: #333;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    .nav-btn:hover {
+      background-color: #f0f0f0;
+      transform: translateY(-2px);
+    }
+    #seed { background:#ff9800; color:white; border:none; }
+    #seed:hover { background:#f57c00; }
+    #btn { background:#4CAF50; color:white; border:none; }
+    #btn:hover { background:#45a049; }
+    #compareBtn { background:#2196f3; color:white; border:none; }
+    #compareBtn:hover { background:#1976d2; }
+    #refreshBtn { background:#9c27b0; color:white; border:none; }
+    #refreshBtn:hover { background:#7b1fa2; }
+    .status-info { 
+      padding: 10px; 
+      background: #f5f5f5; 
+      border-radius: 8px; 
+      margin-top: 10px;
+      border-left: 4px solid #4CAF50;
+    }
+    .status-error { 
+      padding: 10px; 
+      background: #ffebee; 
+      border-radius: 8px; 
+      margin-top: 10px;
+      border-left: 4px solid #f44336;
+    }
+    .positive { color: #4CAF50; font-weight: bold; }
+    .negative { color: #f44336; font-weight: bold; }
+    td:nth-child(4), td:nth-child(6) { font-family: monospace; text-align: right; }
+    .comparison-box {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      border: 2px solid #e3e3e3;
+    }
+    .comparison-result {
+      font-size: 18px;
+      font-weight: bold;
+      margin: 10px 0;
+      padding: 15px;
+      background: white;
+      border-radius: 8px;
+      text-align: center;
+      border-left: 5px solid #2196f3;
+    }
+    .comparison-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .detail-box {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+    .detail-box h4 {
+      margin: 0 0 10px 0;
+      color: #555;
+    }
+    .detail-value {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2196f3;
+    }
+    .detail-label {
+      font-size: 12px;
+      color: #777;
+      margin-top: 5px;
+    }
+    .savings { color: #4CAF50; }
+    .expensive { color: #f44336; }
+    .equal { color: #ff9800; }
+    .currency-symbol { font-weight: bold; color: #555; }
+    .update-time { font-size: 11px; color:#888; margin-top: 5px; text-align:center; }
+    .live-badge {
+      display: inline-block;
+      background: #4CAF50;
+      color: white;
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-left: 10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .mode-indicator {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 11px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .mode-live { background: #4CAF50; color: white; }
+    .mode-db { background: #2196F3; color: white; }
   </style>
 </head>
 <body>
+  <div class="button-container">
+    <button class="nav-btn" onclick="window.location.href='/'">Home</button>
+    <button class="nav-btn" onclick="window.location.href='register.html'">Register</button>
+    <button class="nav-btn" onclick="window.location.href='login.html'">Login</button>
+    <button class="nav-btn" onclick="window.location.href='alerts.html'">Alerts</button>
+  </div>
+
   <div class="wrap">
     <div class="card">
-      <h2>Currency Leaderboard</h2>
-      <div class="small">Compares how far your home currency goes across countries (simple purchasing power proxy).</div>
+      <h2>
+        Currency Comparison 
+        <span class="live-badge">LIVE RATES</span>
+        <span id="modeIndicator" class="mode-indicator mode-live">API Mode</span>
+      </h2>
+      <div class="small">Compare currencies with real-time exchange rates + backend leaderboard</div>
+      <div class="update-time" id="updateTime">Loading rates...</div>
 
-      <div class="row" style="margin-top:14px;">
-        <select id="base" style="min-width:160px;"></select>
-        <input id="amount" type="number" min="1" value="100" style="min-width:160px;" />
-        <button id="seed">Seed Currencies</button>
-        <button id="btn">Load Leaderboard</button>
+      <div class="row" style="margin-top:20px;">
+        <div style="flex:1;">
+          <label style="display:block; margin-bottom:5px; font-weight:bold;">Home Currency</label>
+          <select id="homeCurrency" style="width:100%;">
+            <option value="">Loading currencies...</option>
+          </select>
+          <div style="display:flex; align-items:center; margin-top:8px;">
+            <span class="currency-symbol" id="homeSymbol">$</span>
+            <input id="homeAmount" type="number" min="1" value="1000" placeholder="Amount" style="flex:1;">
+          </div>
+        </div>
+        <div style="text-align:center; align-self:center; padding:0 20px; font-size:24px;">→</div>
+        <div style="flex:1;">
+          <label style="display:block; margin-bottom:5px; font-weight:bold;">Destination Currency</label>
+          <select id="destCurrency" style="width:100%;">
+            <option value="">Loading currencies...</option>
+          </select>
+          <div style="display:flex; align-items:center; margin-top:8px;">
+            <span class="currency-symbol" id="destSymbol">¥</span>
+            <input id="destAmount" type="number" min="1" value="0" placeholder="Converted amount" style="flex:1;" readonly>
+          </div>
+        </div>
       </div>
 
-      <div id="status" class="muted"></div>
+      <div class="row" style="margin-top:10px;">
+        <button id="seed">Seed Database</button>
+        <button id="compareBtn">Compare (Live Rates)</button>
+        <button id="refreshBtn">Refresh Rates</button>
+        <button id="btn">Show Leaderboard</button>
+      </div>
 
-      <table id="tbl" style="display:none;">
-        <thead>
-          <tr>
-            <th>Rank</th>
-            <th>Country</th>
-            <th>Currency</th>
-            <th>Local Amount</th>
-            <th>Cost Index</th>
-            <th>Score</th>
-          </tr>
-        </thead>
-        <tbody id="body"></tbody>
-      </table>
+      <div id="status" class="muted">Click "Seed Database" first to enable leaderboard, or "Compare" for live rates.</div>
 
-      <a href="/">Back to Main Page</a>
+      <div id="comparisonResults" style="display:none;" class="comparison-box">
+        <h3>Comparison Results</h3>
+        <div id="comparisonText" class="comparison-result">Loading comparison...</div>
+
+        <div class="comparison-details">
+          <div class="detail-box">
+            <h4>Exchange Rate (Live)</h4>
+            <div id="exchangeRate" class="detail-value">1.00</div>
+            <div class="detail-label">1 <span id="homeCode">USD</span> = <span id="rateAmount">1.00</span> <span id="destCode">USD</span></div>
+          </div>
+
+          <div class="detail-box">
+            <h4>You Get</h4>
+            <div id="youGet" class="detail-value">0.00</div>
+            <div class="detail-label"><span id="destCode2">USD</span> in destination</div>
+          </div>
+
+          <div class="detail-box">
+            <h4>Cost of Living Index</h4>
+            <div id="costComparison" class="detail-value">Similar</div>
+            <div class="detail-label">Compared to home country</div>
+          </div>
+
+          <div class="detail-box">
+            <h4>Purchasing Power</h4>
+            <div id="purchasingPower" class="detail-value">100%</div>
+            <div class="detail-label">Your money's true value</div>
+          </div>
+        </div>
+
+        <div style="margin-top:15px; padding:15px; background:#e8f5e8; border-radius:8px;">
+          <h4 style="margin-top:0;">💰 Travel Budget Insight</h4>
+          <p id="budgetExample" style="margin:0;">Analyzing your purchasing power...</p>
+        </div>
+      </div>
+
+      <div id="leaderboardSection" style="display:none;">
+        <h3 style="margin-top:30px;">Currency Leaderboard <span class="mode-indicator mode-db">Database</span></h3>
+        <div id="leaderboardStatus" class="muted"></div>
+
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Country</th>
+              <th>Currency</th>
+              <th>Exchange Rate</th>
+              <th>Cost Index</th>
+              <th>Value Score</th>
+            </tr>
+          </thead>
+          <tbody id="body"></tbody>
+        </table>
+      </div>
+
+      <a href="/">← Back to Main Page</a>
     </div>
   </div>
 
 <script>
-  async function seedCurrencies() {
-    document.getElementById('status').textContent = 'Seeding currencies...';
-    const resp = await fetch('/api/currency/seed', { method: 'POST' });
-    const data = await resp.json();
-    if (!data.ok) {
-      document.getElementById('status').textContent = data.message || 'Seed failed';
-      return;
-    }
-    document.getElementById('status').textContent = 'Seed complete. Now loading dropdown...';
-    await loadDropdown();
-    document.getElementById('status').textContent = 'Ready.';
+  let exchangeRates = {};
+  let lastUpdate = null;
+  let currenciesData = [];
+  let useLiveRates = true;
+
+  const currencySymbols = {
+    'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥',
+    'CNY': '¥', 'KRW': '₩', 'INR': '₹', 'RUB': '₽',
+    'BRL': 'R$', 'MXN': '$', 'CAD': '$', 'AUD': '$',
+    'SGD': '$', 'HKD': '$', 'NZD': '$', 'CHF': 'CHF',
+    'THB': '฿', 'IDR': 'Rp', 'PHP': '₱', 'MYR': 'RM',
+    'AED': 'د.إ', 'SAR': 'ر.س', 'ZAR': 'R', 'TRY': '₺',
+    'SEK': 'kr', 'NOK': 'kr', 'DKK': 'kr'
+  };
+
+  const costOfLivingIndex = {
+    'USD': 100, 'CHF': 145, 'NOK': 130, 'DKK': 125, 'AUD': 115,
+    'GBP': 110, 'CAD': 105, 'EUR': 105, 'NZD': 105, 'SEK': 100,
+    'SGD': 95, 'JPY': 90, 'KRW': 85, 'HKD': 90, 'CNY': 60,
+    'MXN': 55, 'THB': 50, 'MYR': 50, 'BRL': 55, 'INR': 35
+  };
+
+  function showStatus(message, isError = false) {
+    const statusDiv = document.getElementById('status');
+    statusDiv.textContent = message;
+    statusDiv.className = isError ? 'status-error' : 'status-info';
   }
 
-  async function loadDropdown() {
-    // Load leaderboard once to get codes (or you could add a dedicated endpoint later)
-    const resp = await fetch('/api/currency/leaderboard?base=USD&amount=1&top=200');
-    const data = await resp.json();
-
-    const baseSel = document.getElementById('base');
-    baseSel.innerHTML = '';
-
-    // If no data yet, just show USD
-    if (!data.ok || !Array.isArray(data.results) || data.results.length === 0) {
-      baseSel.innerHTML = `<option value="USD">USD</option>`;
-      return;
+  function updateModeIndicator(mode) {
+    const indicator = document.getElementById('modeIndicator');
+    if (mode === 'live') {
+      indicator.textContent = 'API Mode';
+      indicator.className = 'mode-indicator mode-live';
+    } else {
+      indicator.textContent = 'Database Mode';
+      indicator.className = 'mode-indicator mode-db';
     }
+  }
 
-    const codes = [...new Set(data.results.map(r => r.currencyCode))].sort();
-    for (const code of codes) {
-      const opt = document.createElement('option');
-      opt.value = code;
-      opt.textContent = code;
-      if (code === 'USD') opt.selected = true;
-      baseSel.appendChild(opt);
+  function updateCurrencySymbols() {
+    const homeCode = document.getElementById('homeCurrency').value;
+    const destCode = document.getElementById('destCurrency').value;
+    document.getElementById('homeSymbol').textContent = currencySymbols[homeCode] || homeCode;
+    document.getElementById('destSymbol').textContent = currencySymbols[destCode] || destCode;
+  }
+
+  async function fetchExchangeRates(baseCurrency = 'USD') {
+    try {
+      showStatus('Fetching live exchange rates from API...', false);
+
+      const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
+      if (!response.ok) throw new Error('Failed to fetch exchange rates');
+
+      const data = await response.json();
+      exchangeRates = data.rates;
+
+      if (data.time_last_updated) {
+        if (typeof data.time_last_updated === 'number') lastUpdate = new Date(data.time_last_updated * 1000);
+        else lastUpdate = new Date(data.time_last_updated);
+      } else if (data.date) {
+        lastUpdate = new Date(data.date);
+      } else {
+        lastUpdate = new Date();
+      }
+
+      if (lastUpdate.getFullYear() < 2000) lastUpdate = new Date();
+
+      useLiveRates = true;
+      updateTimeDisplay();
+      updateModeIndicator('live');
+      showStatus('✅ Live rates loaded from API!', false);
+      return true;
+    } catch (error) {
+      console.error('Error fetching live rates:', error);
+      showStatus('⚠️ Could not fetch live rates. Will use database rates if available.', true);
+      useLiveRates = false;
+      updateModeIndicator('db');
+      return false;
+    }
+  }
+
+  function updateTimeDisplay() {
+    if (lastUpdate) {
+      const timeStr = lastUpdate.toLocaleString('en-US', {
+        month: 'short', day: 'numeric', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+      document.getElementById('updateTime').textContent = `Last updated: ${timeStr} (Live API)`;
+    }
+  }
+
+  function convertCurrency(amount, fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) return amount;
+    const amountInUSD = amount / (exchangeRates[fromCurrency] || 1);
+    return amountInUSD * (exchangeRates[toCurrency] || 1);
+  }
+
+  function getExchangeRate(fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) return 1;
+    const fromRate = exchangeRates[fromCurrency] || 1;
+    const toRate = exchangeRates[toCurrency] || 1;
+    return toRate / fromRate;
+  }
+
+  async function seedCurrencies() {
+    showStatus("Seeding database with currencies...", false);
+    try {
+      const resp = await fetch('/api/currency/seed', { method: 'POST' });
+      const data = await resp.json();
+
+      if (!data.ok) {
+        showStatus(data.message || 'Seed failed', true);
+        return;
+      }
+
+      showStatus(`✅ Successfully seeded ${data.added} currencies in database!`, false);
+      await loadCurrencies();
+    } catch (error) {
+      console.error('Seed error:', error);
+      showStatus("❌ Error connecting to backend server. Make sure server is running.", true);
+    }
+  }
+
+  async function loadCurrencies() {
+    try {
+      const resp = await fetch('/api/currency/codes');
+      const data = await resp.json();
+
+      const homeSelect = document.getElementById('homeCurrency');
+      const destSelect = document.getElementById('destCurrency');
+
+      const currentHome = homeSelect.value;
+      const currentDest = destSelect.value;
+
+      if (data.ok && Array.isArray(data.codes) && data.codes.length > 0) {
+        currenciesData = data.codes;
+
+        homeSelect.innerHTML = '';
+        destSelect.innerHTML = '';
+
+        data.codes.sort((a, b) => a.code.localeCompare(b.code));
+
+        for (const item of data.codes) {
+          const option1 = document.createElement('option');
+          option1.value = item.code;
+          option1.textContent = `${item.code} - ${item.country}`;
+          if (currentHome && item.code === currentHome) option1.selected = true;
+          else if (!currentHome && item.code === 'USD') option1.selected = true;
+          homeSelect.appendChild(option1);
+
+          const option2 = document.createElement('option');
+          option2.value = item.code;
+          option2.textContent = `${item.code} - ${item.country}`;
+          if (currentDest && item.code === currentDest) option2.selected = true;
+          else if (!currentDest && item.code === 'JPY') option2.selected = true;
+          destSelect.appendChild(option2);
+        }
+
+        updateCurrencySymbols();
+        showStatus('✅ Currencies loaded from database!', false);
+      } else {
+        showStatus('No currencies found in database. Seed first.', true);
+      }
+    } catch (error) {
+      console.error('Load currencies error:', error);
+      showStatus("Could not load from database. Seed first.", true);
+    }
+  }
+
+  async function compareCurrencies() {
+    const homeCode = document.getElementById('homeCurrency').value;
+    const homeAmount = parseFloat(document.getElementById('homeAmount').value);
+    const destCode = document.getElementById('destCurrency').value;
+
+    if (!homeCode || !destCode) { showStatus("Please select both currencies.", true); return; }
+    if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid home amount.", true); return; }
+    if (homeCode === destCode) { showStatus("Please select different currencies for comparison.", true); return; }
+
+    showStatus("Comparing with live API rates...", false);
+    if (Object.keys(exchangeRates).length === 0) await fetchExchangeRates();
+
+    try {
+      const exchangeRate = getExchangeRate(homeCode, destCode);
+      const convertedAmount = convertCurrency(homeAmount, homeCode, destCode);
+      document.getElementById('destAmount').value = convertedAmount.toFixed(2);
+
+      const homeCost = costOfLivingIndex[homeCode] || 100;
+      const destCost = costOfLivingIndex[destCode] || 100;
+      const costRatio = destCost / homeCost;
+
+      const purchasingPower = (1 / costRatio) * 100;
+      const savingsPercentage = ((homeCost - destCost) / homeCost) * 100;
+
+      document.getElementById('comparisonResults').style.display = 'block';
+      document.getElementById('leaderboardSection').style.display = 'none';
+
+      const compText = document.getElementById('comparisonText');
+      if (savingsPercentage > 10) compText.innerHTML = `<span class="savings">🎉 Great value! ${destCode} is ${savingsPercentage.toFixed(1)}% cheaper than ${homeCode}.</span>`;
+      else if (savingsPercentage < -10) compText.innerHTML = `<span class="expensive">💸 More expensive! ${destCode} is ${Math.abs(savingsPercentage).toFixed(1)}% pricier than ${homeCode}.</span>`;
+      else compText.innerHTML = `<span class="equal">⚖️ Similar cost! ${destCode} is within 10% of ${homeCode} prices.</span>`;
+
+      document.getElementById('homeCode').textContent = homeCode;
+      document.getElementById('destCode').textContent = destCode;
+      document.getElementById('destCode2').textContent = destCode;
+
+      document.getElementById('exchangeRate').textContent = `1:${exchangeRate.toFixed(4)}`;
+      document.getElementById('rateAmount').textContent = exchangeRate.toFixed(4);
+
+      document.getElementById('youGet').textContent = convertedAmount.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      const costComp = document.getElementById('costComparison');
+      if (costRatio < 0.7) costComp.innerHTML = `<span class="savings">Much Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
+      else if (costRatio < 0.9) costComp.innerHTML = `<span class="savings">Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
+      else if (costRatio > 1.3) costComp.innerHTML = `<span class="expensive">Much Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
+      else if (costRatio > 1.1) costComp.innerHTML = `<span class="expensive">Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
+      else costComp.innerHTML = `<span class="equal">Similar (${(costRatio * 100).toFixed(0)}%)</span>`;
+
+      const powerElem = document.getElementById('purchasingPower');
+      if (purchasingPower > 130) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% 🚀 (Excellent)</span>`;
+      else if (purchasingPower > 110) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% ✨ (Good)</span>`;
+      else if (purchasingPower < 70) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% 📉 (Lower)</span>`;
+      else if (purchasingPower < 90) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% (Below Average)</span>`;
+      else powerElem.innerHTML = `<span class="equal">${purchasingPower.toFixed(0)}% (Average)</span>`;
+
+      const budgetElem = document.getElementById('budgetExample');
+      if (savingsPercentage > 30) budgetElem.innerHTML = `<strong>💎 Excellent Value:</strong> Your money goes ${savingsPercentage.toFixed(0)}% further!`;
+      else if (savingsPercentage > 15) budgetElem.innerHTML = `<strong>👍 Good Value:</strong> Your money stretches ${savingsPercentage.toFixed(0)}% further.`;
+      else if (savingsPercentage > 0) budgetElem.innerHTML = `<strong>✅ Fair Value:</strong> Slightly better value (~${savingsPercentage.toFixed(0)}%).`;
+      else if (savingsPercentage > -15) budgetElem.innerHTML = `<strong>⚠️ Budget Carefully:</strong> Costs are ~${Math.abs(savingsPercentage).toFixed(0)}% higher.`;
+      else budgetElem.innerHTML = `<strong>💰 Premium Destination:</strong> You get ~${Math.abs(savingsPercentage).toFixed(0)}% less value.`;
+
+      updateModeIndicator('live');
+      showStatus('✅ Comparison complete with LIVE rates!', false);
+    } catch (error) {
+      console.error('Compare error:', error);
+      showStatus("Error: " + error.message, true);
     }
   }
 
   async function loadLeaderboard() {
-    const base = document.getElementById('base').value;
-    const amount = document.getElementById('amount').value;
+    const homeCode = document.getElementById('homeCurrency').value;
+    const homeAmount = parseFloat(document.getElementById('homeAmount').value);
 
-    document.getElementById('status').textContent = 'Loading leaderboard...';
-    document.getElementById('tbl').style.display = 'none';
+    if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid amount.", true); return; }
+
+    showStatus("Loading leaderboard from database...", false);
+    document.getElementById('comparisonResults').style.display = 'none';
+    document.getElementById('leaderboardSection').style.display = 'block';
     document.getElementById('body').innerHTML = '';
+    updateModeIndicator('db');
 
-    const params = new URLSearchParams();
-    params.set('base', base);
-    params.set('amount', amount);
-    params.set('top', '50');
+    try {
+      const params = new URLSearchParams();
+      params.set('base', homeCode);
+      params.set('amount', homeAmount);
+      params.set('top', '20');
 
-    const resp = await fetch('/api/currency/leaderboard?' + params.toString());
-    const data = await resp.json();
+      const resp = await fetch('/api/currency/leaderboard?' + params.toString());
+      const data = await resp.json();
 
-    if (!data.ok) {
-      document.getElementById('status').textContent = data.message || 'Load failed';
-      return;
+      if (!data.ok || !data.results || data.results.length === 0) {
+        document.getElementById('leaderboardStatus').textContent = 'No results found. Try seeding currencies first.';
+        return;
+      }
+
+      document.getElementById('leaderboardStatus').textContent =
+        `Base: ${data.base}, Amount: ${data.amount}. Showing ${data.results.length} currencies. Higher score = better value.`;
+
+      const avgScore = data.results.reduce((sum, r) => sum + parseFloat(r.purchasingPowerScore), 0) / data.results.length;
+
+      data.results.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        const score = parseFloat(r.purchasingPowerScore);
+        const scoreClass = score > avgScore * 1.2 ? 'positive' : score < avgScore * 0.8 ? 'negative' : '';
+        const exchangeRate = (parseFloat(r.localAmount) / data.amount).toFixed(2);
+
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td>${escapeHtml(r.country)}</td>
+          <td>${escapeHtml(r.currencyCode)}</td>
+          <td>1 ${data.base} = ${exchangeRate} ${r.currencyCode}</td>
+          <td>${Number(r.costIndex).toFixed(0)}</td>
+          <td class="${scoreClass}">${score.toFixed(2)}</td>
+        `;
+        document.getElementById('body').appendChild(tr);
+      });
+
+      showStatus('✅ Leaderboard loaded from database!', false);
+    } catch (error) {
+      console.error('Load leaderboard error:', error);
+      showStatus("❌ Error loading leaderboard from backend.", true);
     }
-
-    document.getElementById('status').textContent =
-      `Base: ${data.base}, Amount: ${data.amount} (${data.usdAmount} USD). Showing top ${data.results.length}.`;
-
-    document.getElementById('tbl').style.display = 'table';
-
-    data.results.forEach((r, idx) => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${idx + 1}</td>
-        <td>${escapeHtml(r.country)}</td>
-        <td>${escapeHtml(r.currencyCode)} ${escapeHtml(r.currencyName || '')}</td>
-        <td>${Number(r.localAmount).toLocaleString()}</td>
-        <td>${Number(r.costIndex).toFixed(0)}</td>
-        <td>${Number(r.purchasingPowerScore).toFixed(6)}</td>
-      `;
-      document.getElementById('body').appendChild(tr);
-    });
   }
 
   function escapeHtml(s) {
+    if (s === null || s === undefined) return '';
     return String(s)
       .replaceAll('&','&amp;')
       .replaceAll('<','&lt;')
@@ -140,10 +558,35 @@
   }
 
   document.getElementById('seed').addEventListener('click', seedCurrencies);
+  document.getElementById('compareBtn').addEventListener('click', compareCurrencies);
+  document.getElementById('refreshBtn').addEventListener('click', () => fetchExchangeRates());
   document.getElementById('btn').addEventListener('click', loadLeaderboard);
 
-  // init
-  loadDropdown();
+  document.getElementById('homeAmount').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') compareCurrencies();
+  });
+
+  document.getElementById('homeCurrency').addEventListener('change', function() {
+    updateCurrencySymbols();
+    if (this.value === document.getElementById('destCurrency').value) {
+      const options = document.getElementById('destCurrency').options;
+      for (let i = 0; i < options.length; i++) {
+        if (options[i].value !== this.value) {
+          document.getElementById('destCurrency').value = options[i].value;
+          updateCurrencySymbols();
+          break;
+        }
+      }
+    }
+  });
+
+  document.getElementById('destCurrency').addEventListener('change', updateCurrencySymbols);
+
+  window.addEventListener('DOMContentLoaded', async () => {
+    updateCurrencySymbols();
+    await fetchExchangeRates();
+    setTimeout(loadCurrencies, 800);
+  });
 </script>
 </body>
 </html>
