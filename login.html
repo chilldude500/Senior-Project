@@ -76,6 +76,9 @@
         <p id="error-msg"></p>
 
         <div class="links">
+            <!-- ✅ ADDED: Forgot Password link -->
+            <p><a href="reset_password.html">Forgot Password?</a></p>
+            
             <p>Don't have an account? <a href="register.html">Register here</a></p>
             <p><a href="/">Back to Home</a></p>
         </div>
@@ -83,7 +86,7 @@
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
-            e.preventDefault(); // Stop page from reloading
+            e.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
@@ -99,15 +102,10 @@
                 const data = await response.json();
 
                 if (response.ok) {
-                    // --- SUCCESS ---
-                    // 1. Save the User ID to browser storage
                     localStorage.setItem('userId', data.userId);
                     localStorage.setItem('userName', data.name);
-                    
-                    // 2. Redirect to the Profile page
                     window.location.href = 'profile.html';
                 } else {
-                    // --- FAIL ---
                     errorMsg.style.display = 'block';
                     errorMsg.textContent = data.message || 'Login failed';
                 }
