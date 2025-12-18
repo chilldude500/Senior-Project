@@ -5,104 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #9fd3e5;
-            font-family: Arial, sans-serif;
-        }
-        
-        .button-container {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: white;
-            color: #333;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s, transform 0.1s;
-        }
-        
-        button:hover {
-            background-color: #f0f0f0;
-            transform: translateY(-2px);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-
-        .wrap {
-            display: flex;
-            justify-content: center;
-            margin-top: 100px;
-        }
-
-        .card {
-            background: #fff;
-            width: 700px;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 18px rgba(0,0,0,.15);
-        }
-
-        .row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
-        }
-
-        .search-input, .search-select {
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .search-btn {
-            background: #4CAF50;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 10px 18px;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .search-btn:hover {
-            background: #45a049;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 18px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-
-        th {
-            background: #f5f5f5;
-        }
-
-        .muted {
-            color: #444;
-            margin-top: 10px;
-        }
+        body { margin: 0; padding: 0; background-color: #9fd3e5; font-family: Arial, sans-serif; }
+        .button-container { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
+        button { padding: 12px 24px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background-color: white; color: #333; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: background-color 0.3s, transform 0.1s; }
+        button:hover { background-color: #f0f0f0; transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        .wrap { display: flex; justify-content: center; margin-top: 100px; }
+        .card { background: #fff; width: 700px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,.15); }
+        .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+        .search-input, .search-select { padding: 10px; font-size: 14px; border-radius: 8px; border: 1px solid #ccc; }
+        .search-btn { background: #4CAF50; border: none; color: white; cursor: pointer; padding: 10px 18px; border-radius: 8px; font-size: 14px; }
+        .search-btn:hover { background: #45a049; }
+        table { width: 100%; border-collapse: collapse; margin-top: 18px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: #f5f5f5; }
+        .muted { color: #444; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -110,13 +27,12 @@
         <button onclick="window.location.href='register.html'">Register</button>
         <button onclick="window.location.href='login.html'">Login</button>
         <button onclick="window.location.href='alerts.html'">Alerts</button>
+        <button onclick="window.location.href='members.html'">Community</button>
     </div>
 
     <div class="wrap">
         <div class="card">
             <h2>Search Destinations</h2>
-
-            <!-- Quick Select Dropdown -->
             <div class="row">
                 <select id="quickSelect" class="search-select" style="flex:1; min-width:200px;">
                     <option value="">Quick Select Destination...</option>
@@ -124,122 +40,46 @@
                     <option value="Paris">Paris, France</option>
                     <option value="New York">New York, USA</option>
                     <option value="Bali">Bali, Indonesia</option>
-                    <option value="London">London, UK</option>
-                    <option value="Barcelona">Barcelona, Spain</option>
-                    <option value="Dubai">Dubai, UAE</option>
-                    <option value="Sydney">Sydney, Australia</option>
-                    <option value="Rome">Rome, Italy</option>
-                    <option value="Bangkok">Bangkok, Thailand</option>
                 </select>
             </div>
-
-            <!-- Search Filters -->
             <div class="row">
                 <input id="q" class="search-input" placeholder="Search (city/country/tag)" style="flex:2; min-width:220px;">
                 <input id="budget" class="search-input" type="number" min="0" placeholder="Max Budget" style="flex:1; min-width:140px;">
-                <select id="continent" class="search-select" style="flex:1; min-width:160px;">
-                    <option value="Any">Any Continent</option>
-                    <option>North America</option>
-                    <option>South America</option>
-                    <option>Europe</option>
-                    <option>Africa</option>
-                    <option>Asia</option>
-                    <option>Oceania</option>
-                </select>
-                <select id="safety" class="search-select" style="flex:1; min-width:140px;">
-                    <option value="0">Min Safety</option>
-                    <option value="5">5+</option>
-                    <option value="6">6+</option>
-                    <option value="7">7+</option>
-                    <option value="8">8+</option>
-                    <option value="9">9+</option>
-                </select>
                 <button id="btn" class="search-btn">Search</button>
             </div>
-
             <div id="status" class="muted"></div>
-
             <table id="tbl" style="display:none;">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Country</th>
-                        <th>Continent</th>
-                        <th>Cost</th>
-                        <th>Safety</th>
-                        <th>Tags</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Name</th><th>Country</th><th>Continent</th><th>Cost</th><th>Safety</th><th>Tags</th></tr></thead>
                 <tbody id="body"></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Quick select functionality
-        document.getElementById('quickSelect').addEventListener('change', function() {
-            const selected = this.value;
-            if (selected) {
-                document.getElementById('q').value = selected;
-                search();
-            }
-        });
-
+        document.getElementById('quickSelect').addEventListener('change', function() { if (this.value) { document.getElementById('q').value = this.value; search(); } });
         async function search() {
             const q = document.getElementById('q').value.trim();
             const budget = document.getElementById('budget').value.trim();
-            const continent = document.getElementById('continent').value;
-            const safety = document.getElementById('safety').value;
-
             const params = new URLSearchParams();
             if (q) params.set('query', q);
             if (budget) params.set('maxBudget', budget);
-            if (continent && continent !== 'Any') params.set('continent', continent);
-            if (safety && safety !== '0') params.set('minSafety', safety);
-
             document.getElementById('status').textContent = 'Searching...';
             document.getElementById('tbl').style.display = 'none';
             document.getElementById('body').innerHTML = '';
-
+            
+            // Note: This relies on your existing destination API. If that hasn't changed, this works.
             const resp = await fetch('/api/destinations/search?' + params.toString());
             const data = await resp.json();
-
-            if (!data.ok) {
-                document.getElementById('status').textContent = data.message || 'Search failed';
-                return;
-            }
-
+            if (!data.ok) { document.getElementById('status').textContent = data.message || 'Search failed'; return; }
             document.getElementById('status').textContent = `Found ${data.count} result(s)`;
             document.getElementById('tbl').style.display = 'table';
-
             for (const d of data.results) {
                 const tr = document.createElement('tr');
-                const tags = Array.isArray(d.tags) ? d.tags.join(', ') : '';
-                tr.innerHTML = `
-                    <td>${escapeHtml(d.name || '')}</td>
-                    <td>${escapeHtml(d.country || '')}</td>
-                    <td>${escapeHtml(d.continent || '')}</td>
-                    <td>$${Number(d.estimatedCost || 0).toFixed(2)}</td>
-                    <td>${escapeHtml(String(d.safetyScore ?? ''))}</td>
-                    <td>${escapeHtml(tags)}</td>
-                `;
+                tr.innerHTML = `<td>${d.name}</td><td>${d.country}</td><td>${d.continent}</td><td>$${d.estimatedCost}</td><td>${d.safetyScore}</td><td>${d.tags}</td>`;
                 document.getElementById('body').appendChild(tr);
             }
         }
-
-        function escapeHtml(s) {
-            return String(s)
-                .replaceAll('&','&amp;')
-                .replaceAll('<','&lt;')
-                .replaceAll('>','&gt;')
-                .replaceAll('"','&quot;')
-                .replaceAll("'","&#039;");
-        }
-
         document.getElementById('btn').addEventListener('click', search);
-        document.getElementById('q').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') search();
-        });
     </script>
 </body>
 </html>

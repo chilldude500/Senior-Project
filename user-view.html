@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Profile</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #9fd3e5; font-family: Arial, sans-serif; }
+        .nav { padding: 20px; }
+        button { padding: 10px 20px; cursor: pointer; border: none; border-radius: 5px; background: white; transition: 0.2s; }
+        button:hover { background: #f0f0f0; transform: translateY(-2px); }
+
+        .wrap { display: flex; justify-content: center; margin-top: 60px; }
+        .card { background: #fff; width: 500px; padding: 50px; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,.15); text-align: center; }
+        .profile-pic { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 25px; border: 5px solid #f0f0f0; }
+        h2 { margin: 10px 0; color: #333; font-size: 28px; }
+        .email-display { color: #888; font-size: 14px; margin-bottom: 20px; }
+        .bio-box { color: #555; line-height: 1.6; background: #f9f9f9; padding: 20px; border-radius: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+
+    <div class="nav">
+        <button onclick="window.location.href='/members'">Back to List</button>
+    </div>
+
+    <div class="wrap">
+        <div class="card">
+            <img id="pic" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic">
+            <h2 id="name">Loading...</h2>
+            <div class="email-display" id="email"></div>
+            
+            <div class="bio-box">
+                <strong>About:</strong>
+                <p id="bio" style="margin-top: 5px;">...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get the ID from the URL query string (e.g. ?id=12345)
+        const params = new URLSearchParams(window.location.search);
+        const userId = params.get('id');
+
+        async function loadUser() {
+            if (!userId) return; 
+
+            try {
+                const res = await fetch(`/api/users/${userId}`);
+                const user = await res.json();
+                
+                document.getElementById('name').textContent = user.name;
+                document.getElementById('email').textContent = user.email; 
+                document.getElementById('bio').textContent = user.bio || "This user hasn't written a bio yet.";
+                
+                if (user.profilePicture) {
+                    document.getElementById('pic').src = user.profilePicture;
+                }
+            } catch (e) {
+                document.getElementById('name').textContent = 'User not found';
+            }
+        }
+        loadUser();
+    </script>
+</body>
+</html>
