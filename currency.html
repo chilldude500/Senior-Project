@@ -1,592 +1,1359 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Currency Comparison - Hybrid</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#9fd3e5; margin:0; }
-    .wrap { display:flex; justify-content:center; margin-top:80px; }
-    .card { background:#fff; width:950px; padding:30px; border-radius:12px; box-shadow:0 4px 18px rgba(0,0,0,.15); }
-    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom:16px; }
-    input, select, button { padding:10px; font-size:14px; border-radius:8px; border:1px solid #ccc; }
-    button { cursor:pointer; padding:10px 18px; }
-    table { width:100%; border-collapse:collapse; margin-top:18px; }
-    th, td { border:1px solid #ddd; padding:10px; text-align:left; }
-    th { background:#f5f5f5; }
-    .muted { color:#444; margin-top:10px; }
-    a { display:inline-block; margin-top:18px; color:#000; text-decoration:none; }
-    .small { font-size: 12px; color:#555; }
-    .button-container {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      display: flex;
-      gap: 10px;
-    }
-    .nav-btn {
-      padding: 12px 24px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: white;
-      color: #333;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      transition: background-color 0.3s, transform 0.1s;
-    }
-    .nav-btn:hover {
-      background-color: #f0f0f0;
-      transform: translateY(-2px);
-    }
-    #seed { background:#ff9800; color:white; border:none; }
-    #seed:hover { background:#f57c00; }
-    #btn { background:#4CAF50; color:white; border:none; }
-    #btn:hover { background:#45a049; }
-    #compareBtn { background:#2196f3; color:white; border:none; }
-    #compareBtn:hover { background:#1976d2; }
-    #refreshBtn { background:#9c27b0; color:white; border:none; }
-    #refreshBtn:hover { background:#7b1fa2; }
-    .status-info { 
-      padding: 10px; 
-      background: #f5f5f5; 
-      border-radius: 8px; 
-      margin-top: 10px;
-      border-left: 4px solid #4CAF50;
-    }
-    .status-error { 
-      padding: 10px; 
-      background: #ffebee; 
-      border-radius: 8px; 
-      margin-top: 10px;
-      border-left: 4px solid #f44336;
-    }
-    .positive { color: #4CAF50; font-weight: bold; }
-    .negative { color: #f44336; font-weight: bold; }
-    td:nth-child(4), td:nth-child(6) { font-family: monospace; text-align: right; }
-    .comparison-box {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
-      margin-top: 20px;
-      border: 2px solid #e3e3e3;
-    }
-    .comparison-result {
-      font-size: 18px;
-      font-weight: bold;
-      margin: 10px 0;
-      padding: 15px;
-      background: white;
-      border-radius: 8px;
-      text-align: center;
-      border-left: 5px solid #2196f3;
-    }
-    .comparison-details {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .detail-box {
-      background: white;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-    .detail-box h4 {
-      margin: 0 0 10px 0;
-      color: #555;
-    }
-    .detail-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2196f3;
-    }
-    .detail-label {
-      font-size: 12px;
-      color: #777;
-      margin-top: 5px;
-    }
-    .savings { color: #4CAF50; }
-    .expensive { color: #f44336; }
-    .equal { color: #ff9800; }
-    .currency-symbol { font-weight: bold; color: #555; }
-    .update-time { font-size: 11px; color:#888; margin-top: 5px; text-align:center; }
-    .live-badge {
-      display: inline-block;
-      background: #4CAF50;
-      color: white;
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: bold;
-      margin-left: 10px;
-      animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.7; }
-    }
-    .mode-indicator {
-      display: inline-block;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 11px;
-      font-weight: bold;
-      margin-left: 10px;
-    }
-    .mode-live { background: #4CAF50; color: white; }
-    .mode-db { background: #2196F3; color: white; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Currency Comparison - Aurora Trips</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background-color: #9fd3e5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #3498db;
+            animation: aurora 3s infinite alternate;
+        }
+        
+        @keyframes aurora {
+            0% { color: #3498db; }
+            25% { color: #9b59b6; }
+            50% { color: #2ecc71; }
+            75% { color: #e74c3c; }
+            100% { color: #f39c12; }
+        }
+        
+        .logo-text {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-buttons { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-btn { 
+            padding: 10px 20px; 
+            font-size: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            background-color: white; 
+            color: #333; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+        
+        .nav-btn:hover { 
+            background-color: #f8f9fa; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .nav-btn:active { 
+            transform: translateY(0); 
+        }
+        
+        .ticket-btn {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border: none !important;
+        }
+        
+        .ticket-btn:hover {
+            background: linear-gradient(135deg, #f57c00, #e64a19);
+        }
+        
+        /* User Profile Styles */
+        .user-profile {
+            position: relative;
+            margin-left: auto;
+        }
+        
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            min-width: 180px;
+        }
+        
+        .user-toggle:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-email {
+            font-weight: 600;
+            color: #2c3e50;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 280px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-info {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .user-name {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-role.admin {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            padding-left: 25px;
+            color: #3498db;
+        }
+        
+        .dropdown-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .dropdown-item.logout {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .dropdown-item.logout:hover {
+            background-color: #fdedec;
+        }
+        
+        .login-prompt {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #3498db;
+            margin-left: auto;
+        }
+        
+        .login-prompt p {
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .login-prompt a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .login-prompt a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        .login-prompt .divider {
+            color: #bdc3c7;
+        }
+
+        /* Main Currency Content */
+        .main-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .welcome-title {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+        
+        .wrap { 
+            display: flex; 
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 950px;
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,.15); 
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .row { 
+            display: flex; 
+            gap: 12px; 
+            flex-wrap: wrap; 
+            margin-bottom: 20px; 
+            align-items: center;
+        }
+        
+        input, select { 
+            padding: 14px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            border: 2px solid #e0e0e0; 
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        input:focus, select:focus { 
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        button { 
+            padding: 14px 30px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: all 0.3s;
+            min-width: 150px;
+            border: 2px solid transparent;
+        }
+        
+        button:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        th, td { 
+            border: 1px solid #e0e0e0; 
+            padding: 15px; 
+            text-align: left; 
+        }
+        
+        th { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .muted { 
+            color: #7f8c8d; 
+            margin-top: 15px;
+            font-size: 15px;
+        }
+        
+        .small { 
+            font-size: 14px; 
+            color: #7f8c8d;
+            margin-bottom: 20px;
+        }
+        
+        #seed { 
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border: none;
+        }
+        
+        #seed:hover { 
+            background: linear-gradient(135deg, #f57c00, #e64a19);
+        }
+        
+        #compareBtn { 
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            border: none;
+        }
+        
+        #compareBtn:hover { 
+            background: linear-gradient(135deg, #27ae60, #219653);
+        }
+        
+        #refreshBtn { 
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+        }
+        
+        #refreshBtn:hover { 
+            background: linear-gradient(135deg, #2980b9, #1c6ea4);
+        }
+        
+        #btn { 
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            border: none;
+        }
+        
+        #btn:hover { 
+            background: linear-gradient(135deg, #8e44ad, #7d3c98);
+        }
+        
+        .status-info { 
+            padding: 12px; 
+            background: #e8f5e8; 
+            border-radius: 10px; 
+            margin-top: 15px;
+            border-left: 4px solid #2ecc71;
+            color: #2c3e50;
+        }
+        
+        .status-error { 
+            padding: 12px; 
+            background: #ffebee; 
+            border-radius: 10px; 
+            margin-top: 15px;
+            border-left: 4px solid #e74c3c;
+            color: #2c3e50;
+        }
+        
+        .positive { color: #2ecc71; font-weight: bold; }
+        .negative { color: #e74c3c; font-weight: bold; }
+        
+        td:nth-child(4), td:nth-child(6) { 
+            font-family: monospace; 
+            text-align: right; 
+        }
+        
+        .comparison-box {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 25px;
+            border: 2px solid #e3e3e3;
+        }
+        
+        .comparison-result {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 5px solid #3498db;
+        }
+        
+        .comparison-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-box {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .detail-box h4 {
+            margin: 0 0 10px 0;
+            color: #7f8c8d;
+            font-weight: 600;
+        }
+        
+        .detail-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .detail-label {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-top: 8px;
+        }
+        
+        .savings { color: #2ecc71; }
+        .expensive { color: #e74c3c; }
+        .equal { color: #f39c12; }
+        
+        .currency-symbol { 
+            font-weight: bold; 
+            color: #2c3e50;
+            padding: 14px 10px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px 0 0 10px;
+            margin-right: -2px;
+        }
+        
+        .update-time { 
+            font-size: 14px; 
+            color: #7f8c8d; 
+            margin-top: 10px; 
+            text-align: center; 
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .live-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .mode-indicator {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .mode-live { 
+            background: linear-gradient(135deg, #2ecc71, #27ae60); 
+            color: white; 
+        }
+        
+        .mode-db { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white; 
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            background: rgba(255,255,255,0.8);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .header {
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            
+            .logo-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .user-profile {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .user-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .login-prompt {
+                margin: 15px auto 0;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 28px;
+            }
+            
+            .card h2 {
+                font-size: 24px;
+            }
+            
+            .row {
+                flex-direction: column;
+            }
+            
+            input, select, button {
+                width: 100%;
+                min-width: unset;
+            }
+            
+            .comparison-details {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <div class="button-container">
-    <button class="nav-btn" onclick="window.location.href='/'">Home</button>
-    <button class="nav-btn" onclick="window.location.href='register.html'">Register</button>
-    <button class="nav-btn" onclick="window.location.href='login.html'">Login</button>
-    <button class="nav-btn" onclick="window.location.href='alerts.html'">Alerts</button>
-  </div>
-
-  <div class="wrap">
-    <div class="card">
-      <h2>
-        Currency Comparison 
-        <span class="live-badge">LIVE RATES</span>
-        <span id="modeIndicator" class="mode-indicator mode-live">API Mode</span>
-      </h2>
-      <div class="small">Compare currencies with real-time exchange rates + backend leaderboard</div>
-      <div class="update-time" id="updateTime">Loading rates...</div>
-
-      <div class="row" style="margin-top:20px;">
-        <div style="flex:1;">
-          <label style="display:block; margin-bottom:5px; font-weight:bold;">Home Currency</label>
-          <select id="homeCurrency" style="width:100%;">
-            <option value="">Loading currencies...</option>
-          </select>
-          <div style="display:flex; align-items:center; margin-top:8px;">
-            <span class="currency-symbol" id="homeSymbol">$</span>
-            <input id="homeAmount" type="number" min="1" value="1000" placeholder="Amount" style="flex:1;">
-          </div>
+    <div class="header">
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🌌</span>
+                <span class="logo-text">Aurora Trips</span>
+            </a>
         </div>
-        <div style="text-align:center; align-self:center; padding:0 20px; font-size:24px;">→</div>
-        <div style="flex:1;">
-          <label style="display:block; margin-bottom:5px; font-weight:bold;">Destination Currency</label>
-          <select id="destCurrency" style="width:100%;">
-            <option value="">Loading currencies...</option>
-          </select>
-          <div style="display:flex; align-items:center; margin-top:8px;">
-            <span class="currency-symbol" id="destSymbol">¥</span>
-            <input id="destAmount" type="number" min="1" value="0" placeholder="Converted amount" style="flex:1;" readonly>
-          </div>
+        
+        <div class="nav-buttons">
+            <button onclick="window.location.href='index.html'" class="nav-btn">
+                <i class="fas fa-home"></i> Home
+            </button>
+            <button onclick="window.location.href='currency.html'" class="nav-btn">
+                <i class="fas fa-money-bill-wave"></i> Currency
+            </button>
+            <button onclick="window.location.href='alerts.html'" class="nav-btn">
+                <i class="fas fa-bell"></i> Alerts
+            </button>
+            <button onclick="window.location.href='members.html'" class="nav-btn">
+                <i class="fas fa-users"></i> Community
+            </button>
+            <!-- Ticket button will be added here by JavaScript if logged in -->
         </div>
-      </div>
-
-      <div class="row" style="margin-top:10px;">
-        <button id="seed">Seed Database</button>
-        <button id="compareBtn">Compare (Live Rates)</button>
-        <button id="refreshBtn">Refresh Rates</button>
-        <button id="btn">Show Leaderboard</button>
-      </div>
-
-      <div id="status" class="muted">Click "Seed Database" first to enable leaderboard, or "Compare" for live rates.</div>
-
-      <div id="comparisonResults" style="display:none;" class="comparison-box">
-        <h3>Comparison Results</h3>
-        <div id="comparisonText" class="comparison-result">Loading comparison...</div>
-
-        <div class="comparison-details">
-          <div class="detail-box">
-            <h4>Exchange Rate (Live)</h4>
-            <div id="exchangeRate" class="detail-value">1.00</div>
-            <div class="detail-label">1 <span id="homeCode">USD</span> = <span id="rateAmount">1.00</span> <span id="destCode">USD</span></div>
-          </div>
-
-          <div class="detail-box">
-            <h4>You Get</h4>
-            <div id="youGet" class="detail-value">0.00</div>
-            <div class="detail-label"><span id="destCode2">USD</span> in destination</div>
-          </div>
-
-          <div class="detail-box">
-            <h4>Cost of Living Index</h4>
-            <div id="costComparison" class="detail-value">Similar</div>
-            <div class="detail-label">Compared to home country</div>
-          </div>
-
-          <div class="detail-box">
-            <h4>Purchasing Power</h4>
-            <div id="purchasingPower" class="detail-value">100%</div>
-            <div class="detail-label">Your money's true value</div>
-          </div>
+        
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <div class="user-toggle" id="userToggle">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-email" id="userEmail">user@example.com</div>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-info">
+                    <div class="user-name" id="userFullName">User Name</div>
+                    <div class="user-role" id="userRole">Member</div>
+                </div>
+                <a href="profile.html" class="dropdown-item">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="my-tickets.html" class="dropdown-item">
+                    <i class="fas fa-ticket-alt"></i> My Tickets
+                </a>
+                <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
+                    <i class="fas fa-crown"></i> Admin Panel
+                </a>
+                <a href="#" class="dropdown-item logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
         </div>
-
-        <div style="margin-top:15px; padding:15px; background:#e8f5e8; border-radius:8px;">
-          <h4 style="margin-top:0;">💰 Travel Budget Insight</h4>
-          <p id="budgetExample" style="margin:0;">Analyzing your purchasing power...</p>
+        
+        <div class="login-prompt" id="loginPrompt">
+            <p>Welcome to <strong>Aurora Trips</strong></p>
+            <span class="divider">|</span>
+            <p><a href="login.html">Login</a> or <a href="register.html">Register</a> to access all features</p>
         </div>
-      </div>
-
-      <div id="leaderboardSection" style="display:none;">
-        <h3 style="margin-top:30px;">Currency Leaderboard <span class="mode-indicator mode-db">Database</span></h3>
-        <div id="leaderboardStatus" class="muted"></div>
-
-        <table id="tbl">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Country</th>
-              <th>Currency</th>
-              <th>Exchange Rate</th>
-              <th>Cost Index</th>
-              <th>Value Score</th>
-            </tr>
-          </thead>
-          <tbody id="body"></tbody>
-        </table>
-      </div>
-
-      <a href="/">← Back to Main Page</a>
     </div>
-  </div>
 
-<script>
-  let exchangeRates = {};
-  let lastUpdate = null;
-  let currenciesData = [];
-  let useLiveRates = true;
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1 class="welcome-title">Currency Comparison</h1>
+            <p class="welcome-subtitle">Compare currencies with real-time exchange rates and analyze purchasing power for your travels</p>
+        </div>
+        
+        <div class="wrap">
+            <div class="card">
+                <h2>
+                    Currency Comparison 
+                    <span class="live-badge">LIVE RATES</span>
+                    <span id="modeIndicator" class="mode-indicator mode-live">API Mode</span>
+                </h2>
+                <div class="small">Compare currencies with real-time exchange rates + backend leaderboard</div>
+                <div class="update-time" id="updateTime">Loading rates...</div>
 
-  const currencySymbols = {
-    'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥',
-    'CNY': '¥', 'KRW': '₩', 'INR': '₹', 'RUB': '₽',
-    'BRL': 'R$', 'MXN': '$', 'CAD': '$', 'AUD': '$',
-    'SGD': '$', 'HKD': '$', 'NZD': '$', 'CHF': 'CHF',
-    'THB': '฿', 'IDR': 'Rp', 'PHP': '₱', 'MYR': 'RM',
-    'AED': 'د.إ', 'SAR': 'ر.س', 'ZAR': 'R', 'TRY': '₺',
-    'SEK': 'kr', 'NOK': 'kr', 'DKK': 'kr'
-  };
+                <div class="row" style="margin-top:20px;">
+                    <div style="flex:1;">
+                        <label>Home Currency</label>
+                        <select id="homeCurrency" style="width:100%;">
+                            <option value="">Loading currencies...</option>
+                        </select>
+                        <div style="display:flex; align-items:center; margin-top:8px;">
+                            <span class="currency-symbol" id="homeSymbol">$</span>
+                            <input id="homeAmount" type="number" min="1" value="1000" placeholder="Amount" style="flex:1; border-radius: 0 10px 10px 0;">
+                        </div>
+                    </div>
+                    <div style="text-align:center; align-self:center; padding:0 20px; font-size:24px; color: #3498db;">→</div>
+                    <div style="flex:1;">
+                        <label>Destination Currency</label>
+                        <select id="destCurrency" style="width:100%;">
+                            <option value="">Loading currencies...</option>
+                        </select>
+                        <div style="display:flex; align-items:center; margin-top:8px;">
+                            <span class="currency-symbol" id="destSymbol">¥</span>
+                            <input id="destAmount" type="number" min="1" value="0" placeholder="Converted amount" style="flex:1; border-radius: 0 10px 10px 0;" readonly>
+                        </div>
+                    </div>
+                </div>
 
-  const costOfLivingIndex = {
-    'USD': 100, 'CHF': 145, 'NOK': 130, 'DKK': 125, 'AUD': 115,
-    'GBP': 110, 'CAD': 105, 'EUR': 105, 'NZD': 105, 'SEK': 100,
-    'SGD': 95, 'JPY': 90, 'KRW': 85, 'HKD': 90, 'CNY': 60,
-    'MXN': 55, 'THB': 50, 'MYR': 50, 'BRL': 55, 'INR': 35
-  };
+                <div class="row" style="margin-top:20px;">
+                    <button id="seed">Seed Database</button>
+                    <button id="compareBtn">Compare (Live Rates)</button>
+                    <button id="refreshBtn">Refresh Rates</button>
+                    <button id="btn">Show Leaderboard</button>
+                </div>
 
-  function showStatus(message, isError = false) {
-    const statusDiv = document.getElementById('status');
-    statusDiv.textContent = message;
-    statusDiv.className = isError ? 'status-error' : 'status-info';
-  }
+                <div id="status" class="muted">Click "Seed Database" first to enable leaderboard, or "Compare" for live rates.</div>
 
-  function updateModeIndicator(mode) {
-    const indicator = document.getElementById('modeIndicator');
-    if (mode === 'live') {
-      indicator.textContent = 'API Mode';
-      indicator.className = 'mode-indicator mode-live';
-    } else {
-      indicator.textContent = 'Database Mode';
-      indicator.className = 'mode-indicator mode-db';
-    }
-  }
+                <div id="comparisonResults" style="display:none;" class="comparison-box">
+                    <h3>Comparison Results</h3>
+                    <div id="comparisonText" class="comparison-result">Loading comparison...</div>
 
-  function updateCurrencySymbols() {
-    const homeCode = document.getElementById('homeCurrency').value;
-    const destCode = document.getElementById('destCurrency').value;
-    document.getElementById('homeSymbol').textContent = currencySymbols[homeCode] || homeCode;
-    document.getElementById('destSymbol').textContent = currencySymbols[destCode] || destCode;
-  }
+                    <div class="comparison-details">
+                        <div class="detail-box">
+                            <h4>Exchange Rate (Live)</h4>
+                            <div id="exchangeRate" class="detail-value">1.00</div>
+                            <div class="detail-label">1 <span id="homeCode">USD</span> = <span id="rateAmount">1.00</span> <span id="destCode">USD</span></div>
+                        </div>
 
-  async function fetchExchangeRates(baseCurrency = 'USD') {
-    try {
-      showStatus('Fetching live exchange rates from API...', false);
+                        <div class="detail-box">
+                            <h4>You Get</h4>
+                            <div id="youGet" class="detail-value">0.00</div>
+                            <div class="detail-label"><span id="destCode2">USD</span> in destination</div>
+                        </div>
 
-      const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
-      if (!response.ok) throw new Error('Failed to fetch exchange rates');
+                        <div class="detail-box">
+                            <h4>Cost of Living Index</h4>
+                            <div id="costComparison" class="detail-value">Similar</div>
+                            <div class="detail-label">Compared to home country</div>
+                        </div>
 
-      const data = await response.json();
-      exchangeRates = data.rates;
+                        <div class="detail-box">
+                            <h4>Purchasing Power</h4>
+                            <div id="purchasingPower" class="detail-value">100%</div>
+                            <div class="detail-label">Your money's true value</div>
+                        </div>
+                    </div>
 
-      if (data.time_last_updated) {
-        if (typeof data.time_last_updated === 'number') lastUpdate = new Date(data.time_last_updated * 1000);
-        else lastUpdate = new Date(data.time_last_updated);
-      } else if (data.date) {
-        lastUpdate = new Date(data.date);
-      } else {
-        lastUpdate = new Date();
-      }
+                    <div style="margin-top:15px; padding:20px; background:#e8f5e8; border-radius:10px; border-left: 5px solid #2ecc71;">
+                        <h4 style="margin-top:0; color: #2c3e50;">💰 Travel Budget Insight</h4>
+                        <p id="budgetExample" style="margin:0; color: #2c3e50;">Analyzing your purchasing power...</p>
+                    </div>
+                </div>
 
-      if (lastUpdate.getFullYear() < 2000) lastUpdate = new Date();
+                <div id="leaderboardSection" style="display:none;">
+                    <h3 style="margin-top:30px;">Currency Leaderboard <span class="mode-indicator mode-db">Database</span></h3>
+                    <div id="leaderboardStatus" class="muted"></div>
 
-      useLiveRates = true;
-      updateTimeDisplay();
-      updateModeIndicator('live');
-      showStatus('✅ Live rates loaded from API!', false);
-      return true;
-    } catch (error) {
-      console.error('Error fetching live rates:', error);
-      showStatus('⚠️ Could not fetch live rates. Will use database rates if available.', true);
-      useLiveRates = false;
-      updateModeIndicator('db');
-      return false;
-    }
-  }
+                    <table id="tbl">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Country</th>
+                                <th>Currency</th>
+                                <th>Exchange Rate</th>
+                                <th>Cost Index</th>
+                                <th>Value Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="body"></tbody>
+                    </table>
+                </div>
 
-  function updateTimeDisplay() {
-    if (lastUpdate) {
-      const timeStr = lastUpdate.toLocaleString('en-US', {
-        month: 'short', day: 'numeric', year: 'numeric',
-        hour: '2-digit', minute: '2-digit'
-      });
-      document.getElementById('updateTime').textContent = `Last updated: ${timeStr} (Live API)`;
-    }
-  }
+                <a href="index.html" style="display:inline-block; margin-top:30px; color:#3498db; text-decoration:none; font-weight:600;">
+                    <i class="fas fa-arrow-left"></i> Back to Main Page
+                </a>
+            </div>
+        </div>
+    </div>
 
-  function convertCurrency(amount, fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) return amount;
-    const amountInUSD = amount / (exchangeRates[fromCurrency] || 1);
-    return amountInUSD * (exchangeRates[toCurrency] || 1);
-  }
+    <script>
+        // Check if user is logged in
+        async function checkLoginStatus() {
+            const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
+            const userProfilePicture = localStorage.getItem('userProfilePicture');
+            
+            if (userId && userName && userEmail) {
+                // Hide login prompt
+                document.getElementById('loginPrompt').style.display = 'none';
+                
+                // Show user profile
+                const userProfile = document.getElementById('userProfile');
+                userProfile.style.display = 'block';
+                
+                // Update user info
+                document.getElementById('userEmail').textContent = userEmail;
+                document.getElementById('userFullName').textContent = userName;
+                
+                // Set user role
+                const userRole = document.getElementById('userRole');
+                if (userIsAdmin) {
+                    userRole.textContent = 'Admin';
+                    userRole.classList.add('admin');
+                    document.getElementById('adminLink').style.display = 'flex';
+                } else {
+                    userRole.textContent = 'Member';
+                    userRole.classList.remove('admin');
+                }
+                
+                // Set avatar
+                const userAvatar = document.getElementById('userAvatar');
+                if (userProfilePicture) {
+                    userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
+                } else {
+                    // Create initials from name
+                    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                    userAvatar.textContent = initials;
+                    
+                    // Generate random gradient based on user initials
+                    const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
+                    const color1 = colors[initials.charCodeAt(0) % colors.length];
+                    const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
+                    userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+                }
+                
+                // Add ticket button to navigation if not already there
+                const buttonContainer = document.querySelector('.nav-buttons');
+                if (!document.getElementById('ticketNavBtn')) {
+                    const ticketButton = document.createElement('button');
+                    ticketButton.id = 'ticketNavBtn';
+                    ticketButton.className = 'nav-btn ticket-btn';
+                    ticketButton.innerHTML = '<i class="fas fa-ticket-alt"></i> Support';
+                    ticketButton.onclick = () => window.location.href = 'tickets.html';
+                    buttonContainer.appendChild(ticketButton);
+                }
+                
+                // Add admin panel button if user is admin
+                if (userIsAdmin) {
+                    if (!document.getElementById('adminPanelBtn')) {
+                        const adminButton = document.createElement('button');
+                        adminButton.id = 'adminPanelBtn';
+                        adminButton.className = 'nav-btn';
+                        adminButton.innerHTML = '<i class="fas fa-crown"></i> Admin Panel';
+                        adminButton.onclick = () => window.location.href = 'admin-panel.html';
+                        buttonContainer.appendChild(adminButton);
+                    }
+                } else {
+                    const adminBtn = document.getElementById('adminPanelBtn');
+                    if (adminBtn) {
+                        adminBtn.remove();
+                    }
+                }
+                
+                // Check with server if user is banned
+                try {
+                    const response = await fetch(`/api/user/status?userId=${userId}`);
+                    const data = await response.json();
+                    
+                    if (data.loggedIn && data.user.isBanned) {
+                        alert('⚠️ Your account has been suspended. Please contact support.');
+                        logout();
+                        return;
+                    }
+                } catch (error) {
+                    console.error('Error checking user status:', error);
+                }
+            } else {
+                // Show login prompt
+                document.getElementById('loginPrompt').style.display = 'flex';
+                document.getElementById('userProfile').style.display = 'none';
+                
+                // Remove ticket button if exists
+                const ticketBtn = document.getElementById('ticketNavBtn');
+                if (ticketBtn) {
+                    ticketBtn.remove();
+                }
+                
+                // Remove admin button if exists
+                const adminBtn = document.getElementById('adminPanelBtn');
+                if (adminBtn) {
+                    adminBtn.remove();
+                }
+            }
+        }
+        
+        // Toggle user dropdown
+        document.getElementById('userToggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.remove('show');
+        });
+        
+        // Prevent dropdown from closing when clicking inside it
+        document.getElementById('userDropdown').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Logout function
+        function logout() {
+            // Clear all user data from localStorage
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userIsAdmin');
+            localStorage.removeItem('userProfilePicture');
+            localStorage.removeItem('userIsBanned');
+            
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+        
+        // Check login status on page load
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
 
-  function getExchangeRate(fromCurrency, toCurrency) {
-    if (fromCurrency === toCurrency) return 1;
-    const fromRate = exchangeRates[fromCurrency] || 1;
-    const toRate = exchangeRates[toCurrency] || 1;
-    return toRate / fromRate;
-  }
+        // Currency functionality
+        let exchangeRates = {};
+        let lastUpdate = null;
+        let currenciesData = [];
+        let useLiveRates = true;
 
-  async function seedCurrencies() {
-    showStatus("Seeding database with currencies...", false);
-    try {
-      const resp = await fetch('/api/currency/seed', { method: 'POST' });
-      const data = await resp.json();
+        const currencySymbols = {
+            'USD': '$', 'EUR': '€', 'GBP': '£', 'JPY': '¥',
+            'CNY': '¥', 'KRW': '₩', 'INR': '₹', 'RUB': '₽',
+            'BRL': 'R$', 'MXN': '$', 'CAD': '$', 'AUD': '$',
+            'SGD': '$', 'HKD': '$', 'NZD': '$', 'CHF': 'CHF',
+            'THB': '฿', 'IDR': 'Rp', 'PHP': '₱', 'MYR': 'RM',
+            'AED': 'د.إ', 'SAR': 'ر.س', 'ZAR': 'R', 'TRY': '₺',
+            'SEK': 'kr', 'NOK': 'kr', 'DKK': 'kr'
+        };
 
-      if (!data.ok) {
-        showStatus(data.message || 'Seed failed', true);
-        return;
-      }
+        const costOfLivingIndex = {
+            'USD': 100, 'CHF': 145, 'NOK': 130, 'DKK': 125, 'AUD': 115,
+            'GBP': 110, 'CAD': 105, 'EUR': 105, 'NZD': 105, 'SEK': 100,
+            'SGD': 95, 'JPY': 90, 'KRW': 85, 'HKD': 90, 'CNY': 60,
+            'MXN': 55, 'THB': 50, 'MYR': 50, 'BRL': 55, 'INR': 35
+        };
 
-      showStatus(`✅ Successfully seeded ${data.added} currencies in database!`, false);
-      await loadCurrencies();
-    } catch (error) {
-      console.error('Seed error:', error);
-      showStatus("❌ Error connecting to backend server. Make sure server is running.", true);
-    }
-  }
-
-  async function loadCurrencies() {
-    try {
-      const resp = await fetch('/api/currency/codes');
-      const data = await resp.json();
-
-      const homeSelect = document.getElementById('homeCurrency');
-      const destSelect = document.getElementById('destCurrency');
-
-      const currentHome = homeSelect.value;
-      const currentDest = destSelect.value;
-
-      if (data.ok && Array.isArray(data.codes) && data.codes.length > 0) {
-        currenciesData = data.codes;
-
-        homeSelect.innerHTML = '';
-        destSelect.innerHTML = '';
-
-        data.codes.sort((a, b) => a.code.localeCompare(b.code));
-
-        for (const item of data.codes) {
-          const option1 = document.createElement('option');
-          option1.value = item.code;
-          option1.textContent = `${item.code} - ${item.country}`;
-          if (currentHome && item.code === currentHome) option1.selected = true;
-          else if (!currentHome && item.code === 'USD') option1.selected = true;
-          homeSelect.appendChild(option1);
-
-          const option2 = document.createElement('option');
-          option2.value = item.code;
-          option2.textContent = `${item.code} - ${item.country}`;
-          if (currentDest && item.code === currentDest) option2.selected = true;
-          else if (!currentDest && item.code === 'JPY') option2.selected = true;
-          destSelect.appendChild(option2);
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = isError ? 'status-error' : 'status-info';
         }
 
-        updateCurrencySymbols();
-        showStatus('✅ Currencies loaded from database!', false);
-      } else {
-        showStatus('No currencies found in database. Seed first.', true);
-      }
-    } catch (error) {
-      console.error('Load currencies error:', error);
-      showStatus("Could not load from database. Seed first.", true);
-    }
-  }
-
-  async function compareCurrencies() {
-    const homeCode = document.getElementById('homeCurrency').value;
-    const homeAmount = parseFloat(document.getElementById('homeAmount').value);
-    const destCode = document.getElementById('destCurrency').value;
-
-    if (!homeCode || !destCode) { showStatus("Please select both currencies.", true); return; }
-    if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid home amount.", true); return; }
-    if (homeCode === destCode) { showStatus("Please select different currencies for comparison.", true); return; }
-
-    showStatus("Comparing with live API rates...", false);
-    if (Object.keys(exchangeRates).length === 0) await fetchExchangeRates();
-
-    try {
-      const exchangeRate = getExchangeRate(homeCode, destCode);
-      const convertedAmount = convertCurrency(homeAmount, homeCode, destCode);
-      document.getElementById('destAmount').value = convertedAmount.toFixed(2);
-
-      const homeCost = costOfLivingIndex[homeCode] || 100;
-      const destCost = costOfLivingIndex[destCode] || 100;
-      const costRatio = destCost / homeCost;
-
-      const purchasingPower = (1 / costRatio) * 100;
-      const savingsPercentage = ((homeCost - destCost) / homeCost) * 100;
-
-      document.getElementById('comparisonResults').style.display = 'block';
-      document.getElementById('leaderboardSection').style.display = 'none';
-
-      const compText = document.getElementById('comparisonText');
-      if (savingsPercentage > 10) compText.innerHTML = `<span class="savings">🎉 Great value! ${destCode} is ${savingsPercentage.toFixed(1)}% cheaper than ${homeCode}.</span>`;
-      else if (savingsPercentage < -10) compText.innerHTML = `<span class="expensive">💸 More expensive! ${destCode} is ${Math.abs(savingsPercentage).toFixed(1)}% pricier than ${homeCode}.</span>`;
-      else compText.innerHTML = `<span class="equal">⚖️ Similar cost! ${destCode} is within 10% of ${homeCode} prices.</span>`;
-
-      document.getElementById('homeCode').textContent = homeCode;
-      document.getElementById('destCode').textContent = destCode;
-      document.getElementById('destCode2').textContent = destCode;
-
-      document.getElementById('exchangeRate').textContent = `1:${exchangeRate.toFixed(4)}`;
-      document.getElementById('rateAmount').textContent = exchangeRate.toFixed(4);
-
-      document.getElementById('youGet').textContent = convertedAmount.toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-
-      const costComp = document.getElementById('costComparison');
-      if (costRatio < 0.7) costComp.innerHTML = `<span class="savings">Much Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
-      else if (costRatio < 0.9) costComp.innerHTML = `<span class="savings">Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
-      else if (costRatio > 1.3) costComp.innerHTML = `<span class="expensive">Much Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
-      else if (costRatio > 1.1) costComp.innerHTML = `<span class="expensive">Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
-      else costComp.innerHTML = `<span class="equal">Similar (${(costRatio * 100).toFixed(0)}%)</span>`;
-
-      const powerElem = document.getElementById('purchasingPower');
-      if (purchasingPower > 130) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% 🚀 (Excellent)</span>`;
-      else if (purchasingPower > 110) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% ✨ (Good)</span>`;
-      else if (purchasingPower < 70) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% 📉 (Lower)</span>`;
-      else if (purchasingPower < 90) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% (Below Average)</span>`;
-      else powerElem.innerHTML = `<span class="equal">${purchasingPower.toFixed(0)}% (Average)</span>`;
-
-      const budgetElem = document.getElementById('budgetExample');
-      if (savingsPercentage > 30) budgetElem.innerHTML = `<strong>💎 Excellent Value:</strong> Your money goes ${savingsPercentage.toFixed(0)}% further!`;
-      else if (savingsPercentage > 15) budgetElem.innerHTML = `<strong>👍 Good Value:</strong> Your money stretches ${savingsPercentage.toFixed(0)}% further.`;
-      else if (savingsPercentage > 0) budgetElem.innerHTML = `<strong>✅ Fair Value:</strong> Slightly better value (~${savingsPercentage.toFixed(0)}%).`;
-      else if (savingsPercentage > -15) budgetElem.innerHTML = `<strong>⚠️ Budget Carefully:</strong> Costs are ~${Math.abs(savingsPercentage).toFixed(0)}% higher.`;
-      else budgetElem.innerHTML = `<strong>💰 Premium Destination:</strong> You get ~${Math.abs(savingsPercentage).toFixed(0)}% less value.`;
-
-      updateModeIndicator('live');
-      showStatus('✅ Comparison complete with LIVE rates!', false);
-    } catch (error) {
-      console.error('Compare error:', error);
-      showStatus("Error: " + error.message, true);
-    }
-  }
-
-  async function loadLeaderboard() {
-    const homeCode = document.getElementById('homeCurrency').value;
-    const homeAmount = parseFloat(document.getElementById('homeAmount').value);
-
-    if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid amount.", true); return; }
-
-    showStatus("Loading leaderboard from database...", false);
-    document.getElementById('comparisonResults').style.display = 'none';
-    document.getElementById('leaderboardSection').style.display = 'block';
-    document.getElementById('body').innerHTML = '';
-    updateModeIndicator('db');
-
-    try {
-      const params = new URLSearchParams();
-      params.set('base', homeCode);
-      params.set('amount', homeAmount);
-      params.set('top', '20');
-
-      const resp = await fetch('/api/currency/leaderboard?' + params.toString());
-      const data = await resp.json();
-
-      if (!data.ok || !data.results || data.results.length === 0) {
-        document.getElementById('leaderboardStatus').textContent = 'No results found. Try seeding currencies first.';
-        return;
-      }
-
-      document.getElementById('leaderboardStatus').textContent =
-        `Base: ${data.base}, Amount: ${data.amount}. Showing ${data.results.length} currencies. Higher score = better value.`;
-
-      const avgScore = data.results.reduce((sum, r) => sum + parseFloat(r.purchasingPowerScore), 0) / data.results.length;
-
-      data.results.forEach((r, idx) => {
-        const tr = document.createElement('tr');
-        const score = parseFloat(r.purchasingPowerScore);
-        const scoreClass = score > avgScore * 1.2 ? 'positive' : score < avgScore * 0.8 ? 'negative' : '';
-        const exchangeRate = (parseFloat(r.localAmount) / data.amount).toFixed(2);
-
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td>${escapeHtml(r.country)}</td>
-          <td>${escapeHtml(r.currencyCode)}</td>
-          <td>1 ${data.base} = ${exchangeRate} ${r.currencyCode}</td>
-          <td>${Number(r.costIndex).toFixed(0)}</td>
-          <td class="${scoreClass}">${score.toFixed(2)}</td>
-        `;
-        document.getElementById('body').appendChild(tr);
-      });
-
-      showStatus('✅ Leaderboard loaded from database!', false);
-    } catch (error) {
-      console.error('Load leaderboard error:', error);
-      showStatus("❌ Error loading leaderboard from backend.", true);
-    }
-  }
-
-  function escapeHtml(s) {
-    if (s === null || s === undefined) return '';
-    return String(s)
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'","&#039;");
-  }
-
-  document.getElementById('seed').addEventListener('click', seedCurrencies);
-  document.getElementById('compareBtn').addEventListener('click', compareCurrencies);
-  document.getElementById('refreshBtn').addEventListener('click', () => fetchExchangeRates());
-  document.getElementById('btn').addEventListener('click', loadLeaderboard);
-
-  document.getElementById('homeAmount').addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') compareCurrencies();
-  });
-
-  document.getElementById('homeCurrency').addEventListener('change', function() {
-    updateCurrencySymbols();
-    if (this.value === document.getElementById('destCurrency').value) {
-      const options = document.getElementById('destCurrency').options;
-      for (let i = 0; i < options.length; i++) {
-        if (options[i].value !== this.value) {
-          document.getElementById('destCurrency').value = options[i].value;
-          updateCurrencySymbols();
-          break;
+        function updateModeIndicator(mode) {
+            const indicator = document.getElementById('modeIndicator');
+            if (mode === 'live') {
+                indicator.textContent = 'API Mode';
+                indicator.className = 'mode-indicator mode-live';
+            } else {
+                indicator.textContent = 'Database Mode';
+                indicator.className = 'mode-indicator mode-db';
+            }
         }
-      }
-    }
-  });
 
-  document.getElementById('destCurrency').addEventListener('change', updateCurrencySymbols);
+        function updateCurrencySymbols() {
+            const homeCode = document.getElementById('homeCurrency').value;
+            const destCode = document.getElementById('destCurrency').value;
+            document.getElementById('homeSymbol').textContent = currencySymbols[homeCode] || homeCode;
+            document.getElementById('destSymbol').textContent = currencySymbols[destCode] || destCode;
+        }
 
-  window.addEventListener('DOMContentLoaded', async () => {
-    updateCurrencySymbols();
-    await fetchExchangeRates();
-    setTimeout(loadCurrencies, 800);
-  });
-</script>
+        async function fetchExchangeRates(baseCurrency = 'USD') {
+            try {
+                showStatus('Fetching live exchange rates from API...', false);
+
+                const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${baseCurrency}`);
+                if (!response.ok) throw new Error('Failed to fetch exchange rates');
+
+                const data = await response.json();
+                exchangeRates = data.rates;
+
+                if (data.time_last_updated) {
+                    if (typeof data.time_last_updated === 'number') lastUpdate = new Date(data.time_last_updated * 1000);
+                    else lastUpdate = new Date(data.time_last_updated);
+                } else if (data.date) {
+                    lastUpdate = new Date(data.date);
+                } else {
+                    lastUpdate = new Date();
+                }
+
+                if (lastUpdate.getFullYear() < 2000) lastUpdate = new Date();
+
+                useLiveRates = true;
+                updateTimeDisplay();
+                updateModeIndicator('live');
+                showStatus('✅ Live rates loaded from API!', false);
+                return true;
+            } catch (error) {
+                console.error('Error fetching live rates:', error);
+                showStatus('⚠️ Could not fetch live rates. Will use database rates if available.', true);
+                useLiveRates = false;
+                updateModeIndicator('db');
+                return false;
+            }
+        }
+
+        function updateTimeDisplay() {
+            if (lastUpdate) {
+                const timeStr = lastUpdate.toLocaleString('en-US', {
+                    month: 'short', day: 'numeric', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                });
+                document.getElementById('updateTime').textContent = `Last updated: ${timeStr} (Live API)`;
+            }
+        }
+
+        function convertCurrency(amount, fromCurrency, toCurrency) {
+            if (fromCurrency === toCurrency) return amount;
+            const amountInUSD = amount / (exchangeRates[fromCurrency] || 1);
+            return amountInUSD * (exchangeRates[toCurrency] || 1);
+        }
+
+        function getExchangeRate(fromCurrency, toCurrency) {
+            if (fromCurrency === toCurrency) return 1;
+            const fromRate = exchangeRates[fromCurrency] || 1;
+            const toRate = exchangeRates[toCurrency] || 1;
+            return toRate / fromRate;
+        }
+
+        async function seedCurrencies() {
+            showStatus("Seeding database with currencies...", false);
+            try {
+                const resp = await fetch('/api/currency/seed', { method: 'POST' });
+                const data = await resp.json();
+
+                if (!data.ok) {
+                    showStatus(data.message || 'Seed failed', true);
+                    return;
+                }
+
+                showStatus(`✅ Successfully seeded ${data.added} currencies in database!`, false);
+                await loadCurrencies();
+            } catch (error) {
+                console.error('Seed error:', error);
+                showStatus("❌ Error connecting to backend server. Make sure server is running.", true);
+            }
+        }
+
+        async function loadCurrencies() {
+            try {
+                const resp = await fetch('/api/currency/codes');
+                const data = await resp.json();
+
+                const homeSelect = document.getElementById('homeCurrency');
+                const destSelect = document.getElementById('destCurrency');
+
+                const currentHome = homeSelect.value;
+                const currentDest = destSelect.value;
+
+                if (data.ok && Array.isArray(data.codes) && data.codes.length > 0) {
+                    currenciesData = data.codes;
+
+                    homeSelect.innerHTML = '';
+                    destSelect.innerHTML = '';
+
+                    data.codes.sort((a, b) => a.code.localeCompare(b.code));
+
+                    for (const item of data.codes) {
+                        const option1 = document.createElement('option');
+                        option1.value = item.code;
+                        option1.textContent = `${item.code} - ${item.country}`;
+                        if (currentHome && item.code === currentHome) option1.selected = true;
+                        else if (!currentHome && item.code === 'USD') option1.selected = true;
+                        homeSelect.appendChild(option1);
+
+                        const option2 = document.createElement('option');
+                        option2.value = item.code;
+                        option2.textContent = `${item.code} - ${item.country}`;
+                        if (currentDest && item.code === currentDest) option2.selected = true;
+                        else if (!currentDest && item.code === 'JPY') option2.selected = true;
+                        destSelect.appendChild(option2);
+                    }
+
+                    updateCurrencySymbols();
+                    showStatus('✅ Currencies loaded from database!', false);
+                } else {
+                    showStatus('No currencies found in database. Seed first.', true);
+                }
+            } catch (error) {
+                console.error('Load currencies error:', error);
+                showStatus("Could not load from database. Seed first.", true);
+            }
+        }
+
+        async function compareCurrencies() {
+            const homeCode = document.getElementById('homeCurrency').value;
+            const homeAmount = parseFloat(document.getElementById('homeAmount').value);
+            const destCode = document.getElementById('destCurrency').value;
+
+            if (!homeCode || !destCode) { showStatus("Please select both currencies.", true); return; }
+            if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid home amount.", true); return; }
+            if (homeCode === destCode) { showStatus("Please select different currencies for comparison.", true); return; }
+
+            showStatus("Comparing with live API rates...", false);
+            if (Object.keys(exchangeRates).length === 0) await fetchExchangeRates();
+
+            try {
+                const exchangeRate = getExchangeRate(homeCode, destCode);
+                const convertedAmount = convertCurrency(homeAmount, homeCode, destCode);
+                document.getElementById('destAmount').value = convertedAmount.toFixed(2);
+
+                const homeCost = costOfLivingIndex[homeCode] || 100;
+                const destCost = costOfLivingIndex[destCode] || 100;
+                const costRatio = destCost / homeCost;
+
+                const purchasingPower = (1 / costRatio) * 100;
+                const savingsPercentage = ((homeCost - destCost) / homeCost) * 100;
+
+                document.getElementById('comparisonResults').style.display = 'block';
+                document.getElementById('leaderboardSection').style.display = 'none';
+
+                const compText = document.getElementById('comparisonText');
+                if (savingsPercentage > 10) compText.innerHTML = `<span class="savings">🎉 Great value! ${destCode} is ${savingsPercentage.toFixed(1)}% cheaper than ${homeCode}.</span>`;
+                else if (savingsPercentage < -10) compText.innerHTML = `<span class="expensive">💸 More expensive! ${destCode} is ${Math.abs(savingsPercentage).toFixed(1)}% pricier than ${homeCode}.</span>`;
+                else compText.innerHTML = `<span class="equal">⚖️ Similar cost! ${destCode} is within 10% of ${homeCode} prices.</span>`;
+
+                document.getElementById('homeCode').textContent = homeCode;
+                document.getElementById('destCode').textContent = destCode;
+                document.getElementById('destCode2').textContent = destCode;
+
+                document.getElementById('exchangeRate').textContent = `1:${exchangeRate.toFixed(4)}`;
+                document.getElementById('rateAmount').textContent = exchangeRate.toFixed(4);
+
+                document.getElementById('youGet').textContent = convertedAmount.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                const costComp = document.getElementById('costComparison');
+                if (costRatio < 0.7) costComp.innerHTML = `<span class="savings">Much Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
+                else if (costRatio < 0.9) costComp.innerHTML = `<span class="savings">Cheaper (${(costRatio * 100).toFixed(0)}%)</span>`;
+                else if (costRatio > 1.3) costComp.innerHTML = `<span class="expensive">Much Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
+                else if (costRatio > 1.1) costComp.innerHTML = `<span class="expensive">Pricier (${(costRatio * 100).toFixed(0)}%)</span>`;
+                else costComp.innerHTML = `<span class="equal">Similar (${(costRatio * 100).toFixed(0)}%)</span>`;
+
+                const powerElem = document.getElementById('purchasingPower');
+                if (purchasingPower > 130) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% 🚀 (Excellent)</span>`;
+                else if (purchasingPower > 110) powerElem.innerHTML = `<span class="savings">${purchasingPower.toFixed(0)}% ✨ (Good)</span>`;
+                else if (purchasingPower < 70) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% 📉 (Lower)</span>`;
+                else if (purchasingPower < 90) powerElem.innerHTML = `<span class="expensive">${purchasingPower.toFixed(0)}% (Below Average)</span>`;
+                else powerElem.innerHTML = `<span class="equal">${purchasingPower.toFixed(0)}% (Average)</span>`;
+
+                const budgetElem = document.getElementById('budgetExample');
+                if (savingsPercentage > 30) budgetElem.innerHTML = `<strong>💎 Excellent Value:</strong> Your money goes ${savingsPercentage.toFixed(0)}% further!`;
+                else if (savingsPercentage > 15) budgetElem.innerHTML = `<strong>👍 Good Value:</strong> Your money stretches ${savingsPercentage.toFixed(0)}% further.`;
+                else if (savingsPercentage > 0) budgetElem.innerHTML = `<strong>✅ Fair Value:</strong> Slightly better value (~${savingsPercentage.toFixed(0)}%).`;
+                else if (savingsPercentage > -15) budgetElem.innerHTML = `<strong>⚠️ Budget Carefully:</strong> Costs are ~${Math.abs(savingsPercentage).toFixed(0)}% higher.`;
+                else budgetElem.innerHTML = `<strong>💰 Premium Destination:</strong> You get ~${Math.abs(savingsPercentage).toFixed(0)}% less value.`;
+
+                updateModeIndicator('live');
+                showStatus('✅ Comparison complete with LIVE rates!', false);
+            } catch (error) {
+                console.error('Compare error:', error);
+                showStatus("Error: " + error.message, true);
+            }
+        }
+
+        async function loadLeaderboard() {
+            const homeCode = document.getElementById('homeCurrency').value;
+            const homeAmount = parseFloat(document.getElementById('homeAmount').value);
+
+            if (!homeAmount || homeAmount <= 0) { showStatus("Please enter a valid amount.", true); return; }
+
+            showStatus("Loading leaderboard from database...", false);
+            document.getElementById('comparisonResults').style.display = 'none';
+            document.getElementById('leaderboardSection').style.display = 'block';
+            document.getElementById('body').innerHTML = '';
+            updateModeIndicator('db');
+
+            try {
+                const params = new URLSearchParams();
+                params.set('base', homeCode);
+                params.set('amount', homeAmount);
+                params.set('top', '20');
+
+                const resp = await fetch('/api/currency/leaderboard?' + params.toString());
+                const data = await resp.json();
+
+                if (!data.ok || !data.results || data.results.length === 0) {
+                    document.getElementById('leaderboardStatus').textContent = 'No results found. Try seeding currencies first.';
+                    return;
+                }
+
+                document.getElementById('leaderboardStatus').textContent =
+                    `Base: ${data.base}, Amount: ${data.amount}. Showing ${data.results.length} currencies. Higher score = better value.`;
+
+                const avgScore = data.results.reduce((sum, r) => sum + parseFloat(r.purchasingPowerScore), 0) / data.results.length;
+
+                data.results.forEach((r, idx) => {
+                    const tr = document.createElement('tr');
+                    const score = parseFloat(r.purchasingPowerScore);
+                    const scoreClass = score > avgScore * 1.2 ? 'positive' : score < avgScore * 0.8 ? 'negative' : '';
+                    const exchangeRate = (parseFloat(r.localAmount) / data.amount).toFixed(2);
+
+                    tr.innerHTML = `
+                        <td>${idx + 1}</td>
+                        <td>${escapeHtml(r.country)}</td>
+                        <td>${escapeHtml(r.currencyCode)}</td>
+                        <td>1 ${data.base} = ${exchangeRate} ${r.currencyCode}</td>
+                        <td>${Number(r.costIndex).toFixed(0)}</td>
+                        <td class="${scoreClass}">${score.toFixed(2)}</td>
+                    `;
+                    document.getElementById('body').appendChild(tr);
+                });
+
+                showStatus('✅ Leaderboard loaded from database!', false);
+            } catch (error) {
+                console.error('Load leaderboard error:', error);
+                showStatus("❌ Error loading leaderboard from backend.", true);
+            }
+        }
+
+        function escapeHtml(s) {
+            if (s === null || s === undefined) return '';
+            return String(s)
+                .replaceAll('&','&amp;')
+                .replaceAll('<','&lt;')
+                .replaceAll('>','&gt;')
+                .replaceAll('"','&quot;')
+                .replaceAll("'","&#039;");
+        }
+
+        // Event listeners for currency functionality
+        document.getElementById('seed').addEventListener('click', seedCurrencies);
+        document.getElementById('compareBtn').addEventListener('click', compareCurrencies);
+        document.getElementById('refreshBtn').addEventListener('click', () => fetchExchangeRates());
+        document.getElementById('btn').addEventListener('click', loadLeaderboard);
+
+        document.getElementById('homeAmount').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') compareCurrencies();
+        });
+
+        document.getElementById('homeCurrency').addEventListener('change', function() {
+            updateCurrencySymbols();
+            if (this.value === document.getElementById('destCurrency').value) {
+                const options = document.getElementById('destCurrency').options;
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].value !== this.value) {
+                        document.getElementById('destCurrency').value = options[i].value;
+                        updateCurrencySymbols();
+                        break;
+                    }
+                }
+            }
+        });
+
+        document.getElementById('destCurrency').addEventListener('change', updateCurrencySymbols);
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            updateCurrencySymbols();
+            await fetchExchangeRates();
+            setTimeout(loadCurrencies, 800);
+        });
+    </script>
 </body>
 </html>

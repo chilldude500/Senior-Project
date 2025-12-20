@@ -3,62 +3,768 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
+    <title>Aurora Trips - Explore Destinations</title>
     <style>
-        body { margin: 0; padding: 0; background-color: #9fd3e5; font-family: Arial, sans-serif; }
-        .button-container { position: absolute; top: 20px; left: 20px; display: flex; gap: 10px; }
-        button { padding: 12px 24px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; background-color: white; color: #333; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); transition: background-color 0.3s, transform 0.1s; }
-        button:hover { background-color: #f0f0f0; transform: translateY(-2px); }
-        button:active { transform: translateY(0); }
-        .wrap { display: flex; justify-content: center; margin-top: 100px; }
-        .card { background: #fff; width: 700px; padding: 30px; border-radius: 12px; box-shadow: 0 4px 18px rgba(0,0,0,.15); }
-        .row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-        .search-input, .search-select { padding: 10px; font-size: 14px; border-radius: 8px; border: 1px solid #ccc; }
-        .search-btn { background: #4CAF50; border: none; color: white; cursor: pointer; padding: 10px 18px; border-radius: 8px; font-size: 14px; }
-        .search-btn:hover { background: #45a049; }
-        table { width: 100%; border-collapse: collapse; margin-top: 18px; }
-        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-        th { background: #f5f5f5; }
-        .muted { color: #444; margin-top: 10px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            background-color: #9fd3e5; 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: 30px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #3498db;
+            animation: aurora 3s infinite alternate;
+        }
+        
+        @keyframes aurora {
+            0% { color: #3498db; }
+            25% { color: #9b59b6; }
+            50% { color: #2ecc71; }
+            75% { color: #e74c3c; }
+            100% { color: #f39c12; }
+        }
+        
+        .logo-text {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-buttons { 
+            display: flex; 
+            gap: 10px; 
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .nav-btn { 
+            padding: 10px 20px; 
+            font-size: 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            background-color: white; 
+            color: #333; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            border: 2px solid transparent;
+        }
+        
+        .nav-btn:hover { 
+            background-color: #f8f9fa; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .nav-btn:active { 
+            transform: translateY(0); 
+        }
+        
+        .ticket-btn {
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            border: none !important;
+        }
+        
+        .ticket-btn:hover {
+            background: linear-gradient(135deg, #f57c00, #e64a19);
+        }
+        
+        /* User Profile Styles */
+        .user-profile {
+            position: relative;
+            margin-left: auto;
+        }
+        
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            min-width: 180px;
+        }
+        
+        .user-toggle:hover {
+            border-color: #3498db;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-email {
+            font-weight: 600;
+            color: #2c3e50;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 280px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s;
+        }
+        
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .user-info {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .user-name {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-role.admin {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+            padding-left: 25px;
+            color: #3498db;
+        }
+        
+        .dropdown-item i {
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+        
+        .dropdown-item.logout {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        
+        .dropdown-item.logout:hover {
+            background-color: #fdedec;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(52, 152, 219, 0.2);
+        }
+        
+        .welcome-title {
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto 25px;
+            line-height: 1.6;
+        }
+        
+        /* Search Card */
+        .wrap { 
+            display: flex; 
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        
+        .card { 
+            background: white; 
+            width: 100%; 
+            max-width: 800px;
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,.15); 
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 28px;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .row { 
+            display: flex; 
+            gap: 15px; 
+            flex-wrap: wrap; 
+            margin-bottom: 20px; 
+        }
+        
+        .search-input, .search-select { 
+            padding: 14px; 
+            font-size: 16px; 
+            border-radius: 10px; 
+            border: 2px solid #e0e0e0; 
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .search-input:focus, .search-select:focus { 
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .search-btn { 
+            background: linear-gradient(135deg, #2ecc71, #27ae60); 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            padding: 14px 30px; 
+            border-radius: 10px; 
+            font-size: 16px; 
+            font-weight: 600;
+            transition: all 0.3s;
+            min-width: 150px;
+        }
+        
+        .search-btn:hover { 
+            background: linear-gradient(135deg, #27ae60, #219653);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+        }
+        
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        th, td { 
+            border: 1px solid #e0e0e0; 
+            padding: 15px; 
+            text-align: left; 
+        }
+        
+        th { 
+            background: linear-gradient(135deg, #3498db, #2980b9); 
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        tr:hover {
+            background-color: #e3f2fd;
+        }
+        
+        .muted { 
+            color: #7f8c8d; 
+            margin-top: 15px;
+            text-align: center;
+            font-size: 15px;
+        }
+        
+        .login-prompt {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #3498db;
+            margin-left: auto;
+        }
+        
+        .login-prompt p {
+            margin: 0;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
+        .login-prompt a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .login-prompt a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        .login-prompt .divider {
+            color: #bdc3c7;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            color: #7f8c8d;
+            font-size: 14px;
+            border-top: 1px solid #e0e0e0;
+            background: rgba(255,255,255,0.8);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .header {
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            
+            .logo-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .user-profile {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .user-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .login-prompt {
+                margin: 15px auto 0;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .main-content {
+                padding: 20px;
+            }
+            
+            .card {
+                padding: 25px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-title {
+                font-size: 28px;
+            }
+            
+            .card h2 {
+                font-size: 24px;
+            }
+            
+            .search-input, .search-select {
+                min-width: 100%;
+            }
+            
+            .search-btn {
+                width: 100%;
+            }
+        }
     </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="button-container">
-        <button onclick="window.location.href='register.html'">Register</button>
-        <button onclick="window.location.href='login.html'">Login</button>
-        <button onclick="window.location.href='currency.html'">Currency</button>
-        <button onclick="window.location.href='alerts.html'">Alerts</button>
-        <button onclick="window.location.href='members.html'">Community</button>
+    <div class="header">
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🌌</span>
+                <span class="logo-text">Aurora Trips</span>
+            </a>
+        </div>
         
-    </div>
-
-    <div class="wrap">
-        <div class="card">
-            <h2>Search Destinations</h2>
-            <div class="row">
-                <select id="quickSelect" class="search-select" style="flex:1; min-width:200px;">
-                    <option value="">Quick Select Destination...</option>
-                    <option value="Tokyo">Tokyo, Japan</option>
-                    <option value="Paris">Paris, France</option>
-                    <option value="New York">New York, USA</option>
-                    <option value="Bali">Bali, Indonesia</option>
-                </select>
+        <div class="nav-buttons">
+            <button onclick="window.location.href='currency.html'" class="nav-btn">
+                <i class="fas fa-money-bill-wave"></i> Currency
+            </button>
+            <button onclick="window.location.href='alerts.html'" class="nav-btn">
+                <i class="fas fa-bell"></i> Alerts
+            </button>
+            <button onclick="window.location.href='members.html'" class="nav-btn">
+                <i class="fas fa-users"></i> Community
+            </button>
+            <!-- Ticket button will be added here by JavaScript if logged in -->
+        </div>
+        
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <div class="user-toggle" id="userToggle">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-email" id="userEmail">user@example.com</div>
+                <i class="fas fa-chevron-down"></i>
             </div>
-            <div class="row">
-                <input id="q" class="search-input" placeholder="Search (city/country/tag)" style="flex:2; min-width:220px;">
-                <input id="budget" class="search-input" type="number" min="0" placeholder="Max Budget" style="flex:1; min-width:140px;">
-                <button id="btn" class="search-btn">Search</button>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-info">
+                    <div class="user-name" id="userFullName">User Name</div>
+                    <div class="user-role" id="userRole">Member</div>
+                </div>
+                <a href="profile.html" class="dropdown-item">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="my-tickets.html" class="dropdown-item">
+                    <i class="fas fa-ticket-alt"></i> My Tickets
+                </a>
+                <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
+                    <i class="fas fa-crown"></i> Admin Panel
+                </a>
+                <a href="#" class="dropdown-item logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             </div>
-            <div id="status" class="muted"></div>
-            <table id="tbl" style="display:none;">
-                <thead><tr><th>Name</th><th>Country</th><th>Continent</th><th>Cost</th><th>Safety</th><th>Tags</th></tr></thead>
-                <tbody id="body"></tbody>
-            </table>
+        </div>
+        
+        <div class="login-prompt" id="loginPrompt">
+            <p>Welcome to <strong>Aurora Trips</strong></p>
+            <span class="divider">|</span>
+            <p><a href="login.html">Login</a> or <a href="register.html">Register</a> to access all features</p>
         </div>
     </div>
 
+    <div class="main-content">
+        
+        
+        <div class="wrap">
+            <div class="card">
+                <h2>Search Destinations</h2>
+                <div class="row">
+                    <select id="quickSelect" class="search-select">
+                        <option value="">Quick Select Destination...</option>
+                        <option value="Tokyo">Tokyo, Japan</option>
+                        <option value="Paris">Paris, France</option>
+                        <option value="New York">New York, USA</option>
+                        <option value="Bali">Bali, Indonesia</option>
+                        <option value="Sydney">Sydney, Australia</option>
+                        <option value="Rome">Rome, Italy</option>
+                    </select>
+                </div>
+                <div class="row">
+                    <input id="q" class="search-input" placeholder="Search by city, country, or tag (e.g., beaches, museums)">
+                    <input id="budget" class="search-input" type="number" min="0" placeholder="Max Budget (USD)">
+                    <button id="btn" class="search-btn">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+                <div id="status" class="muted"></div>
+                <table id="tbl" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>Destination</th>
+                            <th>Country</th>
+                            <th>Continent</th>
+                            <th>Estimated Cost</th>
+                            <th>Safety Score</th>
+                            <th>Tags</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
     <script>
-        document.getElementById('quickSelect').addEventListener('change', function() { if (this.value) { document.getElementById('q').value = this.value; search(); } });
+// Check if user is logged in
+async function checkLoginStatus() {
+    const userId = localStorage.getItem('userId');
+    const userName = localStorage.getItem('userName');
+    const userEmail = localStorage.getItem('userEmail');
+    const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
+    const userProfilePicture = localStorage.getItem('userProfilePicture');
+    
+    if (userId && userName && userEmail) {
+        // Hide login prompt
+        document.getElementById('loginPrompt').style.display = 'none';
+        
+        // Show user profile
+        const userProfile = document.getElementById('userProfile');
+        userProfile.style.display = 'block';
+        
+        // Update user info
+        document.getElementById('userEmail').textContent = userEmail;
+        document.getElementById('userFullName').textContent = userName;
+        
+        // Set user role
+        const userRole = document.getElementById('userRole');
+        if (userIsAdmin) {
+            userRole.textContent = 'Admin';
+            userRole.classList.add('admin');
+            document.getElementById('adminLink').style.display = 'flex';
+        } else {
+            userRole.textContent = 'Member';
+            userRole.classList.remove('admin');
+        }
+        
+        // Set avatar
+        const userAvatar = document.getElementById('userAvatar');
+        if (userProfilePicture) {
+            userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
+        } else {
+            // Create initials from name
+            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            userAvatar.textContent = initials;
+            
+            // Generate random gradient based on user initials
+            const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
+            const color1 = colors[initials.charCodeAt(0) % colors.length];
+            const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
+            userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+        }
+        
+        // Add ticket button to navigation if not already there
+        const buttonContainer = document.querySelector('.nav-buttons');
+        if (!document.getElementById('ticketNavBtn')) {
+            const ticketButton = document.createElement('button');
+            ticketButton.id = 'ticketNavBtn';
+            ticketButton.className = 'nav-btn ticket-btn';
+            ticketButton.innerHTML = '<i class="fas fa-ticket-alt"></i> Support';
+            ticketButton.onclick = () => window.location.href = 'tickets.html';
+            buttonContainer.appendChild(ticketButton);
+        }
+        
+        // ✅ NEW CODE: Add admin panel button if user is admin
+        if (userIsAdmin) {
+            // Add admin panel button to navigation if not already there
+            if (!document.getElementById('adminPanelBtn')) {
+                const adminButton = document.createElement('a');
+                adminButton.id = 'adminPanelBtn';
+                adminButton.className = 'nav-btn admin-btn';
+                adminButton.href = 'admin-panel.html';
+                adminButton.innerHTML = '<i class="fas fa-crown"></i> Admin Panel';
+                buttonContainer.appendChild(adminButton);
+            }
+        } else {
+            // Remove admin button if exists
+            const adminBtn = document.getElementById('adminPanelBtn');
+            if (adminBtn) {
+                adminBtn.remove();
+            }
+        }
+        // ✅ END OF NEW CODE
+        
+        // ✅ Check with server if user is banned (real-time check)
+        try {
+            const response = await fetch(`/api/user/status?userId=${userId}`);
+            const data = await response.json();
+            
+            if (data.loggedIn && data.user.isBanned) {
+                // User is banned according to server
+                alert('⚠️ Your account has been suspended. Please contact support.');
+                logout();
+                return;
+            }
+        } catch (error) {
+            console.error('Error checking user status:', error);
+        }
+    } else {
+        // Show login prompt
+        document.getElementById('loginPrompt').style.display = 'flex';
+        document.getElementById('userProfile').style.display = 'none';
+        
+        // Remove ticket button if exists
+        const ticketBtn = document.getElementById('ticketNavBtn');
+        if (ticketBtn) {
+            ticketBtn.remove();
+        }
+        
+        // ✅ NEW CODE: Remove admin button if exists
+        const adminBtn = document.getElementById('adminPanelBtn');
+        if (adminBtn) {
+            adminBtn.remove();
+        }
+        // ✅ END OF NEW CODE
+    }
+}
+        
+        // Toggle user dropdown
+        document.getElementById('userToggle').addEventListener('click', function(e) {
+            e.stopPropagation();
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.remove('show');
+        });
+        
+        // Prevent dropdown from closing when clicking inside it
+        document.getElementById('userDropdown').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+        
+        // Logout function
+        function logout() {
+            // Clear all user data from localStorage
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userIsAdmin');
+            localStorage.removeItem('userProfilePicture');
+            localStorage.removeItem('userIsBanned');
+            
+            // Redirect to home page
+            window.location.href = 'index.html';
+        }
+        
+        // Check login status on page load
+        document.addEventListener('DOMContentLoaded', checkLoginStatus);
+        
+        // Existing search functionality
+        document.getElementById('quickSelect').addEventListener('change', function() { 
+            if (this.value) { 
+                document.getElementById('q').value = this.value; 
+                search(); 
+            } 
+        });
+        
         async function search() {
             const q = document.getElementById('q').value.trim();
             const budget = document.getElementById('budget').value.trim();
@@ -69,19 +775,54 @@
             document.getElementById('tbl').style.display = 'none';
             document.getElementById('body').innerHTML = '';
             
-            // Note: This relies on your existing destination API. If that hasn't changed, this works.
-            const resp = await fetch('/api/destinations/search?' + params.toString());
-            const data = await resp.json();
-            if (!data.ok) { document.getElementById('status').textContent = data.message || 'Search failed'; return; }
-            document.getElementById('status').textContent = `Found ${data.count} result(s)`;
-            document.getElementById('tbl').style.display = 'table';
-            for (const d of data.results) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td>${d.name}</td><td>${d.country}</td><td>${d.continent}</td><td>$${d.estimatedCost}</td><td>${d.safetyScore}</td><td>${d.tags}</td>`;
-                document.getElementById('body').appendChild(tr);
+            try {
+                const resp = await fetch('/api/destinations/search?' + params.toString());
+                const data = await resp.json();
+                
+                if (!data.ok) { 
+                    document.getElementById('status').textContent = data.message || 'Search failed'; 
+                    return; 
+                }
+                
+                document.getElementById('status').textContent = `Found ${data.count} result(s)`;
+                
+                if (data.count > 0) {
+                    document.getElementById('tbl').style.display = 'table';
+                    for (const d of data.results) {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><strong>${d.name}</strong></td>
+                            <td>${d.country}</td>
+                            <td>${d.continent}</td>
+                            <td>$${d.estimatedCost}</td>
+                            <td>${d.safetyScore}/10</td>
+                            <td>${d.tags}</td>
+                        `;
+                        document.getElementById('body').appendChild(tr);
+                    }
+                } else {
+                    document.getElementById('status').textContent = 'No destinations found matching your criteria.';
+                }
+            } catch (error) {
+                document.getElementById('status').textContent = 'Error searching destinations. Please try again.';
+                console.error('Search error:', error);
             }
         }
+        
         document.getElementById('btn').addEventListener('click', search);
+        
+        // Allow pressing Enter to search
+        document.getElementById('q').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
+        
+        document.getElementById('budget').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                search();
+            }
+        });
     </script>
 </body>
 </html>

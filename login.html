@@ -2,99 +2,544 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Aurora Trips</title>
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      background: skyblue;
-      font-family: Arial, sans-serif;
+      background-color: #9fd3e5;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
     }
 
-    .container {
-      width: 350px;
-      margin: 100px auto;
+    .login-container {
+      width: 100%;
+      max-width: 450px;
       background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(52, 152, 219, 0.2);
+    }
+
+    .logo-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-size: 36px;
+      font-weight: 800;
+      color: #2c3e50;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .logo-icon {
+      font-size: 40px;
+      color: #3498db;
+      animation: aurora 3s infinite alternate;
+    }
+
+    @keyframes aurora {
+      0% { color: #3498db; }
+      25% { color: #9b59b6; }
+      50% { color: #2ecc71; }
+      75% { color: #e74c3c; }
+      100% { color: #f39c12; }
+    }
+
+    .logo-text {
+      background: linear-gradient(135deg, #3498db, #9b59b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      color: #7f8c8d;
+      font-size: 16px;
+      font-weight: 500;
     }
 
     h2 {
       text-align: center;
+      color: #2c3e50;
+      margin-bottom: 30px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      font-weight: 600;
+      font-size: 15px;
+    }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #7f8c8d;
+      font-size: 18px;
     }
 
     input {
       width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      box-sizing: border-box;
+      padding: 16px 16px 16px 50px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      font-size: 16px;
+      transition: all 0.3s;
+      background-color: #f8f9fa;
     }
 
-    button {
+    input:focus {
+      outline: none;
+      border-color: #3498db;
+      background-color: white;
+      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    }
+
+    .password-toggle {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: #7f8c8d;
+      cursor: pointer;
+      font-size: 18px;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .password-toggle:hover {
+      color: #3498db;
+    }
+
+    button[type="submit"] {
       width: 100%;
-      padding: 10px;
-      background: #333;
+      padding: 16px;
+      background: linear-gradient(135deg, #3498db, #2980b9);
       color: white;
       border: none;
+      border-radius: 12px;
+      font-size: 18px;
+      font-weight: 600;
       cursor: pointer;
-    }
-
-    button:hover {
-      background: #555;
-    }
-
-    .msg {
-      text-align: center;
+      transition: all 0.3s;
       margin-top: 10px;
-      color: green;
+    }
+
+    button[type="submit"]:hover {
+      background: linear-gradient(135deg, #2980b9, #1f618d);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+    }
+
+    button[type="submit"]:active {
+      transform: translateY(0);
+    }
+
+    button[type="submit"]:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 500;
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+      display: block;
+    }
+
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      display: block;
+    }
+
+    .message.warning {
+      background-color: #fff3cd;
+      color: #856404;
+      border: 1px solid #ffeaa7;
+      display: block;
+    }
+
+    .links {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
     .link {
-      text-align: center;
-      margin-top: 10px;
+      color: #3498db;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 15px;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .link a {
+    .link:hover {
+      color: #2980b9;
+      text-decoration: underline;
+    }
+
+    .link i {
+      font-size: 16px;
+    }
+
+    .home-link {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+
+    .home-link a {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #2c3e50;
       text-decoration: none;
-      color: purple;
+      font-weight: 600;
+      font-size: 16px;
+      padding: 10px 20px;
+      border-radius: 8px;
+      background-color: #f8f9fa;
+      transition: all 0.3s;
+    }
+
+    .home-link a:hover {
+      background-color: #e9ecef;
+      transform: translateY(-2px);
+    }
+
+    .home-link a i {
+      font-size: 18px;
+    }
+
+    .demo-credentials {
+      margin-top: 25px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-left: 4px solid #3498db;
+    }
+
+    .demo-credentials h4 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .demo-credentials p {
+      color: #7f8c8d;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 5px;
+    }
+
+    .demo-credentials .admin-note {
+      color: #9b59b6;
+      font-weight: 600;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 768px) {
+      .login-container {
+        padding: 30px;
+      }
+      
+      .logo {
+        font-size: 32px;
+      }
+      
+      .logo-icon {
+        font-size: 36px;
+      }
+      
+      h2 {
+        font-size: 24px;
+      }
+      
+      .links {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+      
+      .login-container {
+        padding: 25px 20px;
+      }
+      
+      .logo {
+        font-size: 28px;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .logo-icon {
+        font-size: 32px;
+      }
     }
   </style>
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
-  <div class="container">
-    <h2>Login</h2>
-
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
-
-    <button onclick="login()">Login</button>
-
-    <p class="msg" id="message"></p>
-
-    <div class="link">
-      <a href="reset_password.html">Forgot password?</a>
+  <div class="login-container">
+    <div class="logo-header">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">🌌</span>
+        <span class="logo-text">Aurora Trips</span>
+      </a>
     </div>
 
-    <div class="link">
-      <a href="index.html">Back to Home</a>
+    <h2>Welcome Back</h2>
+    
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-with-icon">
+          <i class="fas fa-envelope input-icon"></i>
+          <input type="email" id="email" placeholder="Enter your email" required />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-with-icon">
+          <i class="fas fa-lock input-icon"></i>
+          <input type="password" id="password" placeholder="Enter your password" required />
+          <button type="button" class="password-toggle" id="passwordToggle">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+      
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
+    
+    <div id="message" class="message"></div>
+    
+    
+    <div class="links">
+      <a href="reset_password.html" class="link">
+        <i class="fas fa-key"></i> Forgot password?
+      </a>
+      <a href="register.html" class="link">
+        <i class="fas fa-user-plus"></i> Create account
+      </a>
+      <a href="index.html" class="link">
+        <i class="fas fa-home"></i> Back to Home
+      </a>
+    </div>
+    
+    <div class="home-link">
+      <a href="index.html">
+        <i class="fas fa-arrow-left"></i> Return to Aurora Trips Homepage
+      </a>
     </div>
   </div>
 
   <script>
-    async function login() {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-      document.getElementById("message").textContent = data.message || "Login successful";
+    // Toggle password visibility
+    document.getElementById('passwordToggle').addEventListener('click', function() {
+      const passwordInput = document.getElementById('password');
+      const icon = this.querySelector('i');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    });
+    
+    // Handle form submission
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const loginBtn = document.getElementById('loginBtn');
+      const messageDiv = document.getElementById('message');
+      
+      // Clear previous messages
+      messageDiv.style.display = 'none';
+      messageDiv.className = 'message';
+      
+      // Get form values
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      
+      // Basic validation
+      if (!email || !password) {
+        messageDiv.textContent = 'Please fill in all fields';
+        messageDiv.className = 'message error';
+        messageDiv.style.display = 'block';
+        return;
+      }
+      
+      // Disable button during submission
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+      
+      try {
+        // Send login request
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          // Show success message
+          messageDiv.textContent = 'Login successful! Redirecting...';
+          messageDiv.className = 'message success';
+          messageDiv.style.display = 'block';
+          
+          // Store user data in localStorage
+          localStorage.setItem('userId', data.userId);
+          localStorage.setItem('userName', data.name);
+          localStorage.setItem('userEmail', data.email);
+          localStorage.setItem('userIsAdmin', data.isAdmin);
+          localStorage.setItem('userIsBanned', data.isBanned);
+          localStorage.setItem('userProfilePicture', data.profilePicture || '');
+          
+          console.log('User logged in:', {
+            userId: data.userId,
+            name: data.name,
+            email: data.email,
+            isAdmin: data.isAdmin,
+            isBanned: data.isBanned
+          });
+          
+          // Redirect to home page after 1.5 seconds
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        } else {
+          // Show error message based on status code
+          if (response.status === 403) {
+            // User is banned
+            messageDiv.textContent = data.message || 'Your account has been suspended. Please contact support.';
+            messageDiv.className = 'message warning';
+          } else {
+            // Other errors
+            messageDiv.textContent = data.message || 'Login failed. Please check your credentials.';
+            messageDiv.className = 'message error';
+          }
+          messageDiv.style.display = 'block';
+          loginBtn.disabled = false;
+          loginBtn.textContent = 'Login';
+        }
+      } catch (error) {
+        console.error('Login error:', error);
+        messageDiv.textContent = 'Error connecting to server. Please check your internet connection and try again.';
+        messageDiv.className = 'message error';
+        messageDiv.style.display = 'block';
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Login';
+      }
+    });
+    
+    // Focus on email input on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('email').focus();
+      
+      // Check if there's a message in URL (e.g., from logout)
+      const urlParams = new URLSearchParams(window.location.search);
+      const message = urlParams.get('message');
+      
+      if (message) {
+        const messageDiv = document.getElementById('message');
+        messageDiv.textContent = decodeURIComponent(message);
+        messageDiv.className = 'message success';
+        messageDiv.style.display = 'block';
+      }
+    });
+    
+    // Auto-fill demo credentials for testing
+    function fillDemoCredentials(isAdmin = false) {
+      if (isAdmin) {
+        document.getElementById('email').value = 'admin@travelhub.com';
+        document.getElementById('password').value = 'admin123';
+      } else {
+        document.getElementById('email').value = 'user@example.com';
+        document.getElementById('password').value = 'password123';
+      }
     }
+    
+    // For testing purposes - uncomment to enable auto-fill on page load
+    // document.addEventListener('DOMContentLoaded', () => fillDemoCredentials(false));
   </script>
 </body>
 </html>

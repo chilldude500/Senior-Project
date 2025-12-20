@@ -1,4 +1,3 @@
-
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -18,26 +17,108 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 // ✅ Configure SendGrid API Key
-// Set this in your environment variables or .env file
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || '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');
 
 const MONGODB_URI = 'mongodb+srv://seniorproject:RsxK1bDyaTDoXnzx@seniorproject.wkyrwfp.mongodb.net/senior_project_db?appName=seniorproject';
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch(err => console.error('MongoDB connection error:', err));
+  .then(() => console.log('✅ Connected to MongoDB'))
+  .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// USER SCHEMA
+// ============================
+// ✅ USER SCHEMA (Updated with admin/ban fields)
+// ============================
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true, trim: true },
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   password: { type: String, required: true },
   bio: { type: String, default: 'No bio available.' },
   profilePicture: { type: String, default: '' },
+  isAdmin: { type: Boolean, default: false },  // ✅ NEW: Admin flag
+  isBanned: { type: Boolean, default: false },  // ✅ NEW: Ban flag
   createdAt: { type: Date, default: Date.now }
 });
 
 const User = mongoose.model('User', userSchema);
+
+// ============================
+// ✅ TICKET MESSAGE SCHEMA
+// ============================
+const messageSchema = new mongoose.Schema({
+  ticketId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Ticket', 
+    required: true 
+  },
+  senderId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'User', 
+    required: true 
+  },
+  senderName: { type: String, required: true },
+  senderEmail: { type: String, required: true },
+  senderRole: { type: String, enum: ['user', 'admin'], required: true },
+  message: { type: String, required: true },
+  attachments: [{ type: String }],
+  createdAt: { type: Date, default: Date.now },
+  isInternalNote: { type: Boolean, default: false } // For admin-only notes
+});
+
+const Message = mongoose.model('Message', messageSchema);
+
+// ============================
+// ✅ TICKET SCHEMA (Updated with messaging fields)
+// ============================
+const ticketSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  category: { 
+    type: String, 
+    required: true,
+    enum: ['Technical', 'Billing', 'Account', 'Feature', 'Bug', 'Booking', 'Other'] 
+  },
+  priority: { 
+    type: String, 
+    required: true,
+    enum: ['Low', 'Medium', 'High', 'Urgent'] 
+  },
+  description: { type: String, required: true },
+  status: { 
+    type: String, 
+    default: 'Open',
+    enum: ['Open', 'Pending', 'Resolved', 'Closed'] 
+  },
+  createdAt: { type: Date, default: Date.now },
+  resolvedAt: { type: Date },
+  assignedTo: { type: String, default: '' },
+  lastMessageAt: { type: Date, default: Date.now }, // Track last message time
+  messageCount: { type: Number, default: 1 } // Count of messages including initial description
+});
+
+const Ticket = mongoose.model('Ticket', ticketSchema);
+
+// ============================
+// ✅ DESTINATION SCHEMA
+// ============================
+const destinationSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  country: { type: String, required: true },
+  continent: { type: String, required: true },
+  estimatedCost: { type: Number, required: true },
+  safetyScore: { type: Number, required: true },
+  tags: { type: String, default: "" }
+});
+const Destination = mongoose.model('Destination', destinationSchema);
+
+// ============================
+// ✅ CURRENCY SCHEMA
+// ============================
+const currencySchema = new mongoose.Schema({
+  country: { type: String, required: true },
+  currencyCode: { type: String, required: true, unique: true },
+  costIndex: { type: Number, required: true }
+});
+const Currency = mongoose.model('Currency', currencySchema);
 
 // --- HTML PAGE ROUTES ---
 app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
@@ -46,10 +127,16 @@ app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'login.html'))
 app.get('/profile', (req, res) => res.sendFile(path.join(__dirname, 'profile.html')));
 app.get('/members', (req, res) => res.sendFile(path.join(__dirname, 'members.html')));
 app.get('/user', (req, res) => res.sendFile(path.join(__dirname, 'user-view.html')));
+app.get('/tickets', (req, res) => res.sendFile(path.join(__dirname, 'tickets.html')));
+app.get('/tickets-admin', (req, res) => res.sendFile(path.join(__dirname, 'tickets-admin.html')));
+app.get('/currency', (req, res) => res.sendFile(path.join(__dirname, 'currency.html')));
+app.get('/alerts', (req, res) => res.sendFile(path.join(__dirname, 'alerts.html')));
 
 // --- API ROUTES ---
 
-// 1. Register
+// ============================
+// 1. USER REGISTRATION
+// ============================
 app.post('/api/register', async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -59,41 +146,91 @@ app.post('/api/register', async (req, res) => {
     if (existing) return res.status(400).json({ message: 'Email taken' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = new User({ name, email, password: hashedPassword });
+    const newUser = new User({ 
+      name, 
+      email, 
+      password: hashedPassword,
+      isAdmin: false,  // Default to not admin
+      isBanned: false  // Default to not banned
+    });
     await newUser.save();
 
-    res.status(201).json({ message: 'Registered', userId: newUser._id });
+    res.status(201).json({ 
+      message: 'Registered', 
+      userId: newUser._id,
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email,
+        isAdmin: newUser.isAdmin,
+        isBanned: newUser.isBanned,
+        profilePicture: newUser.profilePicture
+      }
+    });
   } catch (e) {
-    res.status(500).json({ message: 'Error' });
+    console.error('Registration error:', e);
+    res.status(500).json({ message: 'Registration error' });
   }
 });
 
-// 2. Login
+// ============================
+// 2. USER LOGIN (Updated with MongoDB ban check)
+// ============================
 app.post('/api/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email.toLowerCase().trim() });
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.json({ message: 'Success', userId: user._id, name: user.name });
+    // Check password
+    const passwordValid = await bcrypt.compare(password, user.password);
+    if (!passwordValid) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    // ✅ Check if user is banned in MongoDB
+    if (user.isBanned) {
+      console.log(`🚫 Blocked banned user login attempt: ${user.email}`);
+      return res.status(403).json({ 
+        message: 'Your account has been suspended. Please contact support.' 
+      });
+    }
+
+    res.json({ 
+      message: 'Success', 
+      userId: user._id, 
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+      isBanned: user.isBanned,
+      profilePicture: user.profilePicture
+    });
   } catch (e) {
-    res.status(500).json({ message: 'Error' });
+    console.error('Login error:', e);
+    res.status(500).json({ message: 'Login error' });
   }
 });
 
-// 3. Get Single Profile
+// ============================
+// 3. GET SINGLE USER PROFILE
+// ============================
 app.get('/api/users/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'Not found' });
+    if (!user) return res.status(404).json({ message: 'User not found' });
     res.json(user);
-  } catch (e) { res.status(500).json({ message: 'Error' }); }
+  } catch (e) { 
+    console.error('Get user error:', e);
+    res.status(500).json({ message: 'Error fetching user' }); 
+  }
 });
 
-// 4. Update Profile
+// ============================
+// 4. UPDATE USER PROFILE
+// ============================
 app.put('/api/users/:id', async (req, res) => {
   try {
     const { name, bio, profilePicture } = req.body;
@@ -103,15 +240,218 @@ app.put('/api/users/:id', async (req, res) => {
       { new: true }
     ).select('-password');
     res.json(updatedUser);
-  } catch (e) { res.status(500).json({ message: 'Error' }); }
+  } catch (e) { 
+    console.error('Update user error:', e);
+    res.status(500).json({ message: 'Error updating user' }); 
+  }
 });
 
-// 5. Get ALL Users
+// ============================
+// 5. GET ALL USERS
+// ============================
 app.get('/api/all-users', async (req, res) => {
   try {
-    const users = await User.find().select('name bio profilePicture');
+    const users = await User.find().select('name bio profilePicture isAdmin isBanned');
     res.json(users);
-  } catch (e) { res.status(500).json({ message: 'Error fetching users' }); }
+  } catch (e) { 
+    console.error('Get all users error:', e);
+    res.status(500).json({ message: 'Error fetching users' }); 
+  }
+});
+
+// ============================
+// 6. GET CURRENT USER STATUS
+// ============================
+app.get('/api/user/status', async (req, res) => {
+  try {
+    const { userId } = req.query;
+    
+    if (!userId) {
+      return res.json({ loggedIn: false });
+    }
+    
+    const user = await User.findById(userId).select('-password');
+    if (!user) {
+      return res.json({ loggedIn: false });
+    }
+    
+    res.json({
+      loggedIn: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isBanned: user.isBanned,
+        profilePicture: user.profilePicture
+      }
+    });
+  } catch (e) {
+    console.error('User status error:', e);
+    res.status(500).json({ message: 'Error checking user status' });
+  }
+});
+
+/* ============================
+   ✅ TICKET MESSAGING API
+============================ */
+
+// Get all messages for a ticket
+app.get('/api/tickets/:id/messages', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.query.userId; // For permission checking
+    
+    // First, verify the ticket exists
+    const ticket = await Ticket.findById(id);
+    if (!ticket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+    
+    // Check if user has permission to view messages
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+    
+    // Allow access if: user is admin OR user created the ticket
+    const isAdmin = user.isAdmin;
+    const isTicketOwner = user.email.toLowerCase() === ticket.email.toLowerCase();
+    
+    if (!isAdmin && !isTicketOwner) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    
+    // Get messages, filter internal notes for non-admins
+    let query = { ticketId: id };
+    if (!isAdmin) {
+      query.isInternalNote = false;
+    }
+    
+    const messages = await Message.find(query)
+      .sort({ createdAt: 1 }) // Oldest first for conversation view
+      .populate('senderId', 'name email profilePicture');
+    
+    res.json(messages);
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Send a new message to a ticket
+app.post('/api/tickets/:id/messages', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { userId, message, isInternalNote } = req.body;
+    
+    if (!userId || !message) {
+      return res.status(400).json({ message: 'User ID and message are required' });
+    }
+    
+    // Verify ticket exists
+    const ticket = await Ticket.findById(id);
+    if (!ticket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+    
+    // Verify user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+    
+    // Check if user has permission to send messages
+    const isAdmin = user.isAdmin;
+    const isTicketOwner = user.email.toLowerCase() === ticket.email.toLowerCase();
+    
+    if (!isAdmin && !isTicketOwner) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    
+    // Create new message
+    const newMessage = new Message({
+      ticketId: id,
+      senderId: userId,
+      senderName: user.name,
+      senderEmail: user.email,
+      senderRole: isAdmin ? 'admin' : 'user',
+      message: message,
+      isInternalNote: isInternalNote || false
+    });
+    
+    await newMessage.save();
+    
+    // Update ticket's last message time and increment message count
+    ticket.lastMessageAt = new Date();
+    ticket.messageCount = (ticket.messageCount || 1) + 1;
+    
+    // Auto-reopen ticket if it was closed/resolved and user is replying
+    if ((ticket.status === 'Resolved' || ticket.status === 'Closed') && !isAdmin) {
+      ticket.status = 'Open';
+    }
+    
+    await ticket.save();
+    
+    // Return the created message with sender info
+    const populatedMessage = await Message.findById(newMessage._id)
+      .populate('senderId', 'name email profilePicture');
+    
+    res.status(201).json({
+      message: 'Message sent successfully',
+      ticketMessage: populatedMessage
+    });
+  } catch (error) {
+    console.error('Error sending message:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get ticket with messages (combined endpoint)
+app.get('/api/tickets/:id/details', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.query.userId;
+    
+    // Get ticket
+    const ticket = await Ticket.findById(id);
+    if (!ticket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+    
+    // Check permissions
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'User not found' });
+    }
+    
+    const isAdmin = user.isAdmin;
+    const isTicketOwner = user.email.toLowerCase() === ticket.email.toLowerCase();
+    
+    if (!isAdmin && !isTicketOwner) {
+      return res.status(403).json({ message: 'Access denied' });
+    }
+    
+    // Get messages
+    let query = { ticketId: id };
+    if (!isAdmin) {
+      query.isInternalNote = false;
+    }
+    
+    const messages = await Message.find(query)
+      .sort({ createdAt: 1 })
+      .populate('senderId', 'name email profilePicture');
+    
+    res.json({
+      ticket,
+      messages,
+      userCanReply: true,
+      userRole: isAdmin ? 'admin' : 'user'
+    });
+  } catch (error) {
+    console.error('Error fetching ticket details:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 /* ============================
@@ -155,7 +495,7 @@ async function sendPasswordResetEmail(toEmail, code) {
   }
 }
 
-// 6. Send reset code
+// 7. Send reset code
 app.post('/api/forgot/send-code', async (req, res) => {
   try {
     const { email } = req.body;
@@ -182,7 +522,7 @@ app.post('/api/forgot/send-code', async (req, res) => {
   }
 });
 
-// 7. Verify code + reset password
+// 8. Verify code + reset password
 app.post('/api/forgot/verify-code-reset', async (req, res) => {
   try {
     const { email, code, newPassword } = req.body;
@@ -227,16 +567,7 @@ app.post('/api/forgot/verify-code-reset', async (req, res) => {
    ✅ DESTINATIONS API (for index.html)
 ============================ */
 
-const destinationSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  country: { type: String, required: true },
-  continent: { type: String, required: true },
-  estimatedCost: { type: Number, required: true },
-  safetyScore: { type: Number, required: true },
-  tags: { type: String, default: "" }
-});
-const Destination = mongoose.model('Destination', destinationSchema);
-
+// Seed destinations
 app.post('/api/destinations/seed', async (req, res) => {
   try {
     // prevents duplicates
@@ -256,6 +587,7 @@ app.post('/api/destinations/seed', async (req, res) => {
   }
 });
 
+// Search destinations
 app.get('/api/destinations/search', async (req, res) => {
   try {
     const query = (req.query.query || "").toString().trim();
@@ -285,13 +617,7 @@ app.get('/api/destinations/search', async (req, res) => {
    ✅ CURRENCY API (for currency.html)
 ============================ */
 
-const currencySchema = new mongoose.Schema({
-  country: { type: String, required: true },
-  currencyCode: { type: String, required: true, unique: true },
-  costIndex: { type: Number, required: true }
-});
-const Currency = mongoose.model('Currency', currencySchema);
-
+// Seed currencies
 app.post('/api/currency/seed', async (req, res) => {
   try {
     const count = await Currency.countDocuments();
@@ -328,6 +654,7 @@ app.post('/api/currency/seed', async (req, res) => {
   }
 });
 
+// Get all currency codes
 app.get('/api/currency/codes', async (req, res) => {
   try {
     const docs = await Currency.find({}, { country: 1, currencyCode: 1, _id: 0 }).sort({ currencyCode: 1 });
@@ -339,6 +666,7 @@ app.get('/api/currency/codes', async (req, res) => {
   }
 });
 
+// Get currency leaderboard
 app.get('/api/currency/leaderboard', async (req, res) => {
   try {
     const base = (req.query.base || 'USD').toString().toUpperCase();
@@ -374,4 +702,325 @@ app.get('/api/currency/leaderboard', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+/* ============================
+   ✅ TICKET SYSTEM API
+============================ */
+
+// Get all tickets with optional filters
+app.get('/api/tickets', async (req, res) => {
+  try {
+    const { status, priority, category } = req.query;
+    
+    // Build filter object
+    const filter = {};
+    if (status && status !== 'all') filter.status = status;
+    if (priority && priority !== 'all') filter.priority = priority;
+    if (category && category !== 'all') filter.category = category;
+    
+    const tickets = await Ticket.find(filter).sort({ createdAt: -1 });
+    res.json(tickets);
+  } catch (error) {
+    console.error('Error fetching tickets:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Create a new ticket
+app.post('/api/tickets', async (req, res) => {
+  try {
+    const { name, email, category, priority, description } = req.body;
+    
+    // Validate required fields
+    if (!name || !email || !category || !priority || !description) {
+      return res.status(400).json({ message: 'All fields are required' });
+    }
+    
+    const newTicket = new Ticket({
+      name,
+      email,
+      category,
+      priority,
+      description,
+      status: 'Open'
+    });
+    
+    await newTicket.save();
+    
+    res.status(201).json({
+      message: 'Ticket submitted successfully',
+      ticketId: newTicket._id,
+      ticket: newTicket
+    });
+  } catch (error) {
+    console.error('Error creating ticket:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update a ticket (status)
+app.patch('/api/tickets/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, assignedTo } = req.body;
+    
+    if (!status && !assignedTo) {
+      return res.status(400).json({ message: 'Status or assignedTo is required' });
+    }
+    
+    const updateData = {};
+    if (status) {
+      // Validate status value
+      const validStatuses = ['Open', 'Pending', 'Resolved'];
+      if (!validStatuses.includes(status)) {
+        return res.status(400).json({ message: 'Invalid status value' });
+      }
+      updateData.status = status;
+      if (status === 'Resolved') {
+        updateData.resolvedAt = new Date();
+      }
+    }
+    if (assignedTo !== undefined) {
+      updateData.assignedTo = assignedTo;
+    }
+    
+    const updatedTicket = await Ticket.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+    
+    if (!updatedTicket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+    
+    res.json({
+      message: 'Ticket updated successfully',
+      ticket: updatedTicket
+    });
+  } catch (error) {
+    console.error('Error updating ticket:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Delete a ticket
+app.delete('/api/tickets/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    
+    const deletedTicket = await Ticket.findByIdAndDelete(id);
+    
+    if (!deletedTicket) {
+      return res.status(404).json({ message: 'Ticket not found' });
+    }
+    
+    res.json({ message: 'Ticket deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting ticket:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Get ticket statistics
+app.get('/api/tickets/stats', async (req, res) => {
+  try {
+    const total = await Ticket.countDocuments();
+    const open = await Ticket.countDocuments({ status: 'Open' });
+    const pending = await Ticket.countDocuments({ status: 'Pending' });
+    const resolved = await Ticket.countDocuments({ status: 'Resolved' });
+    
+    res.json({
+      total,
+      open,
+      pending,
+      resolved
+    });
+  } catch (error) {
+    console.error('Error fetching ticket stats:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+/* ============================
+   ✅ ADMIN USER MANAGEMENT API
+============================ */
+
+// Get all users (admin only) - THE FIXED ROUTE
+app.get('/api/users', async (req, res) => {
+  try {
+    const users = await User.find().select('-password');
+    res.json(users);
+  } catch (e) {
+    console.error('Get users error:', e);
+    res.status(500).json({ message: 'Error fetching users' });
+  }
+});
+
+// Get user statistics
+app.get('/api/users/stats', async (req, res) => {
+  try {
+    const total = await User.countDocuments();
+    const active = await User.countDocuments({ isBanned: false });
+    const banned = await User.countDocuments({ isBanned: true });
+    const admins = await User.countDocuments({ isAdmin: true });
+    
+    res.json({ total, active, banned, admins });
+  } catch (e) {
+    console.error('Get user stats error:', e);
+    res.status(500).json({ message: 'Error fetching user statistics' });
+  }
+});
+
+// Ban/Unban user
+app.post('/api/users/:id/ban', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.isBanned = true;
+    await user.save();
+    
+    res.json({ 
+      message: 'User banned successfully', 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isBanned: user.isBanned
+      }
+    });
+  } catch (e) {
+    console.error('Ban user error:', e);
+    res.status(500).json({ message: 'Error banning user' });
+  }
+});
+
+app.post('/api/users/:id/unban', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.isBanned = false;
+    await user.save();
+    
+    res.json({ 
+      message: 'User unbanned successfully', 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isBanned: user.isBanned
+      }
+    });
+  } catch (e) {
+    console.error('Unban user error:', e);
+    res.status(500).json({ message: 'Error unbanning user' });
+  }
+});
+
+// Get single user
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('-password');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    res.json(user);
+  } catch (e) { 
+    console.error('Get user error:', e);
+    res.status(500).json({ message: 'Error fetching user' }); 
+  }
+});
+
+// Update user
+app.put('/api/users/:id', async (req, res) => {
+  try {
+    const { name, email, isAdmin } = req.body;
+    
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      { name, email, isAdmin },
+      { new: true }
+    ).select('-password');
+    
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json(updatedUser);
+  } catch (e) { 
+    console.error('Update user error:', e);
+    res.status(500).json({ message: 'Error updating user' }); 
+  }
+});
+
+// Toggle user ban status
+app.patch('/api/admin/users/:id/toggle-ban', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    user.isBanned = !user.isBanned;
+    await user.save();
+    
+    res.json({ 
+      message: 'Ban status updated', 
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        isBanned: user.isBanned
+      }
+    });
+  } catch (e) {
+    console.error('Toggle ban error:', e);
+    res.status(500).json({ message: 'Error updating user' });
+  }
+});
+
+// ============================
+// ✅ DEFAULT ADMIN USER CREATION
+// ============================
+async function createDefaultAdmin() {
+  try {
+    const adminEmail = 'admin@travelhub.com';
+    const existingAdmin = await User.findOne({ email: adminEmail });
+    
+    if (!existingAdmin) {
+      const hashedPassword = await bcrypt.hash('admin123', 10);
+      const adminUser = new User({
+        name: 'System Administrator',
+        email: adminEmail,
+        password: hashedPassword,
+        bio: 'Default system administrator account',
+        isAdmin: true,
+        isBanned: false
+      });
+      
+      await adminUser.save();
+      console.log('✅ Default admin user created: admin@travelhub.com / admin123');
+    } else {
+      console.log('✅ Admin user already exists');
+    }
+  } catch (error) {
+    console.error('Error creating default admin:', error);
+  }
+}
+
+// Initialize default admin on server start
+createDefaultAdmin();
+
+app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
