@@ -114,6 +114,29 @@
             background: linear-gradient(135deg, #f57c00, #e64a19);
         }
         
+        /* Home Button */
+        .home-btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white !important;
+        }
+        
+        .home-btn:hover {
+            background: linear-gradient(135deg, #2980b9, #216795) !important;
+        }
+        
+        /* Admin Panel Button - Purple */
+        .admin-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white !important;
+            border: none !important;
+        }
+        
+        .admin-btn:hover {
+            background: linear-gradient(135deg, #8e44ad, #7d3c98) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3);
+        }
+        
         /* User Profile Styles */
         .user-profile {
             position: relative;
@@ -520,6 +543,9 @@
         </div>
         
         <div class="nav-buttons">
+            <button onclick="window.location.href='index.html'" class="nav-btn home-btn">
+                <i class="fas fa-home"></i> Home
+            </button>
             <button onclick="window.location.href='currency.html'" class="nav-btn">
                 <i class="fas fa-money-bill-wave"></i> Currency
             </button>
@@ -672,11 +698,11 @@ async function checkLoginStatus() {
         if (userIsAdmin) {
             // Add admin panel button to navigation if not already there
             if (!document.getElementById('adminPanelBtn')) {
-                const adminButton = document.createElement('a');
+                const adminButton = document.createElement('button');
                 adminButton.id = 'adminPanelBtn';
                 adminButton.className = 'nav-btn admin-btn';
-                adminButton.href = 'admin-panel.html';
                 adminButton.innerHTML = '<i class="fas fa-crown"></i> Admin Panel';
+                adminButton.onclick = () => window.location.href = 'admin-panel.html';
                 buttonContainer.appendChild(adminButton);
             }
         } else {
