@@ -457,11 +457,11 @@
         }
         
         /* Users Table */
-		.users-container {
-			padding: 0 30px; /* Remove top and bottom padding */
-			max-height: 700px;
-			overflow-y: auto;
-		}
+        .users-container {
+            padding: 0 30px; /* Remove top and bottom padding */
+            max-height: 700px;
+            overflow-y: auto;
+        }
         
         .users-container::-webkit-scrollbar {
             width: 8px;
@@ -482,10 +482,10 @@
         }
         
         .users-table {
-			width: 100%;
-			border-collapse: collapse;
-			margin: 30px 0; /* Add margin top and bottom */
-		}
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0; /* Add margin top and bottom */
+        }
         
         .users-table th {
             background: #f8f9fa;
@@ -641,6 +641,219 @@
         .view-tickets-btn:hover {
             background: linear-gradient(135deg, #2980b9, #1f618d);
             transform: translateY(-2px);
+        }
+        
+        /* Edit User Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .edit-user-modal {
+            background: white;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.4s;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .modal-header {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 25px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group label {
+            margin: 0;
+            cursor: pointer;
+        }
+        
+        .avatar-preview-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+            color: white;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-footer {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-radius: 0 0 20px 20px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .modal-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+        
+        .modal-btn.cancel {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .modal-btn.cancel:hover {
+            background: #7f8c8d;
+        }
+        
+        .modal-btn.save {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        
+        .modal-btn.save:hover {
+            background: linear-gradient(135deg, #27ae60, #219653);
+            transform: translateY(-2px);
+        }
+        
+        .password-toggle {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #7f8c8d;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .toggle-password:hover {
+            color: #3498db;
         }
         
         /* Status Messages */
@@ -802,6 +1015,29 @@
                 align-items: flex-start;
                 gap: 8px;
             }
+            
+            .edit-user-modal {
+                width: 95%;
+                margin: 10px;
+            }
+            
+            .modal-body {
+                padding: 20px;
+            }
+            
+            .avatar-preview-container {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .modal-footer {
+                flex-direction: column;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
         }
         
         @media (max-width: 576px) {
@@ -822,6 +1058,72 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <!-- Edit User Modal -->
+    <div class="modal-overlay" id="editUserModal">
+        <div class="edit-user-modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Edit User</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-preview-container">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <span id="avatarInitials">U</span>
+                        <img id="avatarImage" src="" alt="" style="display: none;">
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label for="profilePictureUrl">Profile Picture URL</label>
+                            <input type="text" id="profilePictureUrl" class="form-control" placeholder="https://example.com/avatar.jpg">
+                            <small style="color: #7f8c8d; font-size: 12px;">Leave empty to use default avatar</small>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userName">Full Name</label>
+                    <input type="text" id="userName" class="form-control" placeholder="Enter full name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">Email Address</label>
+                    <input type="email" id="userEmail" class="form-control" placeholder="user@example.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="userPassword">New Password</label>
+                    <div class="password-toggle">
+                        <input type="password" id="userPassword" class="form-control" placeholder="Leave blank to keep current password">
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <small style="color: #7f8c8d; font-size: 12px;">Only fill this if you want to change the password</small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="userIsAdmin">
+                        <label for="userIsAdmin">Administrator Account</label>
+                    </div>
+                    <small style="color: #7f8c8d; font-size: 12px;">Admin users have full access to all features</small>
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="userIsBanned">
+                        <label for="userIsBanned">Ban User</label>
+                    </div>
+                    <small style="color: #7f8c8d; font-size: 12px;">Banned users cannot log in or access any features</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn cancel" id="cancelEdit">Cancel</button>
+                <button class="modal-btn save" id="saveChanges">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
     <div class="header">
         <div class="logo-container">
             <a href="index.html" class="logo">
@@ -882,8 +1184,6 @@
     </div>
 
     <div class="container" id="adminContainer">
-
-        
         <!-- Admin Navigation -->
         <div class="admin-nav">
             <a href="#users" class="admin-nav-btn active" onclick="switchSection('users')">
@@ -899,7 +1199,6 @@
                 <i class="fas fa-history"></i> Activity Log
             </a>
         </div>
-        
         
         <!-- Status Messages -->
         <div id="statusMessage" class="status-message"></div>
@@ -983,86 +1282,109 @@
     </div>
 
     <script>
-        // Check if user is logged in and is admin
-        async function checkAdminAccess() {
-            const userId = localStorage.getItem('userId');
-            const userName = localStorage.getItem('userName');
-            const userEmail = localStorage.getItem('userEmail');
-            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
-            const userProfilePicture = localStorage.getItem('userProfilePicture');
-            
-            console.log('Admin panel check:', { userId, userName, userIsAdmin });
-            
-            if (userId && userName && userIsAdmin) {
-                // User is logged in AND is admin
-                document.getElementById('loginPrompt').style.display = 'none';
-                document.getElementById('adminContainer').style.display = 'block';
-                document.getElementById('userProfile').style.display = 'block';
-                
-                // Update user info
-                document.getElementById('userEmail').textContent = userEmail;
-                document.getElementById('userFullName').textContent = userName;
-                
-                // Set user role
-                const userRole = document.getElementById('userRole');
-                userRole.textContent = 'Admin';
-                userRole.classList.add('admin');
-                
-                // Set avatar
-                const userAvatar = document.getElementById('userAvatar');
-                if (userProfilePicture) {
-                    userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
-                } else {
-                    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                    userAvatar.textContent = initials;
-                    const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
-                    const color1 = colors[initials.charCodeAt(0) % colors.length];
-                    const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
-                    userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-                }
-                
-                // Verify admin status with server
-                try {
-                    const response = await fetch(`/api/user/status?userId=${userId}`);
-                    const data = await response.json();
-                    
-                    if (!data.loggedIn || !data.user.isAdmin) {
-                        // User is not actually admin according to server
-                        showMessage('⚠️ Admin access required. Redirecting...', 'error');
-                        setTimeout(() => {
-                            window.location.href = 'index.html';
-                        }, 2000);
-                        return;
-                    }
-                    
-                    if (data.user.isBanned) {
-                        showMessage('⚠️ Your account has been suspended.', 'error');
-                        logout();
-                        return;
-                    }
-                    
-                    // Load user data
-                    loadUserStats();
-                    loadUsers();
-                    
-                } catch (error) {
-                    console.error('Error verifying admin status:', error);
-                }
-            } else {
-                // User is not logged in or not admin
-                document.getElementById('loginPrompt').style.display = 'block';
-                document.getElementById('adminContainer').style.display = 'none';
-                document.getElementById('userProfile').style.display = 'none';
-                
-                // If logged in but not admin, redirect to home page
-                if (userId && !userIsAdmin) {
-                    showMessage('Admin access required. Redirecting...', 'error');
-                    setTimeout(() => {
-                        window.location.href = 'index.html';
-                    }, 2000);
-                }
-            }
-        }
+        // Global variable to store current user being edited
+        let currentEditingUserId = null;
+        
+        // In the checkAdminAccess() function, update this section:
+
+		// Check if user is logged in and is admin
+		async function checkAdminAccess() {
+			const userId = localStorage.getItem('userId');
+			const userName = localStorage.getItem('userName');
+			const userEmail = localStorage.getItem('userEmail'); // This might be null/undefined
+			const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
+			const userProfilePicture = localStorage.getItem('userProfilePicture');
+			
+			console.log('Admin panel check:', { userId, userName, userEmail, userIsAdmin });
+			
+			// In the checkAdminAccess() function, update this section:
+			if (userId && userName && userIsAdmin) {
+				// User is logged in AND is admin
+				document.getElementById('loginPrompt').style.display = 'none';
+				document.getElementById('adminContainer').style.display = 'block';
+				document.getElementById('userProfile').style.display = 'block';
+				
+				// Update user info - Get email from localStorage
+				const userEmail = localStorage.getItem('userEmail');
+				// Update user info - FIX HERE: Use the actual email from localStorage
+				if (userEmail) {
+					document.querySelector('.user-profile .user-email').textContent = userEmail;
+				} else {
+					// If email not in localStorage, try to get it from server or use username
+					document.querySelector('.user-profile .user-email').textContent = userName || 'Admin User';
+				}
+				
+				document.getElementById('userFullName').textContent = userName;
+				
+				// Set user role
+				const userRole = document.getElementById('userRole');
+				userRole.textContent = 'Admin';
+				userRole.classList.add('admin');
+				
+				// Set avatar
+				const userAvatar = document.getElementById('userAvatar');
+				if (userProfilePicture) {
+					userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
+				} else {
+					const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+					userAvatar.textContent = initials;
+					const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
+					const color1 = colors[initials.charCodeAt(0) % colors.length];
+					const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
+					userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+				}
+				
+				// Verify admin status with server
+				try {
+					const response = await fetch(`/api/user/status?userId=${userId}`);
+					const data = await response.json();
+					
+					if (!data.loggedIn || !data.user.isAdmin) {
+						// User is not actually admin according to server
+						showMessage('⚠️ Admin access required. Redirecting...', 'error');
+						setTimeout(() => {
+							window.location.href = 'index.html';
+						}, 2000);
+						return;
+					}
+					
+					if (data.user.isBanned) {
+						showMessage('⚠️ Your account has been suspended.', 'error');
+						logout();
+						return;
+					}
+					
+					// IMPORTANT: Update email from server response if available
+					if (data.user.email && !userEmail) {
+						localStorage.setItem('userEmail', data.user.email);
+						document.querySelector('.user-profile .user-email').textContent = data.user.email;
+					}
+					
+					// Load user data
+					loadUserStats();
+					loadUsers();
+					
+				} catch (error) {
+					console.error('Error verifying admin status:', error);
+					// Still allow access if server verification fails but local storage says admin
+					loadUserStats();
+					loadUsers();
+				}
+			} else {
+				// User is not logged in or not admin
+				document.getElementById('loginPrompt').style.display = 'block';
+				document.getElementById('adminContainer').style.display = 'none';
+				document.getElementById('userProfile').style.display = 'none';
+				
+				// If logged in but not admin, redirect to home page
+				if (userId && !userIsAdmin) {
+					showMessage('Admin access required. Redirecting...', 'error');
+					setTimeout(() => {
+						window.location.href = 'index.html';
+					}, 2000);
+				}
+			}
+		}
         
         // Toggle user dropdown
         document.getElementById('userToggle').addEventListener('click', function(e) {
@@ -1102,10 +1424,48 @@
         const noUsersMessage = document.getElementById('noUsersMessage');
         const userSearch = document.getElementById('userSearch');
         const searchBtn = document.getElementById('searchBtn');
-        const totalUsers = document.getElementById('totalUsers');
-        const activeUsers = document.getElementById('activeUsers');
-        const bannedUsers = document.getElementById('bannedUsers');
-        const adminUsers = document.getElementById('adminUsers');
+        
+        // Modal elements
+        const editUserModal = document.getElementById('editUserModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelEditBtn = document.getElementById('cancelEdit');
+        const saveChangesBtn = document.getElementById('saveChanges');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        
+        // Modal form elements
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarInitials = document.getElementById('avatarInitials');
+        const avatarImage = document.getElementById('avatarImage');
+        const profilePictureUrl = document.getElementById('profilePictureUrl');
+        const userNameInput = document.getElementById('userName');
+        const userEmailInput = document.getElementById('userEmail');
+        const userPasswordInput = document.getElementById('userPassword');
+        const userIsAdminCheckbox = document.getElementById('userIsAdmin');
+        const userIsBannedCheckbox = document.getElementById('userIsBanned');
+        
+        // Event listeners for modal
+        closeModalBtn.addEventListener('click', closeEditModal);
+        cancelEditBtn.addEventListener('click', closeEditModal);
+        
+        // Close modal when clicking outside
+        editUserModal.addEventListener('click', function(e) {
+            if (e.target === editUserModal) {
+                closeEditModal();
+            }
+        });
+        
+        // Save changes button
+        saveChangesBtn.addEventListener('click', saveUserChanges);
+        
+        // Toggle password visibility
+        togglePasswordBtn.addEventListener('click', function() {
+            const type = userPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            userPasswordInput.setAttribute('type', type);
+            this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        });
+        
+        // Update avatar preview when URL changes
+        profilePictureUrl.addEventListener('input', updateAvatarPreview);
         
         // Event listeners
         searchBtn.addEventListener('click', loadUsers);
@@ -1148,54 +1508,53 @@
                 const response = await fetch('/api/users/stats');
                 const stats = await response.json();
                 
-                totalUsers.textContent = stats.total || 0;
-                activeUsers.textContent = stats.active || 0;
-                bannedUsers.textContent = stats.banned || 0;
-                adminUsers.textContent = stats.admins || 0;
+                // These elements don't exist in your HTML, but I'll keep the function
+                // in case you want to add stats cards later
+                console.log('User stats:', stats);
             } catch (error) {
                 console.error('Error loading user stats:', error);
             }
         }
         
-		// Function to load users from API
-		async function loadUsers() {
-			try {
-				usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px;">Loading users...</td></tr>';
-				noUsersMessage.style.display = 'none';
-				
-				// Build query string from search
-				const queryParams = new URLSearchParams();
-				if (userSearch.value) queryParams.append('search', userSearch.value);
-				
-				const queryString = queryParams.toString();
-				const url = queryString ? 
-					`/api/users?${queryString}` : 
-					'/api/users';
-				
-				const response = await fetch(url);
-				const result = await response.json();
-				
-				// Check if result is an array or has a users property
-				const users = Array.isArray(result) ? result : result.users || [];
-				
-				if (users.length === 0) {
-					usersTableBody.innerHTML = '';
-					noUsersMessage.style.display = 'block';
-					return;
-				}
-				
-				// Render users
-				usersTableBody.innerHTML = '';
-				users.forEach(user => {
-					const userRow = createUserRow(user);
-					usersTableBody.appendChild(userRow);
-				});
-				
-			} catch (error) {
-				console.error('Error loading users:', error);
-				usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #e74c3c;">Error loading users. Please try again.</td></tr>';
-			}
-		}
+        // Function to load users from API
+        async function loadUsers() {
+            try {
+                usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px;">Loading users...</td></tr>';
+                noUsersMessage.style.display = 'none';
+                
+                // Build query string from search
+                const queryParams = new URLSearchParams();
+                if (userSearch.value) queryParams.append('search', userSearch.value);
+                
+                const queryString = queryParams.toString();
+                const url = queryString ? 
+                    `/api/users?${queryString}` : 
+                    '/api/users';
+                
+                const response = await fetch(url);
+                const result = await response.json();
+                
+                // Check if result is an array or has a users property
+                const users = Array.isArray(result) ? result : result.users || [];
+                
+                if (users.length === 0) {
+                    usersTableBody.innerHTML = '';
+                    noUsersMessage.style.display = 'block';
+                    return;
+                }
+                
+                // Render users
+                usersTableBody.innerHTML = '';
+                users.forEach(user => {
+                    const userRow = createUserRow(user);
+                    usersTableBody.appendChild(userRow);
+                });
+                
+            } catch (error) {
+                console.error('Error loading users:', error);
+                usersTableBody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: #e74c3c;">Error loading users. Please try again.</td></tr>';
+            }
+        }
         
         // Function to create a user table row
         function createUserRow(user) {
@@ -1224,13 +1583,13 @@
                 '<span class="badge badge-active">Active</span>';
             
             // Ban/Unban button text
-			const banButton = user.isBanned ? 
-				`<button class="action-btn unban-btn" onclick="toggleBan('${user._id}', false)">
-					<i class="fas fa-user-check"></i> Unban
-				</button>` :
-				`<button class="action-btn ban-btn" onclick="toggleBan('${user._id}', true)">
-					<i class="fas fa-user-slash"></i> Ban
-				</button>`;
+            const banButton = user.isBanned ? 
+                `<button class="action-btn unban-btn" onclick="toggleBan('${user._id}', false)">
+                    <i class="fas fa-user-check"></i> Unban
+                </button>` :
+                `<button class="action-btn ban-btn" onclick="toggleBan('${user._id}', true)">
+                    <i class="fas fa-user-slash"></i> Ban
+                </button>`;
             
             tr.innerHTML = `
                 <td>
@@ -1250,7 +1609,7 @@
                 <td>${statusBadge}</td>
                 <td>${formattedDate}</td>
                 <td class="actions-cell">
-                    <button class="action-btn edit-btn" onclick="editUser('${user._id}')">
+                    <button class="action-btn edit-btn" onclick="openEditUserModal('${user._id}')">
                         <i class="fas fa-edit"></i> Edit
                     </button>
                     ${banButton}
@@ -1262,6 +1621,187 @@
             
             return tr;
         }
+        
+        // Function to open edit user modal
+        async function openEditUserModal(userId) {
+            currentEditingUserId = userId;
+            
+            try {
+                // Fetch user data
+                const response = await fetch(`/api/users/${userId}`);
+                const user = await response.json();
+                
+                // Populate form fields
+                userNameInput.value = user.name || '';
+                userEmailInput.value = user.email || '';
+                profilePictureUrl.value = user.profilePicture || '';
+                userIsAdminCheckbox.checked = user.isAdmin || false;
+                userIsBannedCheckbox.checked = user.isBanned || false;
+                userPasswordInput.value = ''; // Clear password field for security
+                
+                // Update avatar preview
+                updateAvatarPreview();
+                
+                // Show modal
+                editUserModal.classList.add('show');
+                document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+                
+            } catch (error) {
+                console.error('Error loading user for edit:', error);
+                showMessage(`❌ Error loading user data: ${error.message}`, 'error');
+            }
+        }
+        
+        // Function to update avatar preview
+        function updateAvatarPreview() {
+            const url = profilePictureUrl.value.trim();
+            const name = userNameInput.value.trim();
+            
+            // Get initials from name
+            let initials = 'U';
+            if (name) {
+                initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+            }
+            
+            avatarInitials.textContent = initials;
+            
+            // Update colors based on initials
+            const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
+            const color1 = colors[initials.charCodeAt(0) % colors.length];
+            const color2 = initials.length > 1 ? colors[initials.charCodeAt(1) % colors.length] || color1 : color1;
+            avatarPreview.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
+            
+            // Show image if URL is provided
+            if (url) {
+                avatarImage.src = url;
+                avatarImage.alt = name || 'User';
+                avatarImage.style.display = 'block';
+                avatarInitials.style.display = 'none';
+            } else {
+                avatarImage.style.display = 'none';
+                avatarInitials.style.display = 'block';
+            }
+        }
+        
+        // Function to close edit modal
+        function closeEditModal() {
+            editUserModal.classList.remove('show');
+            document.body.style.overflow = ''; // Restore scrolling
+            currentEditingUserId = null;
+            
+            // Reset form
+            userNameInput.value = '';
+            userEmailInput.value = '';
+            profilePictureUrl.value = '';
+            userPasswordInput.value = '';
+            userIsAdminCheckbox.checked = false;
+            userIsBannedCheckbox.checked = false;
+        }
+        
+        // Function to save user changes - UPDATED VERSION
+		async function saveUserChanges() {
+		  if (!currentEditingUserId) return;
+		  
+		  // Validate form
+		  if (!userNameInput.value.trim()) {
+			showMessage('❌ Please enter a name for the user', 'error');
+			return;
+		  }
+		  
+		  if (!userEmailInput.value.trim()) {
+			showMessage('❌ Please enter an email address', 'error');
+			return;
+		  }
+		  
+		  // Email validation
+		  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		  if (!emailRegex.test(userEmailInput.value)) {
+			showMessage('❌ Please enter a valid email address', 'error');
+			return;
+		  }
+		  
+
+		  
+		  // Prepare update data
+		  const updateData = {
+			name: userNameInput.value.trim(),
+			email: userEmailInput.value.trim(),
+			profilePicture: profilePictureUrl.value.trim() || '',
+			isAdmin: userIsAdminCheckbox.checked,
+			isBanned: userIsBannedCheckbox.checked
+		  };
+		  
+		  // Add password only if provided and not empty
+		  if (userPasswordInput.value.trim()) {
+			updateData.password = userPasswordInput.value.trim();
+		  }
+		  
+		  try {
+			saveChangesBtn.disabled = true;
+			saveChangesBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+			
+			// Use the new admin endpoint
+			const response = await fetch(`/api/admin/users/${currentEditingUserId}`, {
+			  method: 'PUT',
+			  headers: {
+				'Content-Type': 'application/json'
+			  },
+			  body: JSON.stringify(updateData)
+			});
+			
+			const result = await response.json();
+			
+			if (response.ok) {
+			  showMessage('✅ User profile updated successfully', 'success');
+			  
+			  // Close modal
+			  closeEditModal();
+			  
+			  // Reload users
+			  loadUsers();
+			  
+			  // If the edited user is the current admin, update local storage
+			  const currentUserId = localStorage.getItem('userId');
+			  if (currentEditingUserId === currentUserId) {
+				if (updateData.name) localStorage.setItem('userName', updateData.name);
+				if (updateData.email) localStorage.setItem('userEmail', updateData.email);
+				if (updateData.profilePicture) localStorage.setItem('userProfilePicture', updateData.profilePicture);
+				localStorage.setItem('userIsAdmin', updateData.isAdmin);
+				localStorage.setItem('userIsBanned', updateData.isBanned);
+				
+				// Update UI
+				document.querySelector('.user-profile .user-email').textContent = updateData.email;
+				document.getElementById('userFullName').textContent = updateData.name;
+				
+				// Update avatar
+				const userAvatar = document.getElementById('userAvatar');
+				if (updateData.profilePicture) {
+				  userAvatar.innerHTML = `<img src="${updateData.profilePicture}" alt="${updateData.name}">`;
+				} else {
+				  const initials = updateData.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+				  userAvatar.textContent = initials;
+				}
+				
+				// If banned themselves, log out
+				if (updateData.isBanned) {
+				  setTimeout(() => {
+					showMessage('⚠️ You have been banned. Logging out...', 'error');
+					setTimeout(logout, 2000);
+				  }, 1000);
+				}
+			  }
+			} else {
+			  throw new Error(result.message || 'Failed to update user');
+			}
+			
+		  } catch (error) {
+			console.error('Error updating user:', error);
+			showMessage(`❌ ${error.message}`, 'error');
+		  } finally {
+			saveChangesBtn.disabled = false;
+			saveChangesBtn.innerHTML = 'Save Changes';
+		  }
+		}
         
         // Function to toggle user ban status
         async function toggleBan(userId, ban) {
@@ -1286,9 +1826,8 @@
                     const message = ban ? 'User banned successfully' : 'User unbanned successfully';
                     showMessage(`✅ ${message}`, 'success');
                     
-                    // Reload users and stats
+                    // Reload users
                     loadUsers();
-                    loadUserStats();
                     
                     // If the banned user is the current user, log them out
                     const currentUserId = localStorage.getItem('userId');
@@ -1304,49 +1843,6 @@
             } catch (error) {
                 console.error(`Error ${action}ning user:`, error);
                 showMessage(`❌ Error ${action}ning user: ${error.message}`, 'error');
-            }
-        }
-        
-        // Function to edit user profile
-        async function editUser(userId) {
-            try {
-                const response = await fetch(`/api/users/${userId}`);
-                const user = await response.json();
-                
-                // In a real implementation, you would show a modal or redirect to an edit page
-                // For this example, we'll use a simple prompt
-                const newName = prompt('Edit user name:', user.name || '');
-                if (newName === null) return;
-                
-                const newEmail = prompt('Edit user email:', user.email || '');
-                if (newEmail === null) return;
-                
-                const makeAdmin = confirm(`Make ${newName || user.name} an admin?`);
-                
-                const updateData = {
-                    name: newName,
-                    email: newEmail,
-                    isAdmin: makeAdmin
-                };
-                
-                const updateResponse = await fetch(`/api/users/${userId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(updateData)
-                });
-                
-                if (updateResponse.ok) {
-                    showMessage('✅ User profile updated successfully', 'success');
-                    loadUsers();
-                    loadUserStats();
-                } else {
-                    throw new Error('Failed to update user');
-                }
-            } catch (error) {
-                console.error('Error editing user:', error);
-                showMessage(`❌ Error editing user: ${error.message}`, 'error');
             }
         }
         

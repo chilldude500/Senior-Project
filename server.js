@@ -131,6 +131,7 @@ app.get('/tickets', (req, res) => res.sendFile(path.join(__dirname, 'tickets.htm
 app.get('/tickets-admin', (req, res) => res.sendFile(path.join(__dirname, 'tickets-admin.html')));
 app.get('/currency', (req, res) => res.sendFile(path.join(__dirname, 'currency.html')));
 app.get('/alerts', (req, res) => res.sendFile(path.join(__dirname, 'alerts.html')));
+app.get('/admin-panel', (req, res) => res.sendFile(path.join(__dirname, 'admin-panel.html')));
 
 // --- API ROUTES ---
 
@@ -142,13 +143,13 @@ app.post('/api/register', async (req, res) => {
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ message: 'All fields required' });
 
-    const existing = await User.findOne({ email });
+    const existing = await User.findOne({ email: email.toLowerCase().trim() });
     if (existing) return res.status(400).json({ message: 'Email taken' });
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({ 
       name, 
-      email, 
+      email: email.toLowerCase().trim(), 
       password: hashedPassword,
       isAdmin: false,  // Default to not admin
       isBanned: false  // Default to not banned
@@ -229,20 +230,106 @@ app.get('/api/users/:id', async (req, res) => {
 });
 
 // ============================
-// 4. UPDATE USER PROFILE
+// 4. UPDATE USER PROFILE (USER VERSION)
 // ============================
 app.put('/api/users/:id', async (req, res) => {
   try {
     const { name, bio, profilePicture } = req.body;
+    
+    // Validate
+    if (!name || name.trim() === '') {
+      return res.status(400).json({ message: 'Name is required' });
+    }
+    
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      { name, bio, profilePicture },
-      { new: true }
+      { 
+        name: name.trim(),
+        bio: bio || '',
+        profilePicture: profilePicture || ''
+      },
+      { new: true, runValidators: true }
     ).select('-password');
-    res.json(updatedUser);
+    
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json({
+      message: 'Profile updated successfully',
+      user: updatedUser
+    });
   } catch (e) { 
     console.error('Update user error:', e);
-    res.status(500).json({ message: 'Error updating user' }); 
+    res.status(500).json({ message: 'Error updating profile' }); 
+  }
+});
+
+// ============================
+// ✅ ADMIN UPDATE USER (NEW ROUTE)
+// ============================
+app.put('/api/admin/users/:id', async (req, res) => {
+  try {
+    const { name, email, isAdmin, isBanned, profilePicture, password } = req.body;
+    
+    // Validate required fields
+    if (!name || !email) {
+      return res.status(400).json({ message: 'Name and email are required' });
+    }
+    
+    // Check if email already exists for another user
+    const existingUser = await User.findOne({ 
+      email: email.toLowerCase().trim(),
+      _id: { $ne: req.params.id }
+    });
+    
+    if (existingUser) {
+      return res.status(400).json({ message: 'Email already taken by another user' });
+    }
+    
+    // Build update object
+    const updateData = { 
+      name: name.trim(),
+      email: email.toLowerCase().trim(),
+      isAdmin: Boolean(isAdmin),
+      isBanned: Boolean(isBanned),
+      profilePicture: profilePicture || ''
+    };
+    
+    // Hash password if provided and not empty
+    if (password && password.trim() !== '') {
+
+      updateData.password = await bcrypt.hash(password, 10);
+    }
+    
+    // Update user
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true, runValidators: true }
+    ).select('-password');
+    
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    res.json({
+      message: 'User updated successfully',
+      user: updatedUser
+    });
+    
+  } catch (error) {
+    console.error('Admin update user error:', error);
+    
+    if (error.name === 'ValidationError') {
+      return res.status(400).json({ message: error.message });
+    }
+    
+    if (error.code === 11000) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
+    
+    res.status(500).json({ message: 'Server error updating user' });
   }
 });
 
@@ -848,7 +935,17 @@ app.get('/api/tickets/stats', async (req, res) => {
 // Get all users (admin only) - THE FIXED ROUTE
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find().select('-password');
+    const search = req.query.search;
+    let query = {};
+    
+    if (search) {
+      query.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { email: { $regex: search, $options: 'i' } }
+      ];
+    }
+    
+    const users = await User.find(query).select('-password').sort({ createdAt: -1 });
     res.json(users);
   } catch (e) {
     console.error('Get users error:', e);
@@ -871,7 +968,7 @@ app.get('/api/users/stats', async (req, res) => {
   }
 });
 
-// Ban/Unban user
+// Ban user
 app.post('/api/users/:id/ban', async (req, res) => {
   try {
     const { id } = req.params;
@@ -900,6 +997,7 @@ app.post('/api/users/:id/ban', async (req, res) => {
   }
 });
 
+// Unban user
 app.post('/api/users/:id/unban', async (req, res) => {
   try {
     const { id } = req.params;
@@ -925,40 +1023,6 @@ app.post('/api/users/:id/unban', async (req, res) => {
   } catch (e) {
     console.error('Unban user error:', e);
     res.status(500).json({ message: 'Error unbanning user' });
-  }
-});
-
-// Get single user
-app.get('/api/users/:id', async (req, res) => {
-  try {
-    const user = await User.findById(req.params.id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
-  } catch (e) { 
-    console.error('Get user error:', e);
-    res.status(500).json({ message: 'Error fetching user' }); 
-  }
-});
-
-// Update user
-app.put('/api/users/:id', async (req, res) => {
-  try {
-    const { name, email, isAdmin } = req.body;
-    
-    const updatedUser = await User.findByIdAndUpdate(
-      req.params.id,
-      { name, email, isAdmin },
-      { new: true }
-    ).select('-password');
-    
-    if (!updatedUser) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-    
-    res.json(updatedUser);
-  } catch (e) { 
-    console.error('Update user error:', e);
-    res.status(500).json({ message: 'Error updating user' }); 
   }
 });
 
