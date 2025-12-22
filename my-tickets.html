@@ -17,288 +17,18 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             color: #333;
+            padding-top: 0 !important; /* Ensure no padding from header */
         }
         
-        /* Header Styles - Matching index.html */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-right: 30px;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2c3e50;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo-icon {
-            font-size: 32px;
-            color: #3498db;
-            animation: aurora 3s infinite alternate;
-        }
-        
-        @keyframes aurora {
-            0% { color: #3498db; }
-            25% { color: #9b59b6; }
-            50% { color: #2ecc71; }
-            75% { color: #e74c3c; }
-            100% { color: #f39c12; }
-        }
-        
-        .logo-text {
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .nav-buttons { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-btn { 
-            padding: 10px 20px; 
-            font-size: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            background-color: white; 
-            color: #333; 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-        
-        .nav-btn:hover { 
-            background-color: #f8f9fa; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-color: #3498db;
-        }
-        
-        .nav-btn:active { 
-            transform: translateY(0); 
-        }
-        
-        .ticket-btn {
-            background: linear-gradient(135deg, #ff9800, #ff5722);
-            color: white;
-            border: none !important;
-        }
-        
-        .ticket-btn:hover {
-            background: linear-gradient(135deg, #f57c00, #e64a19);
-        }
-        
-        /* User Profile Styles */
-        .user-profile {
-            position: relative;
-            margin-left: auto;
-        }
-        
-        .user-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 18px;
-            background: white;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            min-width: 180px;
-        }
-        
-        .user-toggle:hover {
-            border-color: #3498db;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-        }
-        
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            overflow: hidden;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .user-email {
-            font-weight: 600;
-            color: #2c3e50;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 10px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            min-width: 280px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .user-dropdown.show {
-            display: block;
-            animation: slideDown 0.3s;
-        }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user-info {
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .user-name {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        
-        .user-role {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #3498db;
-            color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .user-role.admin {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-        }
-        
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 20px;
-            text-decoration: none;
-            color: #2c3e50;
-            border-bottom: 1px solid #f0f0f0;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            padding-left: 25px;
-            color: #3498db;
-        }
-        
-        .dropdown-item i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .dropdown-item.logout {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-        
-        .dropdown-item.logout:hover {
-            background-color: #fdedec;
-        }
-        
-        /* Login Prompt */
-        .login-prompt {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
-            padding: 15px 25px;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border: 2px solid #3498db;
-            margin-left: auto;
-        }
-        
-        .login-prompt p {
-            margin: 0;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-        
-        .login-prompt a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        
-        .login-prompt a:hover {
-            color: #2980b9;
-            text-decoration: underline;
-        }
-        
-        .login-prompt .divider {
-            color: #bdc3c7;
-        }
+        /* Remove ALL header-related CSS from here */
+        /* We only keep page-specific styles below */
         
         /* Main Content */
         .main-content {
             padding: 30px;
             max-width: 1200px;
             margin: 0 auto;
+            margin-top: 20px; /* Add some space below header */
         }
         
         /* Page Title */
@@ -836,40 +566,6 @@
                 grid-template-columns: 1fr;
             }
             
-            .header {
-                flex-wrap: wrap;
-                padding: 15px;
-            }
-            
-            .logo-container {
-                margin-right: 0;
-                margin-bottom: 15px;
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .nav-buttons {
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 15px;
-            }
-            
-            .user-profile {
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .user-toggle {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .login-prompt {
-                margin: 15px auto 0;
-                width: 100%;
-                justify-content: center;
-            }
-            
             .main-content {
                 padding: 20px;
             }
@@ -904,60 +600,8 @@
     </style>
 </head>
 <body>
-    <div class="header">
-        <div class="logo-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">🌌</span>
-                <span class="logo-text">Aurora Trips</span>
-            </a>
-        </div>
-        
-        <div class="nav-buttons">
-            <button onclick="window.location.href='currency.html'" class="nav-btn">
-                <i class="fas fa-money-bill-wave"></i> Currency
-            </button>
-            <button onclick="window.location.href='alerts.html'" class="nav-btn">
-                <i class="fas fa-bell"></i> Alerts
-            </button>
-            <button onclick="window.location.href='members.html'" class="nav-btn">
-                <i class="fas fa-users"></i> Community
-            </button>
-            <!-- Ticket button will be added here by JavaScript if logged in -->
-        </div>
-        
-        <div class="user-profile" id="userProfile" style="display: none;">
-            <div class="user-toggle" id="userToggle">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="user-email" id="userEmail">user@example.com</div>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-info">
-                    <div class="user-name" id="userFullName">User Name</div>
-                    <div class="user-role" id="userRole">Member</div>
-                </div>
-                <a href="profile.html" class="dropdown-item">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="my-tickets.html" class="dropdown-item">
-                    <i class="fas fa-ticket-alt"></i> My Tickets
-                </a>
-                <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
-                    <i class="fas fa-crown"></i> Admin Panel
-                </a>
-                <a href="#" class="dropdown-item logout" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
-        </div>
-        
-        <div class="login-prompt" id="loginPrompt">
-            <p>Welcome to <strong>Aurora Trips</strong></p>
-            <span class="divider">|</span>
-            <p><a href="login.html">Login</a> or <a href="register.html">Register</a> to access all features</p>
-        </div>
-    </div>
-
+    <!-- REMOVE the entire header section - it will be loaded by load-header.js -->
+    
     <div class="main-content">
         <div class="page-title">
             <h1><i class="fas fa-ticket-alt"></i> My Support Tickets</h1>
@@ -1110,6 +754,9 @@
         </div>
     </div>
 
+    <!-- Add load-header.js script HERE -->
+    <script src="load-header.js"></script>
+    
     <script>
         // Global variables
         let currentUser = null;
@@ -1120,11 +767,6 @@
         let currentTicketDetails = null;
 
         // DOM elements
-        const userInfo = document.getElementById('userInfo');
-        const userName = document.getElementById('userName');
-        const userEmail = document.getElementById('userEmail');
-        const userAvatar = document.getElementById('userAvatar');
-        const logoutBtn = document.getElementById('logoutBtn');
         const ticketsContainer = document.getElementById('ticketsContainer');
         const loadingIndicator = document.getElementById('loadingIndicator');
         const totalTicketsEl = document.getElementById('totalTickets');
@@ -1142,11 +784,19 @@
         const ticketIdToDelete = document.getElementById('ticketIdToDelete');
         const ticketSubjectToDelete = document.getElementById('ticketSubjectToDelete');
 
-        // Initialize the page
+        // Initialize the page - wait for header to load
         document.addEventListener('DOMContentLoaded', function() {
             // Set current year in footer
             document.getElementById('currentYear').textContent = new Date().getFullYear();
             
+            // Wait for header to be fully loaded
+            setTimeout(() => {
+                initMyTicketsPage();
+            }, 300); // Give header time to load
+        });
+
+        // Initialize my tickets page
+        function initMyTicketsPage() {
             // Check if user is logged in
             checkUserStatus();
             
@@ -1191,128 +841,32 @@
                     messageRefreshInterval = null;
                 }
             });
-        });
-
-        // Check if user is logged in
-        async function checkUserStatus() {
-            try {
-                // Get userId from localStorage (from login)
-                const userId = localStorage.getItem('userId');
-                
-                if (!userId) {
-                    // Redirect to login if not logged in
-                    window.location.href = 'login.html';
-                    return;
-                }
-                
-                // Fetch user data
-                const response = await fetch(`/api/users/${userId}`);
-                
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user data');
-                }
-                
-                currentUser = await response.json();
-                
-                // Update UI with user data
-                updateUserUI();
-                
-                // Load user's tickets
-                loadUserTickets();
-                
-            } catch (error) {
-                console.error('Error checking user status:', error);
-                // Redirect to login on error
-                window.location.href = 'login.html';
-            }
         }
 
-        // Update user info in the UI
-        function updateUserUI() {
-            if (!currentUser) return;
+        // Check if user is logged in
+        function checkUserStatus() {
+            // Get user data from localStorage (set by header.js)
+            const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
             
-            // Show user profile, hide login prompt
-            document.getElementById('loginPrompt').style.display = 'none';
-            document.getElementById('userProfile').style.display = 'block';
-            
-            // Update user info
-            document.getElementById('userEmail').textContent = currentUser.email || '';
-            document.getElementById('userFullName').textContent = currentUser.name || 'User';
-            
-            // Set user role
-            const userRole = document.getElementById('userRole');
-            if (currentUser.isAdmin) {
-                userRole.textContent = 'Admin';
-                userRole.classList.add('admin');
-                document.getElementById('adminLink').style.display = 'flex';
-            } else {
-                userRole.textContent = 'Member';
-                userRole.classList.remove('admin');
+            if (!userId || !userEmail) {
+                // Redirect to login if not logged in
+                alert('Please login to view your tickets');
+                window.location.href = 'login.html';
+                return;
             }
             
-            // Set avatar
-            const userAvatar = document.getElementById('userAvatar');
-            if (currentUser.profilePicture) {
-                userAvatar.innerHTML = `<img src="${currentUser.profilePicture}" alt="${currentUser.name}">`;
-            } else {
-                // Create initials from name
-                const initials = (currentUser.name || 'User').split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                userAvatar.textContent = initials;
-                
-                // Generate random gradient based on user initials
-                const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
-                const color1 = colors[(initials.charCodeAt(0) || 0) % colors.length];
-                const color2 = colors[(initials.charCodeAt(1) || 0) % colors.length] || color1;
-                userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-            }
+            currentUser = {
+                _id: userId,
+                name: userName,
+                email: userEmail,
+                isAdmin: userIsAdmin
+            };
             
-            // Add ticket button to navigation if not already there
-            const buttonContainer = document.querySelector('.nav-buttons');
-            if (!document.getElementById('ticketNavBtn')) {
-                const ticketButton = document.createElement('button');
-                ticketButton.id = 'ticketNavBtn';
-                ticketButton.className = 'nav-btn ticket-btn';
-                ticketButton.innerHTML = '<i class="fas fa-ticket-alt"></i> Support';
-                ticketButton.onclick = () => window.location.href = 'tickets.html';
-                buttonContainer.appendChild(ticketButton);
-            }
-            
-            // Add admin panel button if user is admin
-            if (currentUser.isAdmin) {
-                // Add admin panel button to navigation if not already there
-                if (!document.getElementById('adminPanelBtn')) {
-                    const adminButton = document.createElement('a');
-                    adminButton.id = 'adminPanelBtn';
-                    adminButton.className = 'nav-btn';
-                    adminButton.href = 'tickets-admin.html';
-                    adminButton.innerHTML = '<i class="fas fa-crown"></i> Admin Panel';
-                    buttonContainer.appendChild(adminButton);
-                }
-            } else {
-                // Remove admin button if exists
-                const adminBtn = document.getElementById('adminPanelBtn');
-                if (adminBtn) {
-                    adminBtn.remove();
-                }
-            }
-            
-            // Toggle user dropdown
-            document.getElementById('userToggle').addEventListener('click', function(e) {
-                e.stopPropagation();
-                const dropdown = document.getElementById('userDropdown');
-                dropdown.classList.toggle('show');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                const dropdown = document.getElementById('userDropdown');
-                dropdown.classList.remove('show');
-            });
-            
-            // Prevent dropdown from closing when clicking inside it
-            document.getElementById('userDropdown').addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
+            // Load user's tickets
+            loadUserTickets();
         }
 
         // Load user's tickets
@@ -1323,7 +877,7 @@
                 ticketsContainer.innerHTML = '';
                 ticketsContainer.appendChild(loadingIndicator);
                 
-                // Get all tickets
+                // Get all tickets - adjust API endpoint as needed
                 const response = await fetch('/api/tickets');
                 
                 if (!response.ok) {
@@ -1796,20 +1350,6 @@
             setTimeout(() => {
                 statusDiv.textContent = '';
             }, 3000);
-        }
-
-        // Handle user logout
-        function logout() {
-            // Clear user data from localStorage
-            localStorage.removeItem('userId');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userIsAdmin');
-            localStorage.removeItem('userProfilePicture');
-            localStorage.removeItem('userIsBanned');
-            
-            // Redirect to home page
-            window.location.href = 'index.html';
         }
     </script>
 </body>

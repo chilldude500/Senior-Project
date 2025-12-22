@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Aurora Trips Tickets</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -18,263 +20,18 @@
             background-color: #9fd3e5; 
             min-height: 100vh;
             color: #333;
+            padding-top: 0 !important; /* Remove padding since header will be on top */
         }
         
-        /* Header Styles */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-right: 30px;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2c3e50;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo-icon {
-            font-size: 32px;
-            color: #3498db;
-            animation: aurora 3s infinite alternate;
-        }
-        
-        @keyframes aurora {
-            0% { color: #3498db; }
-            25% { color: #9b59b6; }
-            50% { color: #2ecc71; }
-            75% { color: #e74c3c; }
-            100% { color: #f39c12; }
-        }
-        
-        .logo-text {
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .nav-buttons { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-btn { 
-            padding: 10px 20px; 
-            font-size: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            background-color: white; 
-            color: #333; 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-        
-        .nav-btn:hover { 
-            background-color: #f8f9fa; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-color: #3498db;
-        }
-        
-        .nav-btn:active { 
-            transform: translateY(0); 
-        }
-        
-        .ticket-btn {
-            background: linear-gradient(135deg, #ff9800, #ff5722);
-            color: white;
-            border: none !important;
-        }
-        
-        .ticket-btn:hover {
-            background: linear-gradient(135deg, #f57c00, #e64a19);
-        }
-        
-        .admin-btn {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: white;
-            border: none !important;
-        }
-        
-        .admin-btn:hover {
-            background: linear-gradient(135deg, #8e44ad, #7d3c98);
-        }
-        
-        /* User Profile Styles */
-        .user-profile {
-            position: relative;
-            margin-left: auto;
-        }
-        
-        .user-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 18px;
-            background: white;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            min-width: 180px;
-        }
-        
-        .user-toggle:hover {
-            border-color: #3498db;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-        }
-        
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            overflow: hidden;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .user-email {
-            font-weight: 600;
-            color: #2c3e50;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 10px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            min-width: 280px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .user-dropdown.show {
-            display: block;
-            animation: slideDown 0.3s;
-        }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user-info {
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .user-name {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        
-        .user-role {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #3498db;
-            color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .user-role.admin {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-        }
-        
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 20px;
-            text-decoration: none;
-            color: #2c3e50;
-            border-bottom: 1px solid #f0f0f0;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            padding-left: 25px;
-            color: #3498db;
-        }
-        
-        .dropdown-item i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .dropdown-item.logout {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-        
-        .dropdown-item.logout:hover {
-            background-color: #fdedec;
-        }
+        /* Remove ALL header styles - they come from header.html */
+        /* Keep only page-specific styles below */
         
         /* Main Content */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 30px;
+            margin-top: 20px; /* Add space below header */
         }
         
         .page-header {
@@ -743,41 +500,6 @@
             border-radius: 15px;
         }
         
-        .login-prompt {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
-            padding: 20px 30px;
-            border-radius: 50px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border: 2px solid #e74c3c;
-            margin: 40px auto;
-            max-width: 600px;
-        }
-        
-        .login-prompt p {
-            margin: 0;
-            color: #2c3e50;
-            font-weight: 600;
-            font-size: 1.1rem;
-            text-align: center;
-        }
-        
-        .login-prompt a {
-            color: #3498db;
-            text-decoration: none;
-            font-weight: 700;
-            transition: color 0.3s;
-            white-space: nowrap;
-        }
-        
-        .login-prompt a:hover {
-            color: #2980b9;
-            text-decoration: underline;
-        }
-        
         /* Modal Styles */
         .modal {
             display: none;
@@ -906,61 +628,6 @@
             }
         }
         
-        @media (max-width: 992px) {
-            .header {
-                flex-wrap: wrap;
-                padding: 15px;
-            }
-            
-            .logo-container {
-                margin-right: 0;
-                margin-bottom: 15px;
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .nav-buttons {
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 15px;
-            }
-            
-            .user-profile {
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .user-toggle {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            h1 {
-                font-size: 2.2rem;
-            }
-            
-            .panel-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-            
-            .filters {
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .ticket-footer {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .ticket-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-        }
-        
         @media (max-width: 768px) {
             .stat-card {
                 min-width: calc(50% - 15px);
@@ -982,11 +649,22 @@
                 min-width: 100%;
             }
             
-            .login-prompt {
+            .ticket-footer {
                 flex-direction: column;
-                text-align: center;
-                padding: 30px;
-                border-radius: 20px;
+                align-items: flex-start;
+            }
+            
+            .ticket-actions {
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .page-header {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
             }
         }
         
@@ -1006,69 +684,9 @@
             }
         }
     </style>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="header">
-        <div class="logo-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">🌌</span>
-                <span class="logo-text">Aurora Trips</span>
-            </a>
-        </div>
-        
-        <div class="nav-buttons">
-            <button onclick="window.location.href='index.html'" class="nav-btn">
-                <i class="fas fa-home"></i> Home
-            </button>
-            <button onclick="window.location.href='currency.html'" class="nav-btn">
-                <i class="fas fa-money-bill-wave"></i> Currency
-            </button>
-            <button onclick="window.location.href='alerts.html'" class="nav-btn">
-                <i class="fas fa-bell"></i> Alerts
-            </button>
-            <button onclick="window.location.href='members.html'" class="nav-btn">
-                <i class="fas fa-users"></i> Community
-            </button>
-            <a href="tickets.html" class="nav-btn ticket-btn">
-                <i class="fas fa-ticket-alt"></i> Support Tickets
-            </a>
-            <a href="admin-panel.html" class="nav-btn admin-btn" id="adminNavBtn">
-                <i class="fas fa-crown"></i> Admin Panel
-            </a>
-        </div>
-        
-        <div class="user-profile" id="userProfile" style="display: none;">
-            <div class="user-toggle" id="userToggle">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="user-email" id="userEmail">user@example.com</div>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-info">
-                    <div class="user-name" id="userFullName">User Name</div>
-                    <div class="user-role" id="userRole">Member</div>
-                </div>
-                <a href="profile.html" class="dropdown-item">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="my-tickets.html" class="dropdown-item">
-                    <i class="fas fa-ticket-alt"></i> My Tickets
-                </a>
-                <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
-                    <i class="fas fa-crown"></i> Admin Panel
-                </a>
-                <a href="#" class="dropdown-item logout" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
-        </div>
-        
-        <div class="login-prompt" id="loginPrompt">
-            <p>Admin access requires login. <a href="login.html">Login</a> or return to <a href="index.html">Home</a></p>
-        </div>
-    </div>
+    <!-- Header will be loaded here by load-header.js -->
 
     <div class="container" id="adminContainer" style="display: none;">
         <div class="page-header">
@@ -1140,7 +758,7 @@
         </div>
         
         <div class="footer">
-            <p>Aurora Trips Admin Panel &copy; 2023 | MongoDB Backend | Secure Ticket Management</p>
+            <p>Aurora Trips Admin Panel &copy; <span id="currentYear">2023</span> | MongoDB Backend | Secure Ticket Management</p>
             <p style="font-size: 14px; margin-top: 10px; opacity: 0.8;">
                 <i class="fas fa-shield-alt"></i> All actions are logged for security purposes
             </p>
@@ -1208,128 +826,17 @@
         </div>
     </div>
 
+    <!-- Load the shared header -->
+    <script src="load-header.js"></script>
+    
     <script>
         // Variables for messaging
         let currentTicketId = null;
         let messageRefreshInterval = null;
         let currentTicketDetails = null;
 
-        // Check if user is logged in and is admin
-        async function checkAdminAccess() {
-            const userId = localStorage.getItem('userId');
-            const userName = localStorage.getItem('userName');
-            const userEmail = localStorage.getItem('userEmail');
-            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
-            const userProfilePicture = localStorage.getItem('userProfilePicture');
-            
-            console.log('Admin check:', { userId, userName, userIsAdmin });
-            
-            if (userId && userName && userIsAdmin) {
-                // User is logged in AND is admin
-                document.getElementById('loginPrompt').style.display = 'none';
-                document.getElementById('adminContainer').style.display = 'block';
-                document.getElementById('userProfile').style.display = 'block';
-                
-                // Update user info
-                document.getElementById('userEmail').textContent = userEmail;
-                document.getElementById('userFullName').textContent = userName;
-                
-                // Set user role
-                const userRole = document.getElementById('userRole');
-                userRole.textContent = 'Admin';
-                userRole.classList.add('admin');
-                
-                // Show admin link in dropdown
-                document.getElementById('adminLink').style.display = 'flex';
-                
-                // Set avatar
-                const userAvatar = document.getElementById('userAvatar');
-                if (userProfilePicture) {
-                    userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
-                } else {
-                    const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-                    userAvatar.textContent = initials;
-                    const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
-                    const color1 = colors[initials.charCodeAt(0) % colors.length];
-                    const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
-                    userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-                }
-                
-                // Load ticket data
-                loadTicketStats();
-                loadTickets();
-                
-                // Verify admin status with server
-                try {
-                    const response = await fetch(`/api/user/status?userId=${userId}`);
-                    const data = await response.json();
-                    
-                    if (!data.loggedIn || !data.user.isAdmin) {
-                        // User is not actually admin according to server
-                        showMessage('⚠️ Admin access required. Redirecting...', 'error');
-                        setTimeout(() => {
-                            window.location.href = 'tickets.html';
-                        }, 2000);
-                        return;
-                    }
-                    
-                    if (data.user.isBanned) {
-                        showMessage('⚠️ Your account has been suspended.', 'error');
-                        logout();
-                        return;
-                    }
-                } catch (error) {
-                    console.error('Error verifying admin status:', error);
-                }
-            } else {
-                // User is not logged in or not admin
-                document.getElementById('loginPrompt').style.display = 'flex';
-                document.getElementById('adminContainer').style.display = 'none';
-                document.getElementById('userProfile').style.display = 'none';
-                
-                // If logged in but not admin, redirect to regular tickets page
-                if (userId && !userIsAdmin) {
-                    showMessage('Admin access required. Redirecting to support tickets...', 'error');
-                    setTimeout(() => {
-                        window.location.href = 'tickets.html';
-                    }, 2000);
-                }
-            }
-        }
-        
-        // Toggle user dropdown
-        document.getElementById('userToggle').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('show');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.remove('show');
-        });
-        
-        // Prevent dropdown from closing when clicking inside it
-        document.getElementById('userDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
-        
-        // Logout function
-        function logout() {
-            localStorage.removeItem('userId');
-            localStorage.removeItem('userName');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userIsAdmin');
-            localStorage.removeItem('userProfilePicture');
-            localStorage.removeItem('userIsBanned');
-            window.location.href = 'index.html';
-        }
-        
-        // Check admin access on page load
-        document.addEventListener('DOMContentLoaded', checkAdminAccess);
-        
         // DOM elements
+        const adminContainer = document.getElementById('adminContainer');
         const ticketsContainer = document.getElementById('ticketsContainer');
         const statusMessage = document.getElementById('statusMessage');
         const ticketCount = document.getElementById('ticketCount');
@@ -1341,16 +848,104 @@
         const priorityFilter = document.getElementById('priorityFilter');
         const categoryFilter = document.getElementById('categoryFilter');
         const refreshBtn = document.getElementById('refreshBtn');
-        
-        // Event listeners for filters
-        statusFilter.addEventListener('change', loadTickets);
-        priorityFilter.addEventListener('change', loadTickets);
-        categoryFilter.addEventListener('change', loadTickets);
-        refreshBtn.addEventListener('click', () => {
-            loadTicketStats();
-            loadTickets();
-            showMessage('Tickets refreshed successfully', 'success');
+
+        // Initialize the page - wait for header to load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set current year in footer
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            
+            // Wait for header to load, then check admin access
+            setTimeout(() => {
+                checkAdminAccess();
+                initAdminPage();
+            }, 300);
         });
+
+        // Initialize admin page functionality
+        function initAdminPage() {
+            // Event listeners for filters
+            statusFilter.addEventListener('change', loadTickets);
+            priorityFilter.addEventListener('change', loadTickets);
+            categoryFilter.addEventListener('change', loadTickets);
+            refreshBtn.addEventListener('click', () => {
+                loadTicketStats();
+                loadTickets();
+                showMessage('Tickets refreshed successfully', 'success');
+            });
+            
+            // Modal event listeners
+            document.getElementById('closeDetailModalBtn').addEventListener('click', () => {
+                document.getElementById('ticketDetailModal').style.display = 'none';
+                if (messageRefreshInterval) {
+                    clearInterval(messageRefreshInterval);
+                    messageRefreshInterval = null;
+                }
+            });
+            
+            // Close modal when clicking outside
+            document.getElementById('ticketDetailModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('ticketDetailModal')) {
+                    document.getElementById('ticketDetailModal').style.display = 'none';
+                    if (messageRefreshInterval) {
+                        clearInterval(messageRefreshInterval);
+                        messageRefreshInterval = null;
+                    }
+                }
+            });
+        }
+
+        // Check if user is logged in and is admin
+        function checkAdminAccess() {
+            const userId = localStorage.getItem('userId');
+            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
+            
+            if (userId && userIsAdmin) {
+                // User is logged in AND is admin
+                adminContainer.style.display = 'block';
+                
+                // Load ticket data
+                loadTicketStats();
+                loadTickets();
+                
+                // Verify admin status with server
+                try {
+                    fetch(`/api/user/status?userId=${userId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            if (!data.loggedIn || !data.user.isAdmin) {
+                                // User is not actually admin according to server
+                                showMessage('⚠️ Admin access required. Redirecting...', 'error');
+                                setTimeout(() => {
+                                    window.location.href = 'tickets.html';
+                                }, 2000);
+                                return;
+                            }
+                            
+                            if (data.user.isBanned) {
+                                showMessage('⚠️ Your account has been suspended.', 'error');
+                                logout();
+                                return;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error verifying admin status:', error);
+                        });
+                } catch (error) {
+                    console.error('Error verifying admin status:', error);
+                }
+            } else {
+                // User is not logged in or not admin
+                adminContainer.style.display = 'none';
+                
+                // If logged in but not admin, redirect to regular tickets page
+                if (userId && !userIsAdmin) {
+                    showMessage('Admin access required. Redirecting to support tickets...', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'tickets.html';
+                    }, 2000);
+                }
+            }
+        }
         
         // Function to load ticket statistics
         async function loadTicketStats() {
@@ -1895,25 +1490,16 @@
             }, 5000);
         }
         
-        // Close modal
-        document.getElementById('closeDetailModalBtn').addEventListener('click', () => {
-            document.getElementById('ticketDetailModal').style.display = 'none';
-            if (messageRefreshInterval) {
-                clearInterval(messageRefreshInterval);
-                messageRefreshInterval = null;
+        // Logout function (uses the global logout from header)
+        function logout() {
+            if (typeof window.logout === 'function') {
+                window.logout(); // Use the global logout function from header
+            } else {
+                // Fallback logout
+                localStorage.clear();
+                window.location.href = 'index.html';
             }
-        });
-        
-        // Close modal when clicking outside
-        document.getElementById('ticketDetailModal').addEventListener('click', (e) => {
-            if (e.target === document.getElementById('ticketDetailModal')) {
-                document.getElementById('ticketDetailModal').style.display = 'none';
-                if (messageRefreshInterval) {
-                    clearInterval(messageRefreshInterval);
-                    messageRefreshInterval = null;
-                }
-            }
-        });
+        }
     </script>
 </body>
 </html>

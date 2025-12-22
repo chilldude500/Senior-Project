@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Travel Alerts - Aurora Trips</title>
   <style>
-    /* Common Header Styles - Matches index.html */
+    /* Alerts Page Specific Styles */
     * {
         margin: 0;
         padding: 0;
@@ -19,318 +19,6 @@
         color: #333;
     }
     
-    /* Header Styles - Exact match with index.html */
-    .header {
-        display: flex;
-        align-items: center;
-        padding: 15px 30px;
-        background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        border-bottom: 3px solid #3498db;
-    }
-    
-    .logo-container {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-right: 30px;
-    }
-    
-    .logo {
-        font-size: 28px;
-        font-weight: 800;
-        color: #2c3e50;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        letter-spacing: -0.5px;
-    }
-    
-    .logo-icon {
-        font-size: 32px;
-        color: #3498db;
-        animation: aurora 3s infinite alternate;
-    }
-    
-    @keyframes aurora {
-        0% { color: #3498db; }
-        25% { color: #9b59b6; }
-        50% { color: #2ecc71; }
-        75% { color: #e74c3c; }
-        100% { color: #f39c12; }
-    }
-    
-    .logo-text {
-        background: linear-gradient(135deg, #3498db, #9b59b6);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    
-    .nav-buttons { 
-        display: flex; 
-        gap: 10px; 
-        flex-wrap: wrap;
-        align-items: center;
-    }
-    
-    .nav-btn { 
-        padding: 10px 20px; 
-        font-size: 15px; 
-        border: none; 
-        border-radius: 8px; 
-        cursor: pointer; 
-        background-color: white; 
-        color: #333; 
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-        transition: all 0.3s ease;
-        text-decoration: none;
-        display: inline-block;
-        font-weight: 600;
-        border: 2px solid transparent;
-    }
-    
-    .nav-btn:hover { 
-        background-color: #f8f9fa; 
-        transform: translateY(-2px); 
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        border-color: #3498db;
-    }
-    
-    .nav-btn:active { 
-        transform: translateY(0); 
-    }
-    
-    .ticket-btn {
-        background: linear-gradient(135deg, #ff9800, #ff5722);
-        color: white;
-        border: none !important;
-    }
-    
-    .ticket-btn:hover {
-        background: linear-gradient(135deg, #f57c00, #e64a19);
-    }
-    
-    /* User Profile Styles */
-    .user-profile {
-        position: relative;
-        margin-left: auto;
-    }
-    
-    .user-toggle {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 10px 18px;
-        background: white;
-        border-radius: 50px;
-        cursor: pointer;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        transition: all 0.3s;
-        border: 2px solid transparent;
-        min-width: 180px;
-    }
-    
-    .user-toggle:hover {
-        border-color: #3498db;
-        box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-    }
-    
-    .user-avatar {
-        width: 42px;
-        height: 42px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #3498db, #9b59b6);
-        color: white;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: bold;
-        font-size: 18px;
-        overflow: hidden;
-        border: 3px solid white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    }
-    
-    .user-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-    
-    .user-email {
-        font-weight: 600;
-        color: #2c3e50;
-        max-width: 200px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-size: 14px;
-    }
-    
-    .user-dropdown {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        margin-top: 10px;
-        background: white;
-        border-radius: 15px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        min-width: 280px;
-        display: none;
-        z-index: 1000;
-        overflow: hidden;
-        border: 1px solid #e0e0e0;
-    }
-    
-    .user-dropdown.show {
-        display: block;
-        animation: slideDown 0.3s;
-    }
-    
-    @keyframes slideDown {
-        from { opacity: 0; transform: translateY(-10px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .user-info {
-        padding: 20px;
-        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-        border-bottom: 1px solid #dee2e6;
-    }
-    
-    .user-name {
-        font-weight: 700;
-        color: #2c3e50;
-        margin-bottom: 5px;
-        font-size: 18px;
-    }
-    
-    .user-role {
-        display: inline-block;
-        padding: 4px 12px;
-        background: #3498db;
-        color: white;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: bold;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-    
-    .user-role.admin {
-        background: linear-gradient(135deg, #9b59b6, #8e44ad);
-    }
-    
-    .dropdown-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 15px 20px;
-        text-decoration: none;
-        color: #2c3e50;
-        border-bottom: 1px solid #f0f0f0;
-        transition: all 0.3s;
-        font-weight: 500;
-    }
-    
-    .dropdown-item:hover {
-        background-color: #f8f9fa;
-        padding-left: 25px;
-        color: #3498db;
-    }
-    
-    .dropdown-item i {
-        font-size: 18px;
-        width: 24px;
-        text-align: center;
-    }
-    
-    .dropdown-item.logout {
-        color: #e74c3c;
-        font-weight: 600;
-    }
-    
-    .dropdown-item.logout:hover {
-        background-color: #fdedec;
-    }
-    
-    .login-prompt {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-        background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
-        padding: 15px 25px;
-        border-radius: 50px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        border: 2px solid #3498db;
-        margin-left: auto;
-    }
-    
-    .login-prompt p {
-        margin: 0;
-        color: #2c3e50;
-        font-weight: 500;
-    }
-    
-    .login-prompt a {
-        color: #3498db;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s;
-    }
-    
-    .login-prompt a:hover {
-        color: #2980b9;
-        text-decoration: underline;
-    }
-    
-    .login-prompt .divider {
-        color: #bdc3c7;
-    }
-    
-    /* Responsive Header */
-    @media (max-width: 992px) {
-        .header {
-            flex-wrap: wrap;
-            padding: 15px;
-        }
-        
-        .logo-container {
-            margin-right: 0;
-            margin-bottom: 15px;
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .nav-buttons {
-            justify-content: center;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-        
-        .user-profile {
-            margin-left: 0;
-            width: 100%;
-        }
-        
-        .user-toggle {
-            width: 100%;
-            justify-content: center;
-        }
-        
-        .login-prompt {
-            margin: 15px auto 0;
-            width: 100%;
-            justify-content: center;
-        }
-    }
-    
-    /* Alerts Page Specific Styles */
     .main-content {
         padding: 30px;
         max-width: 1200px;
@@ -578,488 +266,306 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-  <!-- Header - Exact match with index.html -->
-<div class="header">
-  <div class="logo-container">
-    <a href="index.html" class="logo">
-      <span class="logo-icon">🌌</span>
-      <span class="logo-text">Aurora Trips</span>
-    </a>
-  </div>
-  
-  <div class="nav-buttons">
-    <!-- Home button added -->
-    <button onclick="window.location.href='index.html'" class="nav-btn">
-      <i class="fas fa-home"></i> Home
-    </button>
-    <button onclick="window.location.href='currency.html'" class="nav-btn">
-      <i class="fas fa-money-bill-wave"></i> Currency
-    </button>
-    <button onclick="window.location.href='alerts.html'" class="nav-btn" style="background-color: #e3f2fd; border-color: #2196f3;">
-      <i class="fas fa-bell"></i> Alerts
-    </button>
-    <button onclick="window.location.href='members.html'" class="nav-btn">
-      <i class="fas fa-users"></i> Community
-    </button>
-    <!-- Ticket button will be added here by JavaScript if logged in -->
-  </div>
-  
-  <div class="user-profile" id="userProfile" style="display: none;">
-    <div class="user-toggle" id="userToggle">
-      <div class="user-avatar" id="userAvatar">U</div>
-      <div class="user-email" id="userEmail">user@example.com</div>
-      <i class="fas fa-chevron-down"></i>
-    </div>
-    <div class="user-dropdown" id="userDropdown">
-      <div class="user-info">
-        <div class="user-name" id="userFullName">User Name</div>
-        <div class="user-role" id="userRole">Member</div>
-      </div>
-      <a href="profile.html" class="dropdown-item">
-        <i class="fas fa-user-circle"></i> My Profile
-      </a>
-      <a href="my-tickets.html" class="dropdown-item">
-        <i class="fas fa-ticket-alt"></i> My Tickets
-      </a>
-      <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
-        <i class="fas fa-crown"></i> Admin Panel
-      </a>
-      <a href="#" class="dropdown-item logout" onclick="logout()">
-        <i class="fas fa-sign-out-alt"></i> Logout
-      </a>
-    </div>
-  </div>
-  
+    <!-- Header will be loaded here by JavaScript -->
 
+    <div class="main-content">
+        <div class="wrap">
+            <div class="card">
+                <h2>Travel Alerts</h2>
+                <div class="muted">Flight delays, weather warnings, and currency drop alerts.</div>
+
+                <!-- Quick Select Location Dropdown -->
+                <div class="row" style="margin-top:20px;">
+                    <select id="quickLocation" class="search-select" style="flex:1; min-width:240px;">
+                        <option value="">Quick Select Location...</option>
+                        <option value="Tokyo">Tokyo, Japan</option>
+                        <option value="Paris">Paris, France</option>
+                        <option value="New York">New York, USA</option>
+                        <option value="London">London, UK</option>
+                        <option value="Dubai">Dubai, UAE</option>
+                        <option value="Sydney">Sydney, Australia</option>
+                        <option value="Barcelona">Barcelona, Spain</option>
+                        <option value="Rome">Rome, Italy</option>
+                        <option value="Bangkok">Bangkok, Thailand</option>
+                        <option value="Bali">Bali, Indonesia</option>
+                    </select>
+                </div>
+
+                <!-- Filter Options -->
+                <div class="row" style="margin-top:20px;">
+                    <select id="type" class="search-select" style="min-width:150px;">
+                        <option value="">All Types</option>
+                        <option value="flight">Flight</option>
+                        <option value="weather">Weather</option>
+                        <option value="currency">Currency</option>
+                    </select>
+
+                    <input id="destination" class="search-input" placeholder="Destination (optional) e.g., Tokyo" style="flex:1; min-width:240px;">
+                    <input id="currencyCode" class="search-input" placeholder="Currency Code (optional) e.g., JPY" style="min-width:150px;">
+                    <select id="minSeverity" class="search-select" style="min-width:160px;">
+                        <option value="0">Min Severity</option>
+                        <option value="1">1+</option>
+                        <option value="2">2+</option>
+                        <option value="3">3+</option>
+                        <option value="4">4+</option>
+                        <option value="5">5</option>
+                    </select>
+
+                    <button id="seedBtn" class="action-btn">
+                        <i class="fas fa-seedling"></i> Seed Alerts
+                    </button>
+                    <button id="loadBtn" class="action-btn">
+                        <i class="fas fa-download"></i> Load Alerts
+                    </button>
+                </div>
+
+                <div class="row" style="margin-top:20px;">
+                    <input id="email" type="email" class="search-input" placeholder="Email (for subscription demo)" style="flex:1; min-width:280px;">
+                    <button id="subBtn" class="action-btn">
+                        <i class="fas fa-envelope"></i> Subscribe
+                    </button>
+                    <button id="myBtn" class="action-btn">
+                        <i class="fas fa-user"></i> Load My Alerts
+                    </button>
+                </div>
+
+                <div id="status" class="muted"></div>
+
+                <table id="tbl" style="display:none;">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Title</th>
+                            <th>Where</th>
+                            <th>Details</th>
+                            <th>Severity</th>
+                            <th>Extra</th>
+                        </tr>
+                    </thead>
+                    <tbody id="body"></tbody>
+                </table>
+
+                <a href="index.html" class="back-link">
+                    <i class="fas fa-arrow-left"></i> Back to Main Page
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load Header Script -->
+    <script src="load-header.js"></script>
     
-    <div class="login-prompt" id="loginPrompt">
-      <p>Welcome to <strong>Aurora Trips</strong></p>
-      <span class="divider">|</span>
-      <p><a href="login.html">Login</a> or <a href="register.html">Register</a> to access all features</p>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <div class="wrap">
-      <div class="card">
-        <h2>Travel Alerts</h2>
-        <div class="muted">Flight delays, weather warnings, and currency drop alerts.</div>
-
-        <!-- Quick Select Location Dropdown -->
-        <div class="row" style="margin-top:20px;">
-          <select id="quickLocation" class="search-select" style="flex:1; min-width:240px;">
-            <option value="">Quick Select Location...</option>
-            <option value="Tokyo">Tokyo, Japan</option>
-            <option value="Paris">Paris, France</option>
-            <option value="New York">New York, USA</option>
-            <option value="London">London, UK</option>
-            <option value="Dubai">Dubai, UAE</option>
-            <option value="Sydney">Sydney, Australia</option>
-            <option value="Barcelona">Barcelona, Spain</option>
-            <option value="Rome">Rome, Italy</option>
-            <option value="Bangkok">Bangkok, Thailand</option>
-            <option value="Bali">Bali, Indonesia</option>
-          </select>
-        </div>
-
-        <!-- Filter Options -->
-        <div class="row" style="margin-top:20px;">
-          <select id="type" class="search-select" style="min-width:150px;">
-            <option value="">All Types</option>
-            <option value="flight">Flight</option>
-            <option value="weather">Weather</option>
-            <option value="currency">Currency</option>
-          </select>
-
-          <input id="destination" class="search-input" placeholder="Destination (optional) e.g., Tokyo" style="flex:1; min-width:240px;">
-          <input id="currencyCode" class="search-input" placeholder="Currency Code (optional) e.g., JPY" style="min-width:150px;">
-          <select id="minSeverity" class="search-select" style="min-width:160px;">
-            <option value="0">Min Severity</option>
-            <option value="1">1+</option>
-            <option value="2">2+</option>
-            <option value="3">3+</option>
-            <option value="4">4+</option>
-            <option value="5">5</option>
-          </select>
-
-          <button id="seedBtn" class="action-btn">
-            <i class="fas fa-seedling"></i> Seed Alerts
-          </button>
-          <button id="loadBtn" class="action-btn">
-            <i class="fas fa-download"></i> Load Alerts
-          </button>
-        </div>
-
-        <div class="row" style="margin-top:20px;">
-          <input id="email" type="email" class="search-input" placeholder="Email (for subscription demo)" style="flex:1; min-width:280px;">
-          <button id="subBtn" class="action-btn">
-            <i class="fas fa-envelope"></i> Subscribe
-          </button>
-          <button id="myBtn" class="action-btn">
-            <i class="fas fa-user"></i> Load My Alerts
-          </button>
-        </div>
-
-        <div id="status" class="muted"></div>
-
-        <table id="tbl" style="display:none;">
-          <thead>
-            <tr>
-              <th>Type</th>
-              <th>Title</th>
-              <th>Where</th>
-              <th>Details</th>
-              <th>Severity</th>
-              <th>Extra</th>
-            </tr>
-          </thead>
-          <tbody id="body"></tbody>
-        </table>
-
-        <a href="index.html" class="back-link">
-          <i class="fas fa-arrow-left"></i> Back to Main Page
-        </a>
-      </div>
-    </div>
-  </div>
-
-<script>
-// Check if user is logged in - Same as index.html
-async function checkLoginStatus() {
-    const userId = localStorage.getItem('userId');
-    const userName = localStorage.getItem('userName');
-    const userEmail = localStorage.getItem('userEmail');
-    const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
-    const userProfilePicture = localStorage.getItem('userProfilePicture');
-    
-    if (userId && userName && userEmail) {
-        // Hide login prompt
-        document.getElementById('loginPrompt').style.display = 'none';
-        
-        // Show user profile
-        const userProfile = document.getElementById('userProfile');
-        userProfile.style.display = 'block';
-        
-        // Update user info
-        document.getElementById('userEmail').textContent = userEmail;
-        document.getElementById('userFullName').textContent = userName;
-        
-        // Set user role
-        const userRole = document.getElementById('userRole');
-        if (userIsAdmin) {
-            userRole.textContent = 'Admin';
-            userRole.classList.add('admin');
-            document.getElementById('adminLink').style.display = 'flex';
-        } else {
-            userRole.textContent = 'Member';
-            userRole.classList.remove('admin');
+    <script>
+        // Original Alerts Functionality
+        function esc(s){ 
+            if (s === null || s === undefined) return '';
+            return String(s)
+              .replaceAll('&','&amp;')
+              .replaceAll('<','&lt;')
+              .replaceAll('>','&gt;')
+              .replaceAll('"','&quot;')
+              .replaceAll("'","&#039;"); 
         }
-        
-        // Set avatar
-        const userAvatar = document.getElementById('userAvatar');
-        if (userProfilePicture) {
-            userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
-        } else {
-            // Create initials from name
-            const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-            userAvatar.textContent = initials;
+
+        function getTypeClass(type) {
+            switch(type) {
+              case 'flight': return 'flight';
+              case 'weather': return 'weather';
+              case 'currency': return 'currency';
+              default: return '';
+            }
+        }
+
+        function showRows(rows){
+            const body = document.getElementById('body');
+            body.innerHTML = "";
+            document.getElementById('tbl').style.display = rows.length ? "table" : "none";
+
+            for (const a of rows) {
+              const where = [a.destination, a.country].filter(Boolean).join(", ");
+              let extra = '';
+              
+              if (a.type === "flight") {
+                extra = `Airport: ${esc(a.airportCode || "")}<br>Flight: ${esc(a.flightNumber || "")}`;
+              } else if (a.type === "currency") {
+                const change = a.percentChange || 0;
+                const changeColor = change < 0 ? '#f44336' : '#4caf50';
+                const changeSymbol = change > 0 ? '+' : '';
+                extra = `Code: ${esc(a.currencyCode || "")}<br>Change: <span style="color:${changeColor}">${changeSymbol}${esc(change)}%</span>`;
+              } else if (a.type === "weather") {
+                extra = `Location: ${esc(a.destination || "")}, ${esc(a.country || "")}`;
+              }
+
+              const severityStars = '★'.repeat(a.severity || 1) + '☆'.repeat(5 - (a.severity || 1));
+              const severityColor = a.severity >= 4 ? '#f44336' : a.severity >= 3 ? '#ff9800' : '#4CAF50';
+
+              const tr = document.createElement("tr");
+              tr.innerHTML = `
+                <td><span class="pill ${getTypeClass(a.type)}">${esc(a.type || '')}</span></td>
+                <td><strong>${esc(a.title || '')}</strong></td>
+                <td>${esc(where)}</td>
+                <td>${esc(a.details || "")}</td>
+                <td><span style="color:${severityColor}; font-weight:bold">${severityStars} (${a.severity})</span></td>
+                <td><small>${extra}</small></td>
+              `;
+              body.appendChild(tr);
+            }
+        }
+
+        function showStatus(message, isError = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            statusDiv.className = isError ? 'status-error' : 'status-info';
+        }
+
+        // Quick select location functionality
+        document.getElementById('quickLocation').addEventListener('change', function() {
+            const selected = this.value;
+            if (selected) {
+              document.getElementById('destination').value = selected;
+              loadAlerts();
+            }
+        });
+
+        async function seedAlerts(){
+            showStatus("Seeding alerts...", false);
+            try {
+              const r = await fetch("/api/alerts/seed", { method:"POST" });
+              const data = await r.json();
+              if (data.ok) {
+                showStatus(`Successfully seeded ${data.added} alerts. Now click 'Load Alerts' to see them.`, false);
+              } else {
+                showStatus(data.message || "Seed failed", true);
+              }
+            } catch (error) {
+              console.error('Seed error:', error);
+              showStatus("Error connecting to server. Make sure server is running.", true);
+            }
+        }
+
+        async function loadAlerts(){
+            const type = document.getElementById('type').value.trim();
+            const destination = document.getElementById('destination').value.trim();
+            const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
+            const minSeverity = document.getElementById('minSeverity').value;
+
+            const params = new URLSearchParams();
+            if (type) params.set("type", type);
+            if (destination) params.set("destination", destination);
+            if (currencyCode) params.set("currencyCode", currencyCode);
+            if (minSeverity && minSeverity !== "0") params.set("minSeverity", minSeverity);
+
+            showStatus("Loading alerts...", false);
+            try {
+              const r = await fetch("/api/alerts?" + params.toString());
+              const data = await r.json();
+              if (!data.ok) { 
+                showStatus(data.message || "Load failed", true); 
+                return; 
+              }
+
+              showStatus(`Found ${data.count} alert(s).`, false);
+              showRows(data.results || []);
+            } catch (error) {
+              console.error('Load alerts error:', error);
+              showStatus("Error connecting to server. Make sure server is running and seed alerts first.", true);
+            }
+        }
+
+        async function subscribe(){
+            const email = document.getElementById('email').value.trim();
+            if (!email) { 
+              showStatus("Please enter an email address to subscribe.", true); 
+              return; 
+            }
             
-            // Generate random gradient based on user initials
-            const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
-            const color1 = colors[initials.charCodeAt(0) % colors.length];
-            const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
-            userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-        }
-        
-        // Add ticket button to navigation if not already there
-        const buttonContainer = document.querySelector('.nav-buttons');
-        if (!document.getElementById('ticketNavBtn')) {
-            const ticketButton = document.createElement('button');
-            ticketButton.id = 'ticketNavBtn';
-            ticketButton.className = 'nav-btn ticket-btn';
-            ticketButton.innerHTML = '<i class="fas fa-ticket-alt"></i> Support';
-            ticketButton.onclick = () => window.location.href = 'tickets.html';
-            buttonContainer.appendChild(ticketButton);
-        }
-        
-        // Add admin panel button if user is admin
-        if (userIsAdmin) {
-            if (!document.getElementById('adminPanelBtn')) {
-                const adminButton = document.createElement('a');
-                adminButton.id = 'adminPanelBtn';
-                adminButton.className = 'nav-btn admin-btn';
-                adminButton.href = 'admin-panel.html';
-                adminButton.innerHTML = '<i class="fas fa-crown"></i> Admin Panel';
-                buttonContainer.appendChild(adminButton);
+            // Basic email validation
+            if (!email.includes('@') || !email.includes('.')) {
+              showStatus("Please enter a valid email address.", true);
+              return;
             }
-        } else {
-            const adminBtn = document.getElementById('adminPanelBtn');
-            if (adminBtn) {
-                adminBtn.remove();
+
+            const destination = document.getElementById('destination').value.trim();
+            const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
+            const minSeverity = Number(document.getElementById('minSeverity').value || 1);
+
+            showStatus("Subscribing...", false);
+            try {
+              const r = await fetch("/api/alerts/subscribe", {
+                method:"POST",
+                headers:{ "Content-Type":"application/json" },
+                body: JSON.stringify({ email, destination, currencyCode, minSeverity })
+              });
+
+              const data = await r.json();
+              if (data.ok) {
+                showStatus("Successfully subscribed! You can now click 'Load My Alerts' to see alerts matching your preferences.", false);
+              } else {
+                showStatus(data.message || "Subscribe failed", true);
+              }
+            } catch (error) {
+              console.error('Subscribe error:', error);
+              showStatus("Error connecting to server. Make sure server is running.", true);
             }
         }
-        
-        // Auto-fill email field with logged in user's email
-        document.getElementById('email').value = userEmail;
-        
-    } else {
-        // Show login prompt
-        document.getElementById('loginPrompt').style.display = 'flex';
-        document.getElementById('userProfile').style.display = 'none';
-        
-        // Remove ticket button if exists
-        const ticketBtn = document.getElementById('ticketNavBtn');
-        if (ticketBtn) {
-            ticketBtn.remove();
+
+        async function loadMyAlerts(){
+            const email = document.getElementById('email').value.trim();
+            if (!email) { 
+              showStatus("Please enter your email address first.", true); 
+              return; 
+            }
+
+            showStatus(`Loading alerts for ${email}...`, false);
+            try {
+              const r = await fetch("/api/alerts/forUser?email=" + encodeURIComponent(email));
+              const data = await r.json();
+              if (!data.ok) { 
+                showStatus(data.message || "Load failed", true); 
+                return; 
+              }
+
+              if (data.count === 0) {
+                showStatus(`No alerts found for ${email}. Try subscribing first or check your subscription criteria.`, false);
+              } else {
+                showStatus(`Found ${data.count} alert(s) for ${email}.`, false);
+              }
+              showRows(data.results || []);
+            } catch (error) {
+              console.error('Load my alerts error:', error);
+              showStatus("Error connecting to server. Make sure server is running.", true);
+            }
         }
-        
-        // Remove admin button if exists
-        const adminBtn = document.getElementById('adminPanelBtn');
-        if (adminBtn) {
-            adminBtn.remove();
-        }
-    }
-}
 
-// Toggle user dropdown - Same as index.html
-document.getElementById('userToggle').addEventListener('click', function(e) {
-    e.stopPropagation();
-    const dropdown = document.getElementById('userDropdown');
-    dropdown.classList.toggle('show');
-});
+        // Event listeners
+        document.getElementById("seedBtn").addEventListener("click", seedAlerts);
+        document.getElementById("loadBtn").addEventListener("click", loadAlerts);
+        document.getElementById("subBtn").addEventListener("click", subscribe);
+        document.getElementById("myBtn").addEventListener("click", loadMyAlerts);
 
-// Close dropdown when clicking outside - Same as index.html
-document.addEventListener('click', function() {
-    const dropdown = document.getElementById('userDropdown');
-    dropdown.classList.remove('show');
-});
+        // Enter key support
+        document.getElementById("email").addEventListener("keydown", (e) => {
+            if (e.key === 'Enter') subscribe();
+        });
+        document.getElementById("destination").addEventListener("keydown", (e) => {
+            if (e.key === 'Enter') loadAlerts();
+        });
+        document.getElementById("currencyCode").addEventListener("keydown", (e) => {
+            if (e.key === 'Enter') loadAlerts();
+        });
 
-// Prevent dropdown from closing when clicking inside it - Same as index.html
-document.getElementById('userDropdown').addEventListener('click', function(e) {
-    e.stopPropagation();
-});
-
-// Logout function - Same as index.html
-function logout() {
-    // Clear all user data from localStorage
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('userEmail');
-    localStorage.removeItem('userIsAdmin');
-    localStorage.removeItem('userProfilePicture');
-    localStorage.removeItem('userIsBanned');
-    
-    // Redirect to home page
-    window.location.href = 'index.html';
-}
-
-// Check login status on page load
-document.addEventListener('DOMContentLoaded', checkLoginStatus);
-
-// Original Alerts Functionality
-function esc(s){ 
-    if (s === null || s === undefined) return '';
-    return String(s)
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'","&#039;"); 
-}
-
-function getTypeClass(type) {
-    switch(type) {
-      case 'flight': return 'flight';
-      case 'weather': return 'weather';
-      case 'currency': return 'currency';
-      default: return '';
-    }
-}
-
-function showRows(rows){
-    const body = document.getElementById('body');
-    body.innerHTML = "";
-    document.getElementById('tbl').style.display = rows.length ? "table" : "none";
-
-    for (const a of rows) {
-      const where = [a.destination, a.country].filter(Boolean).join(", ");
-      let extra = '';
-      
-      if (a.type === "flight") {
-        extra = `Airport: ${esc(a.airportCode || "")}<br>Flight: ${esc(a.flightNumber || "")}`;
-      } else if (a.type === "currency") {
-        const change = a.percentChange || 0;
-        const changeColor = change < 0 ? '#f44336' : '#4caf50';
-        const changeSymbol = change > 0 ? '+' : '';
-        extra = `Code: ${esc(a.currencyCode || "")}<br>Change: <span style="color:${changeColor}">${changeSymbol}${esc(change)}%</span>`;
-      } else if (a.type === "weather") {
-        extra = `Location: ${esc(a.destination || "")}, ${esc(a.country || "")}`;
-      }
-
-      const severityStars = '★'.repeat(a.severity || 1) + '☆'.repeat(5 - (a.severity || 1));
-      const severityColor = a.severity >= 4 ? '#f44336' : a.severity >= 3 ? '#ff9800' : '#4CAF50';
-
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><span class="pill ${getTypeClass(a.type)}">${esc(a.type || '')}</span></td>
-        <td><strong>${esc(a.title || '')}</strong></td>
-        <td>${esc(where)}</td>
-        <td>${esc(a.details || "")}</td>
-        <td><span style="color:${severityColor}; font-weight:bold">${severityStars} (${a.severity})</span></td>
-        <td><small>${extra}</small></td>
-      `;
-      body.appendChild(tr);
-    }
-}
-
-function showStatus(message, isError = false) {
-    const statusDiv = document.getElementById('status');
-    statusDiv.textContent = message;
-    statusDiv.className = isError ? 'status-error' : 'status-info';
-}
-
-// Quick select location functionality
-document.getElementById('quickLocation').addEventListener('change', function() {
-    const selected = this.value;
-    if (selected) {
-      document.getElementById('destination').value = selected;
-      loadAlerts();
-    }
-});
-
-async function seedAlerts(){
-    showStatus("Seeding alerts...", false);
-    try {
-      const r = await fetch("/api/alerts/seed", { method:"POST" });
-      const data = await r.json();
-      if (data.ok) {
-        showStatus(`Successfully seeded ${data.added} alerts. Now click 'Load Alerts' to see them.`, false);
-      } else {
-        showStatus(data.message || "Seed failed", true);
-      }
-    } catch (error) {
-      console.error('Seed error:', error);
-      showStatus("Error connecting to server. Make sure server is running.", true);
-    }
-}
-
-async function loadAlerts(){
-    const type = document.getElementById('type').value.trim();
-    const destination = document.getElementById('destination').value.trim();
-    const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
-    const minSeverity = document.getElementById('minSeverity').value;
-
-    const params = new URLSearchParams();
-    if (type) params.set("type", type);
-    if (destination) params.set("destination", destination);
-    if (currencyCode) params.set("currencyCode", currencyCode);
-    if (minSeverity && minSeverity !== "0") params.set("minSeverity", minSeverity);
-
-    showStatus("Loading alerts...", false);
-    try {
-      const r = await fetch("/api/alerts?" + params.toString());
-      const data = await r.json();
-      if (!data.ok) { 
-        showStatus(data.message || "Load failed", true); 
-        return; 
-      }
-
-      showStatus(`Found ${data.count} alert(s).`, false);
-      showRows(data.results || []);
-    } catch (error) {
-      console.error('Load alerts error:', error);
-      showStatus("Error connecting to server. Make sure server is running and seed alerts first.", true);
-    }
-}
-
-async function subscribe(){
-    const email = document.getElementById('email').value.trim();
-    if (!email) { 
-      showStatus("Please enter an email address to subscribe.", true); 
-      return; 
-    }
-    
-    // Basic email validation
-    if (!email.includes('@') || !email.includes('.')) {
-      showStatus("Please enter a valid email address.", true);
-      return;
-    }
-
-    const destination = document.getElementById('destination').value.trim();
-    const currencyCode = document.getElementById('currencyCode').value.trim().toUpperCase();
-    const minSeverity = Number(document.getElementById('minSeverity').value || 1);
-
-    showStatus("Subscribing...", false);
-    try {
-      const r = await fetch("/api/alerts/subscribe", {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ email, destination, currencyCode, minSeverity })
-      });
-
-      const data = await r.json();
-      if (data.ok) {
-        showStatus("Successfully subscribed! You can now click 'Load My Alerts' to see alerts matching your preferences.", false);
-      } else {
-        showStatus(data.message || "Subscribe failed", true);
-      }
-    } catch (error) {
-      console.error('Subscribe error:', error);
-      showStatus("Error connecting to server. Make sure server is running.", true);
-    }
-}
-
-async function loadMyAlerts(){
-    const email = document.getElementById('email').value.trim();
-    if (!email) { 
-      showStatus("Please enter your email address first.", true); 
-      return; 
-    }
-
-    showStatus(`Loading alerts for ${email}...`, false);
-    try {
-      const r = await fetch("/api/alerts/forUser?email=" + encodeURIComponent(email));
-      const data = await r.json();
-      if (!data.ok) { 
-        showStatus(data.message || "Load failed", true); 
-        return; 
-      }
-
-      if (data.count === 0) {
-        showStatus(`No alerts found for ${email}. Try subscribing first or check your subscription criteria.`, false);
-      } else {
-        showStatus(`Found ${data.count} alert(s) for ${email}.`, false);
-      }
-      showRows(data.results || []);
-    } catch (error) {
-      console.error('Load my alerts error:', error);
-      showStatus("Error connecting to server. Make sure server is running.", true);
-    }
-}
-
-// Event listeners
-document.getElementById("seedBtn").addEventListener("click", seedAlerts);
-document.getElementById("loadBtn").addEventListener("click", loadAlerts);
-document.getElementById("subBtn").addEventListener("click", subscribe);
-document.getElementById("myBtn").addEventListener("click", loadMyAlerts);
-
-// Enter key support
-document.getElementById("email").addEventListener("keydown", (e) => {
-    if (e.key === 'Enter') subscribe();
-});
-document.getElementById("destination").addEventListener("keydown", (e) => {
-    if (e.key === 'Enter') loadAlerts();
-});
-document.getElementById("currencyCode").addEventListener("keydown", (e) => {
-    if (e.key === 'Enter') loadAlerts();
-});
-
-// Initialize
-document.addEventListener('DOMContentLoaded', function() {
-    showStatus('Click "Seed Alerts" to populate the database with sample data, then "Load Alerts" to view them.', false);
-});
-</script>
-
-
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            showStatus('Click "Seed Alerts" to populate the database with sample data, then "Load Alerts" to view them.', false);
+            
+            // Auto-fill email if user is logged in (after header loads)
+            setTimeout(() => {
+                const userEmail = localStorage.getItem('userEmail');
+                if (userEmail) {
+                    document.getElementById('email').value = userEmail;
+                }
+            }, 500);
+        });
+    </script>
 </body>
 </html>

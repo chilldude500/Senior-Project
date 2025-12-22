@@ -20,246 +20,6 @@
             color: #333;
         }
         
-        /* Header Styles - consistent with other pages */
-        .header {
-            display: flex;
-            align-items: center;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 3px solid #3498db;
-        }
-        
-        .logo-container {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-right: 30px;
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: 800;
-            color: #2c3e50;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            letter-spacing: -0.5px;
-        }
-        
-        .logo-icon {
-            font-size: 32px;
-            color: #3498db;
-            animation: aurora 3s infinite alternate;
-        }
-        
-        @keyframes aurora {
-            0% { color: #3498db; }
-            25% { color: #9b59b6; }
-            50% { color: #2ecc71; }
-            75% { color: #e74c3c; }
-            100% { color: #f39c12; }
-        }
-        
-        .logo-text {
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .nav-buttons { 
-            display: flex; 
-            gap: 10px; 
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        
-        .nav-btn { 
-            padding: 10px 20px; 
-            font-size: 15px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            background-color: white; 
-            color: #333; 
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-        
-        .nav-btn:hover { 
-            background-color: #f8f9fa; 
-            transform: translateY(-2px); 
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            border-color: #3498db;
-        }
-        
-        .nav-btn:active { 
-            transform: translateY(0); 
-        }
-        
-        .admin-btn {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-            color: white;
-            border: none !important;
-        }
-        
-        .admin-btn:hover {
-            background: linear-gradient(135deg, #8e44ad, #7d3c98);
-        }
-        
-        /* User Profile Styles */
-        .user-profile {
-            position: relative;
-            margin-left: auto;
-        }
-        
-        .user-toggle {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 18px;
-            background: white;
-            border-radius: 50px;
-            cursor: pointer;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-            transition: all 0.3s;
-            border: 2px solid transparent;
-            min-width: 180px;
-        }
-        
-        .user-toggle:hover {
-            border-color: #3498db;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
-        }
-        
-        .user-avatar {
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #3498db, #9b59b6);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 18px;
-            overflow: hidden;
-            border: 3px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-        
-        .user-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .user-email {
-            font-weight: 600;
-            color: #2c3e50;
-            max-width: 200px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 14px;
-        }
-        
-        .user-dropdown {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 10px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            min-width: 280px;
-            display: none;
-            z-index: 1000;
-            overflow: hidden;
-            border: 1px solid #e0e0e0;
-        }
-        
-        .user-dropdown.show {
-            display: block;
-            animation: slideDown 0.3s;
-        }
-        
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .user-info {
-            padding: 20px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .user-name {
-            font-weight: 700;
-            color: #2c3e50;
-            margin-bottom: 5px;
-            font-size: 18px;
-        }
-        
-        .user-role {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #3498db;
-            color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .user-role.admin {
-            background: linear-gradient(135deg, #9b59b6, #8e44ad);
-        }
-        
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 15px 20px;
-            text-decoration: none;
-            color: #2c3e50;
-            border-bottom: 1px solid #f0f0f0;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-        
-        .dropdown-item:hover {
-            background-color: #f8f9fa;
-            padding-left: 25px;
-            color: #3498db;
-        }
-        
-        .dropdown-item i {
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-        }
-        
-        .dropdown-item.logout {
-            color: #e74c3c;
-            font-weight: 600;
-        }
-        
-        .dropdown-item.logout:hover {
-            background-color: #fdedec;
-        }
-        
         /* Main Admin Panel Styles */
         .container {
             max-width: 1400px;
@@ -936,34 +696,6 @@
         }
         
         @media (max-width: 992px) {
-            .header {
-                flex-wrap: wrap;
-                padding: 15px;
-            }
-            
-            .logo-container {
-                margin-right: 0;
-                margin-bottom: 15px;
-                width: 100%;
-                justify-content: center;
-            }
-            
-            .nav-buttons {
-                justify-content: center;
-                width: 100%;
-                margin-bottom: 15px;
-            }
-            
-            .user-profile {
-                margin-left: 0;
-                width: 100%;
-            }
-            
-            .user-toggle {
-                width: 100%;
-                justify-content: center;
-            }
-            
             h1 {
                 font-size: 2.2rem;
             }
@@ -1124,66 +856,11 @@
         </div>
     </div>
 
-    <div class="header">
-        <div class="logo-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">🌌</span>
-                <span class="logo-text">Aurora Trips</span>
-            </a>
-        </div>
-        
-        <div class="nav-buttons">
-            <button onclick="window.location.href='index.html'" class="nav-btn">
-                <i class="fas fa-home"></i> Home
-            </button>
-            <button onclick="window.location.href='currency.html'" class="nav-btn">
-                <i class="fas fa-money-bill-wave"></i> Currency
-            </button>
-            <button onclick="window.location.href='alerts.html'" class="nav-btn">
-                <i class="fas fa-bell"></i> Alerts
-            </button>
-            <button onclick="window.location.href='members.html'" class="nav-btn">
-                <i class="fas fa-users"></i> Community
-            </button>
-            <a href="tickets.html" class="nav-btn">
-                <i class="fas fa-ticket-alt"></i> Support
-            </a>
-            <a href="admin-panel.html" class="nav-btn admin-btn">
-                <i class="fas fa-crown"></i> User Admin
-            </a>
-        </div>
-        
-        <div class="user-profile" id="userProfile" style="display: none;">
-            <div class="user-toggle" id="userToggle">
-                <div class="user-avatar" id="userAvatar">U</div>
-                <div class="user-email" id="userEmail">user@example.com</div>
-                <i class="fas fa-chevron-down"></i>
-            </div>
-            <div class="user-dropdown" id="userDropdown">
-                <div class="user-info">
-                    <div class="user-name" id="userFullName">User Name</div>
-                    <div class="user-role" id="userRole">Member</div>
-                </div>
-                <a href="profile.html" class="dropdown-item">
-                    <i class="fas fa-user-circle"></i> My Profile
-                </a>
-                <a href="tickets.html" class="dropdown-item">
-                    <i class="fas fa-ticket-alt"></i> My Tickets
-                </a>
-                <a href="tickets-admin.html" class="dropdown-item">
-                    <i class="fas fa-headset"></i> Ticket Admin
-                </a>
-                <a href="admin-panel.html" class="dropdown-item">
-                    <i class="fas fa-crown"></i> User Admin
-                </a>
-                <a href="#" class="dropdown-item logout" onclick="logout()">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
-        </div>
-    </div>
+    <!-- Header will be loaded here by JavaScript -->
 
-    <div class="container" id="adminContainer">
+    <div class="container" id="adminContainer" style="display: none;">
+
+        
         <!-- Admin Navigation -->
         <div class="admin-nav">
             <a href="#users" class="admin-nav-btn active" onclick="switchSection('users')">
@@ -1198,6 +875,26 @@
             <a href="#activity" class="admin-nav-btn" onclick="switchSection('activity')">
                 <i class="fas fa-history"></i> Activity Log
             </a>
+        </div>
+        
+        <!-- Stats Cards -->
+        <div class="stats-container" id="statsCards" style="display: none;">
+            <div class="stat-card stat-users">
+                <span class="stat-number" id="totalUsers">0</span>
+                <span class="stat-label">Total Users</span>
+            </div>
+            <div class="stat-card stat-active">
+                <span class="stat-number" id="activeUsers">0</span>
+                <span class="stat-label">Active Users</span>
+            </div>
+            <div class="stat-card stat-banned">
+                <span class="stat-number" id="bannedUsers">0</span>
+                <span class="stat-label">Banned Users</span>
+            </div>
+            <div class="stat-card stat-admin">
+                <span class="stat-number" id="adminUsers">0</span>
+                <span class="stat-label">Administrators</span>
+            </div>
         </div>
         
         <!-- Status Messages -->
@@ -1281,128 +978,72 @@
         </div>
     </div>
 
+    <!-- Load shared header JavaScript -->
+    <script src="load-header.js"></script>
+    
     <script>
         // Global variable to store current user being edited
         let currentEditingUserId = null;
         
-        // In the checkAdminAccess() function, update this section:
-
-		// Check if user is logged in and is admin
-		async function checkAdminAccess() {
-			const userId = localStorage.getItem('userId');
-			const userName = localStorage.getItem('userName');
-			const userEmail = localStorage.getItem('userEmail'); // This might be null/undefined
-			const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
-			const userProfilePicture = localStorage.getItem('userProfilePicture');
-			
-			console.log('Admin panel check:', { userId, userName, userEmail, userIsAdmin });
-			
-			// In the checkAdminAccess() function, update this section:
-			if (userId && userName && userIsAdmin) {
-				// User is logged in AND is admin
-				document.getElementById('loginPrompt').style.display = 'none';
-				document.getElementById('adminContainer').style.display = 'block';
-				document.getElementById('userProfile').style.display = 'block';
-				
-				// Update user info - Get email from localStorage
-				const userEmail = localStorage.getItem('userEmail');
-				// Update user info - FIX HERE: Use the actual email from localStorage
-				if (userEmail) {
-					document.querySelector('.user-profile .user-email').textContent = userEmail;
-				} else {
-					// If email not in localStorage, try to get it from server or use username
-					document.querySelector('.user-profile .user-email').textContent = userName || 'Admin User';
-				}
-				
-				document.getElementById('userFullName').textContent = userName;
-				
-				// Set user role
-				const userRole = document.getElementById('userRole');
-				userRole.textContent = 'Admin';
-				userRole.classList.add('admin');
-				
-				// Set avatar
-				const userAvatar = document.getElementById('userAvatar');
-				if (userProfilePicture) {
-					userAvatar.innerHTML = `<img src="${userProfilePicture}" alt="${userName}">`;
-				} else {
-					const initials = userName.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-					userAvatar.textContent = initials;
-					const colors = ['#3498db', '#9b59b6', '#2ecc71', '#e74c3c', '#f39c12', '#1abc9c'];
-					const color1 = colors[initials.charCodeAt(0) % colors.length];
-					const color2 = colors[initials.charCodeAt(1) % colors.length] || color1;
-					userAvatar.style.background = `linear-gradient(135deg, ${color1}, ${color2})`;
-				}
-				
-				// Verify admin status with server
-				try {
-					const response = await fetch(`/api/user/status?userId=${userId}`);
-					const data = await response.json();
-					
-					if (!data.loggedIn || !data.user.isAdmin) {
-						// User is not actually admin according to server
-						showMessage('⚠️ Admin access required. Redirecting...', 'error');
-						setTimeout(() => {
-							window.location.href = 'index.html';
-						}, 2000);
-						return;
-					}
-					
-					if (data.user.isBanned) {
-						showMessage('⚠️ Your account has been suspended.', 'error');
-						logout();
-						return;
-					}
-					
-					// IMPORTANT: Update email from server response if available
-					if (data.user.email && !userEmail) {
-						localStorage.setItem('userEmail', data.user.email);
-						document.querySelector('.user-profile .user-email').textContent = data.user.email;
-					}
-					
-					// Load user data
-					loadUserStats();
-					loadUsers();
-					
-				} catch (error) {
-					console.error('Error verifying admin status:', error);
-					// Still allow access if server verification fails but local storage says admin
-					loadUserStats();
-					loadUsers();
-				}
-			} else {
-				// User is not logged in or not admin
-				document.getElementById('loginPrompt').style.display = 'block';
-				document.getElementById('adminContainer').style.display = 'none';
-				document.getElementById('userProfile').style.display = 'none';
-				
-				// If logged in but not admin, redirect to home page
-				if (userId && !userIsAdmin) {
-					showMessage('Admin access required. Redirecting...', 'error');
-					setTimeout(() => {
-						window.location.href = 'index.html';
-					}, 2000);
-				}
-			}
-		}
-        
-        // Toggle user dropdown
-        document.getElementById('userToggle').addEventListener('click', function(e) {
-            e.stopPropagation();
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.toggle('show');
-        });
-        
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
-            const dropdown = document.getElementById('userDropdown');
-            dropdown.classList.remove('show');
-        });
-        
-        // Prevent dropdown from closing when clicking inside it
-        document.getElementById('userDropdown').addEventListener('click', function(e) {
-            e.stopPropagation();
-        });
+        // Check if user is logged in and is admin
+        async function checkAdminAccess() {
+            const userId = localStorage.getItem('userId');
+            const userName = localStorage.getItem('userName');
+            const userEmail = localStorage.getItem('userEmail');
+            const userIsAdmin = localStorage.getItem('userIsAdmin') === 'true';
+            const userProfilePicture = localStorage.getItem('userProfilePicture');
+            
+            console.log('Admin panel check:', { userId, userName, userIsAdmin });
+            
+            if (userId && userName && userIsAdmin) {
+                // User is logged in AND is admin
+                document.getElementById('loginPrompt').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                
+                // Verify admin status with server
+                try {
+                    const response = await fetch(`/api/user/status?userId=${userId}`);
+                    const data = await response.json();
+                    
+                    if (!data.loggedIn || !data.user.isAdmin) {
+                        // User is not actually admin according to server
+                        showMessage('⚠️ Admin access required. Redirecting...', 'error');
+                        setTimeout(() => {
+                            window.location.href = 'index.html';
+                        }, 2000);
+                        return;
+                    }
+                    
+                    if (data.user.isBanned) {
+                        showMessage('⚠️ Your account has been suspended.', 'error');
+                        logout();
+                        return;
+                    }
+                    
+                    // Load user data
+                    loadUserStats();
+                    loadUsers();
+                    
+                } catch (error) {
+                    console.error('Error verifying admin status:', error);
+                    // Still allow access if server verification fails but local storage says admin
+                    loadUserStats();
+                    loadUsers();
+                }
+            } else {
+                // User is not logged in or not admin
+                document.getElementById('loginPrompt').style.display = 'block';
+                document.getElementById('adminContainer').style.display = 'none';
+                
+                // If logged in but not admin, redirect to home page
+                if (userId && !userIsAdmin) {
+                    showMessage('Admin access required. Redirecting...', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+                }
+            }
+        }
         
         // Logout function
         function logout() {
@@ -1416,7 +1057,12 @@
         }
         
         // Check admin access on page load
-        document.addEventListener('DOMContentLoaded', checkAdminAccess);
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for header to load
+            setTimeout(() => {
+                checkAdminAccess();
+            }, 500);
+        });
         
         // DOM elements
         const statusMessage = document.getElementById('statusMessage');
@@ -1424,6 +1070,13 @@
         const noUsersMessage = document.getElementById('noUsersMessage');
         const userSearch = document.getElementById('userSearch');
         const searchBtn = document.getElementById('searchBtn');
+        
+        // Stats elements
+        const statsCards = document.getElementById('statsCards');
+        const totalUsersEl = document.getElementById('totalUsers');
+        const activeUsersEl = document.getElementById('activeUsers');
+        const bannedUsersEl = document.getElementById('bannedUsers');
+        const adminUsersEl = document.getElementById('adminUsers');
         
         // Modal elements
         const editUserModal = document.getElementById('editUserModal');
@@ -1486,6 +1139,7 @@
             // Show/hide panels
             document.getElementById('usersPanel').style.display = 'none';
             document.getElementById('ticketsPanel').style.display = 'none';
+            statsCards.style.display = 'none';
             
             if (section === 'users') {
                 document.getElementById('usersPanel').style.display = 'block';
@@ -1494,8 +1148,8 @@
                 // In a real implementation, you would load tickets here
                 // For now, we're just showing a link to the tickets admin page
             } else if (section === 'stats') {
-                // Would show statistics dashboard
-                alert('Statistics dashboard would be implemented here');
+                statsCards.style.display = 'grid';
+                loadUserStats();
             } else if (section === 'activity') {
                 // Would show activity log
                 alert('Activity log would be implemented here');
@@ -1508,11 +1162,19 @@
                 const response = await fetch('/api/users/stats');
                 const stats = await response.json();
                 
-                // These elements don't exist in your HTML, but I'll keep the function
-                // in case you want to add stats cards later
-                console.log('User stats:', stats);
+                // Update stats cards
+                totalUsersEl.textContent = stats.totalUsers || 0;
+                activeUsersEl.textContent = stats.activeUsers || 0;
+                bannedUsersEl.textContent = stats.bannedUsers || 0;
+                adminUsersEl.textContent = stats.adminUsers || 0;
+                
             } catch (error) {
                 console.error('Error loading user stats:', error);
+                // Set defaults if error
+                totalUsersEl.textContent = '0';
+                activeUsersEl.textContent = '0';
+                bannedUsersEl.textContent = '0';
+                adminUsersEl.textContent = '0';
             }
         }
         
@@ -1698,110 +1360,96 @@
             userIsBannedCheckbox.checked = false;
         }
         
-        // Function to save user changes - UPDATED VERSION
-		async function saveUserChanges() {
-		  if (!currentEditingUserId) return;
-		  
-		  // Validate form
-		  if (!userNameInput.value.trim()) {
-			showMessage('❌ Please enter a name for the user', 'error');
-			return;
-		  }
-		  
-		  if (!userEmailInput.value.trim()) {
-			showMessage('❌ Please enter an email address', 'error');
-			return;
-		  }
-		  
-		  // Email validation
-		  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		  if (!emailRegex.test(userEmailInput.value)) {
-			showMessage('❌ Please enter a valid email address', 'error');
-			return;
-		  }
-		  
-
-		  
-		  // Prepare update data
-		  const updateData = {
-			name: userNameInput.value.trim(),
-			email: userEmailInput.value.trim(),
-			profilePicture: profilePictureUrl.value.trim() || '',
-			isAdmin: userIsAdminCheckbox.checked,
-			isBanned: userIsBannedCheckbox.checked
-		  };
-		  
-		  // Add password only if provided and not empty
-		  if (userPasswordInput.value.trim()) {
-			updateData.password = userPasswordInput.value.trim();
-		  }
-		  
-		  try {
-			saveChangesBtn.disabled = true;
-			saveChangesBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-			
-			// Use the new admin endpoint
-			const response = await fetch(`/api/admin/users/${currentEditingUserId}`, {
-			  method: 'PUT',
-			  headers: {
-				'Content-Type': 'application/json'
-			  },
-			  body: JSON.stringify(updateData)
-			});
-			
-			const result = await response.json();
-			
-			if (response.ok) {
-			  showMessage('✅ User profile updated successfully', 'success');
-			  
-			  // Close modal
-			  closeEditModal();
-			  
-			  // Reload users
-			  loadUsers();
-			  
-			  // If the edited user is the current admin, update local storage
-			  const currentUserId = localStorage.getItem('userId');
-			  if (currentEditingUserId === currentUserId) {
-				if (updateData.name) localStorage.setItem('userName', updateData.name);
-				if (updateData.email) localStorage.setItem('userEmail', updateData.email);
-				if (updateData.profilePicture) localStorage.setItem('userProfilePicture', updateData.profilePicture);
-				localStorage.setItem('userIsAdmin', updateData.isAdmin);
-				localStorage.setItem('userIsBanned', updateData.isBanned);
-				
-				// Update UI
-				document.querySelector('.user-profile .user-email').textContent = updateData.email;
-				document.getElementById('userFullName').textContent = updateData.name;
-				
-				// Update avatar
-				const userAvatar = document.getElementById('userAvatar');
-				if (updateData.profilePicture) {
-				  userAvatar.innerHTML = `<img src="${updateData.profilePicture}" alt="${updateData.name}">`;
-				} else {
-				  const initials = updateData.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
-				  userAvatar.textContent = initials;
-				}
-				
-				// If banned themselves, log out
-				if (updateData.isBanned) {
-				  setTimeout(() => {
-					showMessage('⚠️ You have been banned. Logging out...', 'error');
-					setTimeout(logout, 2000);
-				  }, 1000);
-				}
-			  }
-			} else {
-			  throw new Error(result.message || 'Failed to update user');
-			}
-			
-		  } catch (error) {
-			console.error('Error updating user:', error);
-			showMessage(`❌ ${error.message}`, 'error');
-		  } finally {
-			saveChangesBtn.disabled = false;
-			saveChangesBtn.innerHTML = 'Save Changes';
-		  }
-		}
+        // Function to save user changes
+        async function saveUserChanges() {
+            if (!currentEditingUserId) return;
+            
+            // Validate form
+            if (!userNameInput.value.trim()) {
+                showMessage('❌ Please enter a name for the user', 'error');
+                return;
+            }
+            
+            if (!userEmailInput.value.trim()) {
+                showMessage('❌ Please enter an email address', 'error');
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmailInput.value)) {
+                showMessage('❌ Please enter a valid email address', 'error');
+                return;
+            }
+            
+            // Prepare update data
+            const updateData = {
+                name: userNameInput.value.trim(),
+                email: userEmailInput.value.trim(),
+                profilePicture: profilePictureUrl.value.trim() || '',
+                isAdmin: userIsAdminCheckbox.checked,
+                isBanned: userIsBannedCheckbox.checked
+            };
+            
+            // Add password only if provided and not empty
+            if (userPasswordInput.value.trim()) {
+                updateData.password = userPasswordInput.value.trim();
+            }
+            
+            try {
+                saveChangesBtn.disabled = true;
+                saveChangesBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+                
+                // Use the admin endpoint
+                const response = await fetch(`/api/admin/users/${currentEditingUserId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    showMessage('✅ User profile updated successfully', 'success');
+                    
+                    // Close modal
+                    closeEditModal();
+                    
+                    // Reload users and stats
+                    loadUsers();
+                    loadUserStats();
+                    
+                    // If the edited user is the current admin, update local storage
+                    const currentUserId = localStorage.getItem('userId');
+                    if (currentEditingUserId === currentUserId) {
+                        if (updateData.name) localStorage.setItem('userName', updateData.name);
+                        if (updateData.email) localStorage.setItem('userEmail', updateData.email);
+                        if (updateData.profilePicture) localStorage.setItem('userProfilePicture', updateData.profilePicture);
+                        localStorage.setItem('userIsAdmin', updateData.isAdmin);
+                        localStorage.setItem('userIsBanned', updateData.isBanned);
+                        
+                        // If banned themselves, log out
+                        if (updateData.isBanned) {
+                            setTimeout(() => {
+                                showMessage('⚠️ You have been banned. Logging out...', 'error');
+                                setTimeout(logout, 2000);
+                            }, 1000);
+                        }
+                    }
+                } else {
+                    throw new Error(result.message || 'Failed to update user');
+                }
+                
+            } catch (error) {
+                console.error('Error updating user:', error);
+                showMessage(`❌ ${error.message}`, 'error');
+            } finally {
+                saveChangesBtn.disabled = false;
+                saveChangesBtn.innerHTML = 'Save Changes';
+            }
+        }
         
         // Function to toggle user ban status
         async function toggleBan(userId, ban) {
@@ -1826,8 +1474,9 @@
                     const message = ban ? 'User banned successfully' : 'User unbanned successfully';
                     showMessage(`✅ ${message}`, 'success');
                     
-                    // Reload users
+                    // Reload users and stats
                     loadUsers();
+                    loadUserStats();
                     
                     // If the banned user is the current user, log them out
                     const currentUserId = localStorage.getItem('userId');

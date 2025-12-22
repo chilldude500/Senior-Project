@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Header Styles */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,248,255,0.95) 100%);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #3498db;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-right: 30px;
+            flex-shrink: 0; /* Prevent logo from shrinking */
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #2c3e50;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #3498db;
+            animation: aurora 3s infinite alternate;
+        }
+        
+        @keyframes aurora {
+            0% { color: #3498db; }
+            25% { color: #9b59b6; }
+            50% { color: #2ecc71; }
+            75% { color: #e74c3c; }
+            100% { color: #f39c12; }
+        }
+        
+        .logo-text {
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-buttons { 
+            display: flex; 
+            align-items: center;
+            flex-grow: 1;
+            min-width: 0; /* Allow shrinking */
+        }
+        
+        .nav-btn { 
+            padding: 10px 20px !important; 
+            font-size: 15px !important; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            background-color: white; 
+            color: #333; 
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+            border: 2px solid transparent;
+            min-width: 120px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        
+        .nav-btn:hover { 
+            background-color: #f8f9fa; 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: #3498db;
+        }
+        
+        .ticket-btn {
+            background: linear-gradient(135deg, #ff9800, #ff5722) !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .admin-btn {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad) !important;
+            color: white !important;
+            border: none !important;
+        }
+        
+        .user-profile {
+            position: relative;
+            margin-left: 20px;
+            flex-shrink: 0; /* Prevent user profile from shrinking */
+        }
+        
+        .user-toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 18px;
+            background: white;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            min-width: 180px;
+            white-space: nowrap;
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+            overflow: hidden;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            flex-shrink: 0;
+        }
+        
+        /* Zoom out profile picture */
+        .user-avatar img {
+            width: 120%; /* Zoom out - smaller relative to container */
+            height: 120%;
+            object-fit: cover;
+            transform: scale(0.9); /* Slightly zoom out */
+            transform-origin: center;
+        }
+        
+        .user-email {
+            font-weight: 600;
+            color: #2c3e50;
+            max-width: 200px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 14px;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 10px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            min-width: 280px;
+            display: none;
+            z-index: 1000;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+        }
+        
+        .user-info {
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .user-name {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+        
+        .user-role {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #3498db;
+            color: white;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .user-role.admin {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+        
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: #2c3e50;
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .login-prompt {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(248,249,250,0.9) 100%);
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #3498db;
+            margin-left: auto;
+            white-space: nowrap;
+        }
+        
+        .login-prompt a {
+            color: #3498db; /* Sky blue color */
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .login-prompt a:hover {
+            color: #2980b9; /* Darker sky blue on hover */
+            text-decoration: underline;
+        }
+        
+        .divider {
+            color: #ccc;
+            font-weight: 300;
+        }
+        
+        @media (max-width: 992px) {
+            .header {
+                flex-wrap: wrap;
+                padding: 15px;
+            }
+            
+            .logo-container {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .nav-buttons {
+                justify-content: center;
+                width: 100%;
+                margin-bottom: 15px;
+            }
+            
+            .user-profile {
+                margin-left: 0;
+                width: 100%;
+            }
+            
+            .user-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .login-prompt {
+                margin: 15px auto 0;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="header">
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">🌌</span>
+                <span class="logo-text">Aurora Trips</span>
+            </a>
+        </div>
+        
+        <div class="nav-buttons" id="navButtons">
+            <!-- Navigation buttons will be dynamically inserted here -->
+        </div>
+        
+        <div class="user-profile" id="userProfile" style="display: none;">
+            <div class="user-toggle" id="userToggle">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-email" id="userEmail">user@example.com</div>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="user-dropdown" id="userDropdown">
+                <div class="user-info">
+                    <div class="user-name" id="userFullName">User Name</div>
+                    <div class="user-role" id="userRole">Member</div>
+                </div>
+                <a href="profile.html" class="dropdown-item">
+                    <i class="fas fa-user-circle"></i> My Profile
+                </a>
+                <a href="my-tickets.html" class="dropdown-item">
+                    <i class="fas fa-ticket-alt"></i> My Tickets
+                </a>
+                <a href="tickets-admin.html" class="dropdown-item" id="adminLink" style="display: none;">
+                    <i class="fas fa-crown"></i> Admin Panel
+                </a>
+                <a href="#" class="dropdown-item logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+            </div>
+        </div>
+        
+        <div class="login-prompt" id="loginPrompt">
+            <p>Welcome to <strong>Aurora Trips</strong></p>
+            <span class="divider">|</span>
+            <p><a href="login.html">Login</a> or <a href="register.html">Register</a> to access all features</p>
+        </div>
+    </div>
+</body>
+</html>
